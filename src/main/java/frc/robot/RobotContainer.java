@@ -28,6 +28,8 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final Drivetrain m_robotDrive = new Drivetrain();
+  private final Shooter m_shooter = new Shooter();
+  private final Turret m_turret = new Turret();
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
@@ -59,6 +61,11 @@ public class RobotContainer {
                       DriveConstants.kOuterDeadband)))*DriveConstants.kMaxAngularSpeed,
                     true)
                     ,m_robotDrive));
+
+    m_turret.setDefaultCommand(
+      new RunCommand(
+        () -> m_turret.setAngle(-1.0*m_robotDrive.getGyro().getRadians()),m_turret));
+
   }
 
   /**
@@ -70,6 +77,32 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //Reset drivetrain when down on the DPad is pressed
     new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset());
+
+    // Spin up the shooter when the 'A' button is pressed
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whenPressed(new ParallelCommandGroup(
+          new ParallelCommandGroup(  
+            new InstantCommand(m_shooter::enable, m_shooter),
+            new InstantCommand(() -> m_shooter.setDistance(m_turret.getDistance()))), 
+          new InstantCommand(() -> m_turret.trackTarget())));
+
+    // Turn off the shooter when the 'B' button is pressed
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whenPressed(new ParallelCommandGroup(new InstantCommand(m_shooter::disable, m_shooter), new InstantCommand(() -> m_turret.setAngle(-1.0*m_robotDrive.getGyro().getRadians()))));
+
+    // Run the feeder when the 'X' button is held, but only if the shooter is at speed and turret is aligned
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whenPressed(
+          new ConditionalCommand(
+            new ConditionalCommand(
+                new InstantCommand(m_shooter::runFeeder, m_shooter),
+                new InstantCommand(),
+                m_shooter::atSetpoint), 
+            new InstantCommand(),
+            m_turret::atSetpoint)
+        )
+        .whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
+
   }
 
 

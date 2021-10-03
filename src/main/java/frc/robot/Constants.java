@@ -34,9 +34,9 @@ public final class Constants {
     public static final double kBackRightOffset = 1.368783;
 
 
-    public static final double kTrackWidth = 0.534;
+    public static final double kTrackWidth = 0.5588;
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = 0.66;
+    public static final double kWheelBase = 0.6446;
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
@@ -53,8 +53,9 @@ public final class Constants {
     // The RobotPy Characterization Toolsuite provides a convenient tool for obtaining these
     // values for your robot.
     public static final double ksVolts = 1;
-    public static final double kvVoltSecondsPerMeter = 0.8;
+    public static final double kvVoltSecondsPerMeter = 3.42;
     public static final double kaVoltSecondsSquaredPerMeter = 0.15;
+
 
     public static final double kMaxSpeedMetersPerSecond = 3.25;
     public static final double kMaxAngularSpeed = Math.PI;
@@ -85,6 +86,33 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
+  }
+
+  public static final class ShooterConstants {
+    public static final int kFeederPort = 2;
+    public static final double kFeederSpeed = -1.0;
+    public static final double kFeederReverseSpeed = 0.5;
+
+    public static final int kMotorPorts[] = {9,10};
+    public static final double kShotHysteresis = 50.0;
+    public static final double[] kShooterPID = {4.0e-5,0,0};
+    public static final double kShooterFreeRPS = 5676;
+
+    public static final double kSVolts = 0.05;
+    public static final double kVVoltSecondsPerRotation =
+        // Should have value 12V at free speed...
+        12.0 / kShooterFreeRPS;
+  }
+
+  public static final class TurretConstants {
+    public static final int kTurretPort = 1;
+    public static final int kTurretPotentiometerPort = 4;
+    public static final double kTurretTolerance = 0.8/180.0*Math.PI;
+    public static final double[] kTurretPID = {0.0325,0,0};
+    public static final double kTurretILimit = 32.0;
+    public static final double kTurretLow = 70.0/180.0*Math.PI;
+    public static final double kTurretHigh = 300.0/180.0*Math.PI;
+
   }
 
   public static final class AutoConstants {

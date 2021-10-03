@@ -41,7 +41,11 @@ public class SwerveModule {
         ModuleConstants.kTurnPID[2]);
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
+  private final SimpleMotorFeedforward m_driveFeedforward = 
+    new SimpleMotorFeedforward(
+      DriveConstants.ksVolts, 
+      DriveConstants.kvVoltSecondsPerMeter, 
+      DriveConstants.kaVoltSecondsSquaredPerMeter);
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
