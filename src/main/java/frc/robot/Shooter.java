@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.*;
 
 public class Shooter extends PIDSubsystem {
@@ -18,7 +17,6 @@ public class Shooter extends PIDSubsystem {
     private final CANSparkMax m_shooterMotor1 = new CANSparkMax(ShooterConstants.kMotorPorts[0], MotorType.kBrushless);
     private final CANSparkMax m_shooterMotor2 = new CANSparkMax(ShooterConstants.kMotorPorts[1], MotorType.kBrushless);
     private final CANEncoder m_shooterEncoder1 = m_shooterMotor1.getEncoder();
-    private final CANEncoder m_shooterEncoder2 = m_shooterMotor2.getEncoder();
 
     private static DoubleSolenoid flap = new DoubleSolenoid(0, 4);
     private static boolean currentlyClose = true;
@@ -39,20 +37,27 @@ public class Shooter extends PIDSubsystem {
         m_shooterMotor1.setSmartCurrentLimit(60, 40);
         m_shooterMotor2.setSmartCurrentLimit(60, 40);
         m_shooterMotor1.setInverted(true);
-
+        m_shooterMotor1.enableVoltageCompensation(12.6);
         m_shooterMotor1.burnFlash();
-        m_shooterMotor2.burnFlash();
+        m_shooterMotor2.burnFlash();   
         
+        setSetpoint(3000.0);
       }
 
       @Override
       public void useOutput(double output, double setpoint) {
-        m_shooterMotor1.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
+          SmartDashboard.putNumber("FeedFor", m_shooterFeedforward.calculate(setpoint));
+          SmartDashboard.putNumber("OutputShooter", output);
+
+        //m_shooterMotor1.setVoltage(output + m_shooterFeedforward.calculate(setpoint));
+        m_shooterMotor1.set(output/12.0 + m_shooterFeedforward.calculate(setpoint)/12.0);
         m_shooterMotor2.follow(m_shooterMotor1, true);
       }
     
       @Override
       public double getMeasurement() {
+          SmartDashboard.putNumber("Shooter Error", m_controller.getPositionError());
+          SmartDashboard.putNumber("Encoder Velocity", m_shooterEncoder1.getVelocity());
         return m_shooterEncoder1.getVelocity();
       }
 
@@ -60,24 +65,34 @@ public class Shooter extends PIDSubsystem {
         return m_controller.atSetpoint();
       }
 
-      public void setDistance(double distance) {
-          double rpmCommand = 4000;
-        if (distance > 275.0 && currentlyClose) {
+      public void setRPM(double distance) {
+        double RPMcommand = 3000.0;
+        SmartDashboard.putNumber("Distance", distance);
+        if (distance > 240.0 && currentlyClose) {
             currentlyClose = false;
         } else if (distance < 220.0 && !currentlyClose) {
             currentlyClose = true;
         }
+
         if (currentlyClose) {
-            rpmCommand = -0.0003857 * Math.pow(distance, 3) + 0.3357896 * Math.pow(distance, 2) - 94.3357106 * distance + 11587.3458;
+            RPMcommand = 0.00021811*Math.pow(distance, 4) - 0.14587931*Math.pow(distance, 3) + 36.33601566*Math.pow(distance, 2) -4001.14*distance + 167946.35 - 225.0;
+            if(distance >210.0)
+            {
+                RPMcommand = 3075+(distance-210)*13.333;
+            }
+            else if(distance > 225)
+            {
+                RPMcommand = 3175;
+            }
             setFlap(false);
         } else {
-            rpmCommand = 4000.0;
+            RPMcommand = 3950.0;
             setFlap(true);
         }
-          m_controller.setSetpoint(rpmCommand);
+        setSetpoint(RPMcommand);
       }
 
-      public static void setFlap(boolean down) {
+      private void setFlap(boolean down) {
         if (down) {
             flap.set(DoubleSolenoid.Value.kForward);
         } else {
@@ -87,8 +102,11 @@ public class Shooter extends PIDSubsystem {
 
     
       public void runFeeder() {
+        if(isEnabled() && atSetpoint())
+        {
         m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kFeederSpeed);
-      }
+        }
+    }
     
       public void stopFeeder() {
         m_feederMotor.set(TalonSRXControlMode.PercentOutput, 0.0);

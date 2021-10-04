@@ -63,9 +63,12 @@ public class RobotContainer {
                     ,m_robotDrive));
 
     m_turret.setDefaultCommand(
-      new RunCommand(
-        () -> m_turret.setAngle(-1.0*m_robotDrive.getGyro().getRadians()),m_turret));
-
+                      new InstantCommand(m_turret::enable,m_turret).andThen(new RunCommand(() ->
+                        m_turret.setAngle(Math.PI/2.0-m_robotDrive.getGyro().getRadians()),m_turret)));
+    m_shooter.setDefaultCommand(
+                          new RunCommand(() ->
+                            m_shooter.setRPM(m_turret.getDistance()),m_shooter));             
+    
   }
 
   /**
@@ -81,26 +84,22 @@ public class RobotContainer {
     // Spin up the shooter when the 'A' button is pressed
     new JoystickButton(m_driverController, Button.kA.value)
         .whenPressed(new ParallelCommandGroup(
-          new ParallelCommandGroup(  
             new InstantCommand(m_shooter::enable, m_shooter),
-            new InstantCommand(() -> m_shooter.setDistance(m_turret.getDistance()))), 
-          new InstantCommand(() -> m_turret.trackTarget())));
+          new InstantCommand(() -> m_turret.trackTarget(true),m_turret)));
 
     // Turn off the shooter when the 'B' button is pressed
     new JoystickButton(m_driverController, Button.kB.value)
-        .whenPressed(new ParallelCommandGroup(new InstantCommand(m_shooter::disable, m_shooter), new InstantCommand(() -> m_turret.setAngle(-1.0*m_robotDrive.getGyro().getRadians()))));
+        .whenPressed(new ParallelCommandGroup(new InstantCommand(m_shooter::disable, m_shooter), new InstantCommand(() -> m_turret.trackTarget(false))));
 
     // Run the feeder when the 'X' button is held, but only if the shooter is at speed and turret is aligned
     new JoystickButton(m_driverController, Button.kX.value)
-        .whenPressed(
-          new ConditionalCommand(
+        .whileHeld(
+          new ParallelCommandGroup(
             new ConditionalCommand(
                 new InstantCommand(m_shooter::runFeeder, m_shooter),
-                new InstantCommand(),
-                m_shooter::atSetpoint), 
-            new InstantCommand(),
-            m_turret::atSetpoint)
-        )
+                new InstantCommand(m_shooter::stopFeeder, m_shooter),
+            m_turret::visionAligned), new InstantCommand(() ->
+            m_shooter.setRPM(m_turret.getDistance()))))
         .whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
 
   }

@@ -13,25 +13,25 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
  */
 public final class Constants {
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = 1;
-    public static final int kFrontRightDriveMotorPort = 3;
+    public static final int kFrontLeftDriveMotorPort = 3;
+    public static final int kFrontRightDriveMotorPort = 1;
     public static final int kBackLeftDriveMotorPort = 5;
     public static final int kBackRightDriveMotorPort = 7;
 
-    public static final int kFrontLeftTurningMotorPort = 2;
-    public static final int kFrontRightTurningMotorPort = 4;
+    public static final int kFrontLeftTurningMotorPort = 4;
+    public static final int kFrontRightTurningMotorPort = 2;
     public static final int kBackLeftTurningMotorPort = 6;
     public static final int kBackRightTurningMotorPort = 8;
 
-    public static final int kFrontLeftTurningEncoderPort = 0;
-    public static final int kFrontRightTurningEncoderPort = 1;
+    public static final int kFrontLeftTurningEncoderPort = 1;
+    public static final int kFrontRightTurningEncoderPort = 0;
     public static final int kBackLeftTurningEncoderPort = 2;
     public static final int kBackRightTurningEncoderPort = 3;
 
-    public static final double kFrontLeftOffset = 2.1922;
-    public static final double kFrontRightOffset = 0.53279;
-    public static final double kBackLeftOffset = -1.1540;
-    public static final double kBackRightOffset = 1.368783;
+    public static final double kFrontLeftOffset = 4.2743;
+    public static final double kFrontRightOffset = 1.605703;
+    public static final double kBackLeftOffset = 3.21123;
+    public static final double kBackRightOffset = 4.75428;
 
 
     public static final double kTrackWidth = 0.5588;
@@ -78,7 +78,7 @@ public final class Constants {
     public static final int kDriveCurrentLimit = 30;
     public static final int kTurnCurrentLimit = 20;
 
-    public static final double[] kDrivePID = {0.001,0,0};
+    public static final double[] kDrivePID = {0.00125,0,0};
     public static final double[] kTurnPID = {6.0,0,0};
 
   }
@@ -95,23 +95,20 @@ public final class Constants {
 
     public static final int kMotorPorts[] = {9,10};
     public static final double kShotHysteresis = 50.0;
-    public static final double[] kShooterPID = {4.0e-5,0,0};
-    public static final double kShooterFreeRPS = 5676;
+    public static final double[] kShooterPID = {0.002,0,0};
 
-    public static final double kSVolts = 0.05;
-    public static final double kVVoltSecondsPerRotation =
-        // Should have value 12V at free speed...
-        12.0 / kShooterFreeRPS;
+    public static final double kSVolts = 0.00;
+    public static final double kVVoltSecondsPerRotation = 0.00193;
   }
 
   public static final class TurretConstants {
     public static final int kTurretPort = 1;
     public static final int kTurretPotentiometerPort = 4;
     public static final double kTurretTolerance = 0.8/180.0*Math.PI;
-    public static final double[] kTurretPID = {0.0325,0,0};
-    public static final double kTurretILimit = 32.0;
-    public static final double kTurretLow = 70.0/180.0*Math.PI;
-    public static final double kTurretHigh = 300.0/180.0*Math.PI;
+    public static final double[] kTurretPID = {2.0,2.0,0};
+    public static final double kTurretILimit = 0.025;
+    public static final double kTurretLow = 1.00;
+    public static final double kTurretHigh = 5.25;
 
   }
 

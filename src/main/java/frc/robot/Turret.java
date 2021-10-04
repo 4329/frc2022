@@ -2,12 +2,10 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
 import frc.robot.Constants.*;
@@ -15,7 +13,10 @@ import frc.robot.Constants.*;
 public class Turret extends PIDSubsystem {
  
     private static TalonSRX m_turretMotor = new TalonSRX(TurretConstants.kTurretPort);
-    private static Potentiometer m_turretPotentiometer = new AnalogPotentiometer(TurretConstants.kTurretPotentiometerPort, 2.0*Math.PI, 3.1835);
+    private static Potentiometer m_turretPotentiometer = new AnalogPotentiometer(TurretConstants.kTurretPotentiometerPort, 2.0*Math.PI, -2.80);
+
+    private boolean searchClockwise = true;
+    private boolean trackTarget = false;
 
     public Turret() {
         super(
@@ -23,18 +24,22 @@ public class Turret extends PIDSubsystem {
                 TurretConstants.kTurretPID[0], 
                 TurretConstants.kTurretPID[1], 
                 TurretConstants.kTurretPID[2]));
-        getController().setTolerance(TurretConstants.kTurretTolerance);        
+        getController().setTolerance(TurretConstants.kTurretTolerance);
         m_controller.setSetpoint(Math.PI);
+        m_turretMotor.setInverted(true);
+        m_controller.setIntegratorRange(-TurretConstants.kTurretILimit, TurretConstants.kTurretILimit);
       }
 
       @Override
       public void useOutput(double output, double setpoint) {
+        SmartDashboard.putNumber("Turret Output", output);
         m_turretMotor.set(TalonSRXControlMode.PercentOutput,output);
       }
 
       @Override
       public double getMeasurement() {
-        return m_turretPotentiometer.get();
+          SmartDashboard.putNumber("Turret Location", getPotentionmeter());
+        return getPotentionmeter();
       }
 
       public boolean atSetpoint() {
@@ -42,22 +47,87 @@ public class Turret extends PIDSubsystem {
       }
 
       public void setAngle(double angle){
-        if(angle < TurretConstants.kTurretLow){
-            setSetpoint(TurretConstants.kTurretLow);
+        SmartDashboard.putNumber("Turret Error", m_controller.getPositionError());
+            if(trackTarget)
+            {
+              Limelight.enable();
+            }
+            else
+            {
+              Limelight.disable();
+            }
+        
+            if(trackTarget && !Limelight.valid())
+            {
+              if(searchClockwise && getPotentionmeter() > TurretConstants.kTurretHigh-Math.PI/6.0)
+              {
+                searchClockwise = false;
+              }
+              if(!searchClockwise && getPotentionmeter() < TurretConstants.kTurretLow+Math.PI/6.0)
+              {
+                searchClockwise = true;
+              }
+              if(searchClockwise)
+              {
+                angle = getPotentionmeter()+0.25;
+              }
+              else
+              {
+                angle = getPotentionmeter()-0.25;
+              }
+
+            }
+            else if(trackTarget && Limelight.valid()){
+              angle = getPotentionmeter()+Limelight.tx();
+            }
+            if(angle < TurretConstants.kTurretLow){
+                setSetpoint(TurretConstants.kTurretLow);
+            }
+            else if(angle > TurretConstants.kTurretHigh) {
+                setSetpoint(TurretConstants.kTurretHigh);
+            }
+            else{
+                setSetpoint(angle);
+            }
+            SmartDashboard.putNumber("Turret Desired Angle", angle);
+    }
+
+      public void trackTarget(boolean track){
+        trackTarget = track;      
+    }
+      public double getDistance(){
+        if(Limelight.valid())
+        {
+          return Limelight.getDistance();
         }
-        else if(angle > TurretConstants.kTurretHigh) {
-            setSetpoint(TurretConstants.kTurretHigh);
+        else
+        {
+          return 225;
+        }
+      }
+
+      private double getPotentionmeter(){
+          if(m_turretPotentiometer.get() > 2*Math.PI){
+              return m_turretPotentiometer.get() - 2*Math.PI;
+          }
+          else if(m_turretPotentiometer.get() < 0.0){
+              return m_turretPotentiometer.get() + 2*Math.PI;
+          }
+          else{
+              return m_turretPotentiometer.get();
+          }
+      }
+      
+      public boolean visionAligned(){
+        if(Limelight.valid() && Math.abs(Limelight.tx())<0.0140){
+          return true;
         }
         else{
-            setSetpoint(angle);
+          return false;
         }
+        }
+      public boolean visionNotAligned(){
+        return !visionAligned();
       }
-
-      public void trackTarget(){
-          setSetpoint(Math.PI);
-      }
-      public double getDistance(){
-        return 240;
-      }
-
+      
 }
