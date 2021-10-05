@@ -71,7 +71,7 @@ public class SwerveModule {
     m_turningMotor.setInverted(false);
     m_turningMotor.burnFlash();
 
-    m_turningEncoder = new AnalogPotentiometer(turningEncoderChannel,-2.0*Math.PI,angularOffset);
+    m_turningEncoder = new AnalogPotentiometer(turningEncoderChannel,2.0*Math.PI,angularOffset);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -84,7 +84,7 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.get()));
+    return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(getTurnEncoder()));
   }
 
   /**
@@ -95,7 +95,7 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state = 
-        SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get()));
+        SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = 
@@ -105,7 +105,7 @@ public class SwerveModule {
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
-        m_turningPIDController.calculate(m_turningEncoder.get(), state.angle.getRadians());
+        m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians());
 
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     
@@ -113,7 +113,7 @@ public class SwerveModule {
   }
 
   public double getTurnEncoder(){
-    return m_turningEncoder.get();
+    return -1.0*m_turningEncoder.get();
   }
 
 }

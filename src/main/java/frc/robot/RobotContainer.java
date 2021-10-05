@@ -64,10 +64,10 @@ public class RobotContainer {
 
     m_turret.setDefaultCommand(
                       new InstantCommand(m_turret::enable,m_turret).andThen(new RunCommand(() ->
-                        m_turret.setAngle(Math.PI/2.0-m_robotDrive.getGyro().getRadians()),m_turret)));
+                        m_turret.setAngle(3*Math.PI/2.0+m_robotDrive.getGyro().getRadians()),m_turret)));
     m_shooter.setDefaultCommand(
-                          new RunCommand(() ->
-                            m_shooter.setRPM(m_turret.getDistance()),m_shooter));             
+                          new InstantCommand(() -> m_shooter.setRPM(m_turret.getDistance())).andThen(new RunCommand(() ->
+                            m_shooter.feedThroat(),m_shooter)));             
     
   }
 
@@ -79,7 +79,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //Reset drivetrain when down on the DPad is pressed
-    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset());
+    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset(180.0));
+    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.reset(0.0));
 
     // Spin up the shooter when the 'A' button is pressed
     new JoystickButton(m_driverController, Button.kA.value)
@@ -94,12 +95,10 @@ public class RobotContainer {
     // Run the feeder when the 'X' button is held, but only if the shooter is at speed and turret is aligned
     new JoystickButton(m_driverController, Button.kX.value)
         .whileHeld(
-          new ParallelCommandGroup(
             new ConditionalCommand(
                 new InstantCommand(m_shooter::runFeeder, m_shooter),
                 new InstantCommand(m_shooter::stopFeeder, m_shooter),
-            m_turret::visionAligned), new InstantCommand(() ->
-            m_shooter.setRPM(m_turret.getDistance()))))
+            m_turret::visionAligned))
         .whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
 
   }
@@ -205,5 +204,8 @@ public class RobotContainer {
     return Math.signum(input)*Math.pow(input, 2);
   }
 
-  
+  public void printSwerveStates(){
+    m_robotDrive.printStates();
+  }
+
 }

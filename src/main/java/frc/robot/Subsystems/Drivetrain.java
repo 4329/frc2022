@@ -125,9 +125,17 @@ public class Drivetrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(pose, ahrs.getRotation2d());
   }
-  public void reset(){
+  public void reset(double angle){
     ahrs.reset();
+    ahrs.setAngleAdjustment(angle);
     m_odometry.resetPosition(new Pose2d(0, 0, new Rotation2d(0.0)), ahrs.getRotation2d());
+  }
+
+  public void printStates(){
+    SmartDashboard.putNumber("Front Left", m_frontLeft.getState().angle.getRadians());
+    SmartDashboard.putNumber("Front Right", m_frontRight.getState().angle.getRadians());
+    SmartDashboard.putNumber("Back Left", m_backLeft.getState().angle.getRadians());
+    SmartDashboard.putNumber("Back Right", m_backRight.getState().angle.getRadians());
   }
 
 }

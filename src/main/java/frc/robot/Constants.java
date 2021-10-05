@@ -28,10 +28,10 @@ public final class Constants {
     public static final int kBackLeftTurningEncoderPort = 2;
     public static final int kBackRightTurningEncoderPort = 3;
 
-    public static final double kFrontLeftOffset = 4.2743;
-    public static final double kFrontRightOffset = 1.605703;
-    public static final double kBackLeftOffset = 3.21123;
-    public static final double kBackRightOffset = 4.75428;
+    public static final double kFrontLeftOffset = Math.PI-4.305;
+    public static final double kFrontRightOffset = Math.PI-1.605;
+    public static final double kBackLeftOffset = Math.PI-3.230;
+    public static final double kBackRightOffset = Math.PI-4.761;
 
 
     public static final double kTrackWidth = 0.5588;
@@ -92,13 +92,16 @@ public final class Constants {
     public static final int kFeederPort = 2;
     public static final double kFeederSpeed = -1.0;
     public static final double kFeederReverseSpeed = 0.5;
+    public static final double kThroatSpeed = -0.75;
 
     public static final int kMotorPorts[] = {9,10};
     public static final double kShotHysteresis = 50.0;
-    public static final double[] kShooterPID = {0.002,0,0};
+    public static final double[] kShooterPID = {0.005,0,0};
 
+    public static final int[] kLimitSwitchPorts = {8,9};
+    
     public static final double kSVolts = 0.00;
-    public static final double kVVoltSecondsPerRotation = 0.00193;
+    public static final double kVVoltSecondsPerRotation = 0.00197;
   }
 
   public static final class TurretConstants {

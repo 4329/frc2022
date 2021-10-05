@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -20,6 +22,10 @@ public class Shooter extends PIDSubsystem {
 
     private static DoubleSolenoid flap = new DoubleSolenoid(0, 4);
     private static boolean currentlyClose = true;
+    private static boolean loading = false;
+
+    private final DigitalInput limit1 = new DigitalInput(ShooterConstants.kLimitSwitchPorts[0]);
+    private final DigitalInput limit2 = new DigitalInput(ShooterConstants.kLimitSwitchPorts[1]);
 
     private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);
 
@@ -86,7 +92,7 @@ public class Shooter extends PIDSubsystem {
             }
             setFlap(false);
         } else {
-            RPMcommand = 3950.0;
+            RPMcommand = 4150.0;
             setFlap(true);
         }
         setSetpoint(RPMcommand);
@@ -110,5 +116,20 @@ public class Shooter extends PIDSubsystem {
     
       public void stopFeeder() {
         m_feederMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
+      }
+
+      public void feedThroat() {
+        if(!isEnabled() && (!limit1.get() && !limit2.get()))
+        {
+          m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kThroatSpeed);
+          loading = true;
+        }
+        else if(!isEnabled() && loading && !limit2.get()){
+          m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kThroatSpeed);
+        }
+        else if(!isEnabled() && limit2.get()){
+          loading = false;
+          stopFeeder();
+        }
       }
 }

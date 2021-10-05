@@ -59,11 +59,11 @@ public class Turret extends PIDSubsystem {
         
             if(trackTarget && !Limelight.valid())
             {
-              if(searchClockwise && getPotentionmeter() > TurretConstants.kTurretHigh-Math.PI/6.0)
+              if(searchClockwise && getPotentionmeter() > TurretConstants.kTurretHigh-Math.PI/12.0)
               {
                 searchClockwise = false;
               }
-              if(!searchClockwise && getPotentionmeter() < TurretConstants.kTurretLow+Math.PI/6.0)
+              if(!searchClockwise && getPotentionmeter() < TurretConstants.kTurretLow+Math.PI/12.0)
               {
                 searchClockwise = true;
               }
@@ -102,7 +102,7 @@ public class Turret extends PIDSubsystem {
         }
         else
         {
-          return 225;
+          return Limelight.getDistance();
         }
       }
 
