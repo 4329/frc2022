@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
@@ -59,21 +59,21 @@ public class Turret extends PIDSubsystem {
         
             if(trackTarget && !Limelight.valid())
             {
-              if(searchClockwise && getPotentionmeter() > TurretConstants.kTurretHigh-Math.PI/12.0)
+              if(searchClockwise && getPotentionmeter() > angle+Math.PI/6.0)
               {
                 searchClockwise = false;
               }
-              if(!searchClockwise && getPotentionmeter() < TurretConstants.kTurretLow+Math.PI/12.0)
+              if(!searchClockwise && getPotentionmeter() < angle-Math.PI/6.0)
               {
                 searchClockwise = true;
               }
               if(searchClockwise)
               {
-                angle = getPotentionmeter()+0.25;
+                angle = getPotentionmeter()+0.10;
               }
               else
               {
-                angle = getPotentionmeter()-0.25;
+                angle = getPotentionmeter()-0.10;
               }
 
             }

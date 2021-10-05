@@ -1,4 +1,5 @@
 package frc.robot;
+import frc.robot.Subsystems.*;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
@@ -10,11 +11,13 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.FaceTurret;
+import frc.robot.Commands.FeedShooter;
+import frc.robot.Commands.GoalShoot;
 import frc.robot.Constants.*;
 
 import java.util.List;
@@ -30,12 +33,16 @@ public class RobotContainer {
   private final Drivetrain m_robotDrive = new Drivetrain();
   private final Shooter m_shooter = new Shooter();
   private final Turret m_turret = new Turret();
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
+
+  private final GoalShoot m_goalShoot = new GoalShoot(m_shooter,m_turret, m_robotDrive);
+  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter,m_turret);
+  private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
+  private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -44,30 +51,9 @@ public class RobotContainer {
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
-    m_robotDrive.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        new RunCommand(
-            () ->
-                m_robotDrive.drive(
-                    -m_xspeedLimiter.calculate(quadraticTransform(applyDeadband(
-                      m_driverController.getY(GenericHID.Hand.kLeft),DriveConstants.kInnerDeadband,
-                      DriveConstants.kOuterDeadband)))*DriveConstants.kMaxSpeedMetersPerSecond,
-                    -m_yspeedLimiter.calculate(quadraticTransform(applyDeadband(
-                      m_driverController.getX(GenericHID.Hand.kLeft),DriveConstants.kInnerDeadband,
-                      DriveConstants.kOuterDeadband)))*DriveConstants.kMaxSpeedMetersPerSecond,
-                    -m_rotLimiter.calculate(quadraticTransform(applyDeadband(
-                      m_driverController.getX(GenericHID.Hand.kRight),DriveConstants.kInnerDeadband,
-                      DriveConstants.kOuterDeadband)))*DriveConstants.kMaxAngularSpeed,
-                    true)
-                    ,m_robotDrive));
-
-    m_turret.setDefaultCommand(
-                      new InstantCommand(m_turret::enable,m_turret).andThen(new RunCommand(() ->
-                        m_turret.setAngle(3*Math.PI/2.0+m_robotDrive.getGyro().getRadians()),m_turret)));
-    m_shooter.setDefaultCommand(
-                          new InstantCommand(() -> m_shooter.setRPM(m_turret.getDistance())).andThen(new RunCommand(() ->
-                            m_shooter.feedThroat(),m_shooter)));             
+    m_robotDrive.setDefaultCommand(m_drive);
+    m_turret.setDefaultCommand(m_faceTurret);
+    m_shooter.setDefaultCommand(new RunCommand(() -> m_shooter.feedThroat(), m_shooter));             
     
   }
 
@@ -84,23 +70,24 @@ public class RobotContainer {
 
     // Spin up the shooter when the 'A' button is pressed
     new JoystickButton(m_driverController, Button.kA.value)
-        .whenPressed(new ParallelCommandGroup(
-            new InstantCommand(m_shooter::enable, m_shooter),
-          new InstantCommand(() -> m_turret.trackTarget(true),m_turret)));
+        .whenPressed(m_goalShoot);
 
     // Turn off the shooter when the 'B' button is pressed
     new JoystickButton(m_driverController, Button.kB.value)
-        .whenPressed(new ParallelCommandGroup(new InstantCommand(m_shooter::disable, m_shooter), new InstantCommand(() -> m_turret.trackTarget(false))));
+        .whenPressed(() -> m_goalShoot.cancel());
 
     // Run the feeder when the 'X' button is held, but only if the shooter is at speed and turret is aligned
     new JoystickButton(m_driverController, Button.kX.value)
-        .whileHeld(
-            new ConditionalCommand(
-                new InstantCommand(m_shooter::runFeeder, m_shooter),
-                new InstantCommand(m_shooter::stopFeeder, m_shooter),
-            m_turret::visionAligned))
-        .whenReleased(new InstantCommand(m_shooter::stopFeeder, m_shooter));
+        .whileHeld(m_feedShoot)
+        .whenReleased(() -> m_feedShoot.cancel());
 
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whileHeld(() -> m_shooter.reverseFeeder()) 
+        .whenReleased(() -> m_shooter.stopFeeder());
+
+    new JoystickButton(m_driverController, Button.kBumperRight.value)
+      .whenPressed(() -> m_drive.changeFieldOrient());
+      
   }
 
 
@@ -182,26 +169,6 @@ public class RobotContainer {
       swerveControllerCommand2.andThen(
       () -> m_robotDrive.drive(0, 0, 0, false))).andThen(
       () -> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d(0.0))));
-  }
-
-  double applyDeadband(double input, double lowDeadband, double highDeadband)
-  {
-    if(Math.abs(input) < lowDeadband)
-    {
-      return 0.0;
-    }
-    else if(Math.abs(input) > highDeadband)
-    {
-      return Math.signum(input)*1.0;
-    }
-    else
-    {
-      return input;
-    }
-  }
-
-  double quadraticTransform(double input){
-    return Math.signum(input)*Math.pow(input, 2);
   }
 
   public void printSwerveStates(){

@@ -63,7 +63,7 @@ public final class Constants {
     public static final double kInnerDeadband = 0.08;
     public static final double kOuterDeadband = 0.98;
 
-    public static final double kSlewRate = 5.0;
+    public static final double kSlewRate = 10.0;
   }
 
   public static final class ModuleConstants {

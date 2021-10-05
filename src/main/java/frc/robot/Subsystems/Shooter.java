@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
@@ -106,11 +106,17 @@ public class Shooter extends PIDSubsystem {
         }
     }
 
-    
+      public void reverseFeeder(){
+        if(isEnabled()){
+          m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kFeederReverseSpeed);
+        }
+      }
+
+
       public void runFeeder() {
         if(isEnabled() && atSetpoint())
         {
-        m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kFeederSpeed);
+          m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kFeederSpeed);
         }
     }
     
