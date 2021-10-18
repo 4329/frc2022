@@ -65,7 +65,6 @@ public final class Constants {
 
     public static final double kSlewRate = 10.0;
   }
-
   public static final class ModuleConstants {
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI;
     public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI;

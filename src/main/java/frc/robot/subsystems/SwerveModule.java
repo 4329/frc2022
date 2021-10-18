@@ -4,6 +4,8 @@
 
 package frc.robot.Subsystems.Swerve;
 
+import frc.robot.Constants.*;
+
 import edu.wpi.first.wpilibj.controller.PIDController;
 //import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -16,10 +18,7 @@ import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
-import frc.robot.Constants.*;
-
 public class SwerveModule {
-
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 

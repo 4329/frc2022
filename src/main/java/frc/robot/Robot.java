@@ -4,9 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Subsystems.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,7 +29,6 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    Limelight.disable();
   }
 
   /**
@@ -56,13 +54,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {
-    Limelight.disable();
+  public void disabledInit() {}
   }
 
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   /**
    * This autonomous runs the autonomous command selected by your
@@ -115,6 +111,5 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 }
