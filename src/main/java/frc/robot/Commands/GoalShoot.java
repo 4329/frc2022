@@ -1,14 +1,14 @@
 package frc.robot.Commands;
 
-import frc.robot.Subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Subsystems.*;
 
 public class GoalShoot extends CommandBase {
     private final Shooter m_shooter;
     private final Turret m_turret;
     private final Drivetrain m_robotDrive;
 
-    public GoalShoot(Shooter shooter, Turret turret, Drivetrain drive){
+    public GoalShoot(Shooter shooter, Turret turret, Drivetrain drive) {
         m_shooter = shooter;
         m_turret = turret;
         m_robotDrive = drive;
