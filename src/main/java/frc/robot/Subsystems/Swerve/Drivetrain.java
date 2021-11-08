@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Subsystems.Swerve;
+package frc.robot.Subsystems;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -20,27 +20,40 @@ import frc.robot.Constants.*;
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
 
-  private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
-      DriveConstants.kFrontLeftTurningMotorPort, DriveConstants.kFrontLeftTurningEncoderPort,
-      DriveConstants.kFrontLeftOffset);
+  private final SwerveModule m_frontLeft  = 
+    new SwerveModule(
+    DriveConstants.kFrontLeftDriveMotorPort,
+    DriveConstants.kFrontLeftTurningMotorPort, 
+    DriveConstants.kFrontLeftTurningEncoderPort, 
+    DriveConstants.kFrontLeftOffset);
 
-  private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort,
-      DriveConstants.kFrontRightTurningMotorPort, DriveConstants.kFrontRightTurningEncoderPort,
+  private final SwerveModule m_frontRight = 
+    new SwerveModule(
+      DriveConstants.kFrontRightDriveMotorPort,
+      DriveConstants.kFrontRightTurningMotorPort, 
+      DriveConstants.kFrontRightTurningEncoderPort, 
       DriveConstants.kFrontRightOffset);
 
-  private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.kBackLeftDriveMotorPort,
-      DriveConstants.kBackLeftTurningMotorPort, DriveConstants.kBackLeftTurningEncoderPort,
+  private final SwerveModule m_backLeft   = 
+    new SwerveModule(
+      DriveConstants.kBackLeftDriveMotorPort,
+      DriveConstants.kBackLeftTurningMotorPort, 
+      DriveConstants.kBackLeftTurningEncoderPort, 
       DriveConstants.kBackLeftOffset);
 
-  private final SwerveModule m_backRight = new SwerveModule(DriveConstants.kBackRightDriveMotorPort,
-      DriveConstants.kBackRightTurningMotorPort, DriveConstants.kBackRightTurningEncoderPort,
+  private final SwerveModule m_backRight  =
+    new SwerveModule(
+      DriveConstants.kBackRightDriveMotorPort,
+      DriveConstants.kBackRightTurningMotorPort, 
+      DriveConstants.kBackRightTurningEncoderPort, 
       DriveConstants.kBackRightOffset);
 
   private static AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
 
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, ahrs.getRotation2d());
+  private final SwerveDriveOdometry m_odometry =
+      new SwerveDriveOdometry(m_kinematics, ahrs.getRotation2d());
 
   public Drivetrain() {
     ahrs.reset();
@@ -49,20 +62,18 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field.
+   * @param xSpeed Speed of the robot in the x direction (forward).
+   * @param ySpeed Speed of the robot in the y direction (sideways).
+   * @param rot Angular rate of the robot.
+   * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    ChassisSpeeds diagnose = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d());
-    SmartDashboard.putNumber("Robot Desired Speed X", diagnose.vxMetersPerSecond);
-    SmartDashboard.putNumber("Robot Desired Speed Y", diagnose.vyMetersPerSecond);
-    var swerveModuleStates = m_kinematics.toSwerveModuleStates(
-        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d())
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    var swerveModuleStates =
+        m_kinematics.toSwerveModuleStates(
+            fieldRelative
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d())
+                : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
@@ -77,7 +88,8 @@ public class Drivetrain extends SubsystemBase {
    * @param desiredStates The desired SwerveModule states.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.normalizeWheelSpeeds(
+        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_backLeft.setDesiredState(desiredStates[2]);
@@ -86,7 +98,11 @@ public class Drivetrain extends SubsystemBase {
 
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
-    m_odometry.update(ahrs.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
+    m_odometry.update(
+        ahrs.getRotation2d(),
+        m_frontLeft.getState(),
+        m_frontRight.getState(),
+        m_backLeft.getState(),
         m_backRight.getState());
   }
 
@@ -94,14 +110,14 @@ public class Drivetrain extends SubsystemBase {
     return ahrs.getRotation2d();
   }
 
-  public Pose2d getPose() {
+  public Pose2d getPose(){
     updateOdometry();
     SmartDashboard.putNumber("Robot X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Robot Y", m_odometry.getPoseMeters().getY());
     return m_odometry.getPoseMeters();
   }
 
-  /**
+    /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
@@ -109,16 +125,17 @@ public class Drivetrain extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(pose, ahrs.getRotation2d());
   }
-
-  public void reset(double angle) {
+  public void reset(double angle){
     ahrs.reset();
     ahrs.setAngleAdjustment(angle);
     m_odometry.resetPosition(new Pose2d(0, 0, new Rotation2d(0.0)), ahrs.getRotation2d());
   }
 
-  public ChassisSpeeds getChassisSpeed(){
-    return m_kinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
-    m_backRight.getState());
+  public void printStates(){
+    SmartDashboard.putNumber("Front Left", m_frontLeft.getState().angle.getRadians());
+    SmartDashboard.putNumber("Front Right", m_frontRight.getState().angle.getRadians());
+    SmartDashboard.putNumber("Back Left", m_backLeft.getState().angle.getRadians());
+    SmartDashboard.putNumber("Back Right", m_backRight.getState().angle.getRadians());
   }
 
 }
