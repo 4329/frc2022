@@ -26,11 +26,11 @@ public class DriveByController extends CommandBase {
   @Override
   public void execute() {
     m_robotDrive.drive(
-        -m_xspeedLimiter.calculate(quadraticTransform(applyDeadband(m_controller.getY(GenericHID.Hand.kLeft))))
+        -quadraticTransform(applyDeadband(m_controller.getY(GenericHID.Hand.kLeft)))
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        -m_yspeedLimiter.calculate(quadraticTransform(applyDeadband(m_controller.getX(GenericHID.Hand.kLeft))))
+        -quadraticTransform(applyDeadband(m_controller.getX(GenericHID.Hand.kLeft)))
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        -m_rotLimiter.calculate(quadraticTransform(applyDeadband(m_controller.getX(GenericHID.Hand.kRight))))
+        -quadraticTransform(applyDeadband(m_controller.getX(GenericHID.Hand.kRight)))
             * DriveConstants.kMaxAngularSpeed,
         fieldOrient);
         SmartDashboard.putNumber("Robot Velocity X", m_robotDrive.getChassisSpeed().vxMetersPerSecond);

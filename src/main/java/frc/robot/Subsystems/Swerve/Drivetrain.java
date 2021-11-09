@@ -69,6 +69,7 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
     getPose();
+    printTransEncoders();
   }
 
   /**
@@ -119,6 +120,16 @@ public class Drivetrain extends SubsystemBase {
   public ChassisSpeeds getChassisSpeed(){
     return m_kinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
     m_backRight.getState());
+  }
+
+  public double[] printTransEncoders(){
+    double[] encoders = {m_frontLeft.getTranslationEncPosition(), m_frontRight.getTranslationEncPosition(), m_backLeft.getTranslationEncPosition(), m_backRight.getTranslationEncPosition()};
+    SmartDashboard.putNumber("Front Left Encoder", encoders[0]);
+    SmartDashboard.putNumber("Front Right Encoder", encoders[1]);
+    SmartDashboard.putNumber("Back Left Encoder", encoders[2]);
+    SmartDashboard.putNumber("Back Right Encoder", encoders[3]);
+
+    return encoders;
   }
 
 }

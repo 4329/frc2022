@@ -7,10 +7,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
 import edu.wpi.first.wpilibj2.command.*;
@@ -23,7 +20,6 @@ import frc.robot.Commands.GoalShoot;
 import frc.robot.Commands.ShooterDefault;
 import frc.robot.Constants.*;
 
-import java.util.List;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -81,6 +77,7 @@ public class RobotContainer {
     // Turn off the shooter when the 'B' button is pressed
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_goalShoot.cancel());
 
+
     // Run the feeder when the 'X' button is held, but only if the shooter is at
     // speed and turret is aligned
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(m_feedShoot)
@@ -98,27 +95,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0.0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1.0, 1.0), new Translation2d(2.0, -1.0)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3.0, 0.0, new Rotation2d(0.0)), config);
-
+  public Command getAutonomousCommand(Trajectory trajectory) {
+    
     var thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0,
         AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(exampleTrajectory,
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory,
         m_robotDrive::getPose, // Functional interface to feed supplier
         DriveConstants.kDriveKinematics,
 
@@ -127,7 +110,7 @@ public class RobotContainer {
         thetaController, m_robotDrive::setModuleStates, m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetOdometry(trajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false))

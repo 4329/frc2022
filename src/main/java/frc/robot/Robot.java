@@ -4,7 +4,20 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.lang.String;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Subsystems.Limelight;
 
@@ -19,6 +32,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private String trajectoryCSV = "paths/TestPath.csv";
+  private Trajectory trajectory = new Trajectory();
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -31,6 +46,34 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     Limelight.disable();
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryCSV);
+      List<String> lines = Files.readAllLines(trajectoryPath);
+      int j = 0;
+      double[] elements = new double[lines.size()*7];
+      for(String line : lines){
+        String[] parts = line.split(",");
+        for (String part : parts){
+          elements[j++] = Double.parseDouble(part);
+        }
+      }
+  
+      // Create a list of states from the elements.
+      List<Trajectory.State> states = new ArrayList<>();
+      for (int i = 0; i < elements.length; i += 7) {
+        states.add(
+            new Trajectory.State(
+                elements[i],
+                elements[i + 1],
+                elements[i + 2],
+                new Pose2d(elements[i + 3], 8.2296 - elements[i + 4], new Rotation2d(-1.0*elements[i + 5])),
+                elements[i + 6]));
+      }
+
+      trajectory = new Trajectory(states);
+   } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryCSV, ex.getStackTrace());
+   }
   }
 
   /**
@@ -70,7 +113,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(trajectory);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
