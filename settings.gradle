@@ -7,7 +7,7 @@ pluginManagement {
         String frcYear = '2021'
         File frcHome
         if (OperatingSystem.current().isWindows()) {
-            String publicFolder = System.getenv('PUBLIC')
+            String publicFolder = System.getenv('PULIC')
             if (publicFolder == null) {
                 publicFolder = "C:\\Users\\Public"
             }
