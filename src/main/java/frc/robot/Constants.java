@@ -53,7 +53,7 @@ public final class Constants {
     //Minimum allowable tranlsation command (in m/s) assuming user input is squared using quadraticTransform, this value is always positive and should be compared agaisnt the absolute value of the drive command
     public static final double kMinTranslationCommand = DriveConstants.kMaxSpeedMetersPerSecond * Math.pow(DriveConstants.kInnerDeadband,2);
 
-    public static final double[] kKeepAnglePID = { 0.666, 0, 0 };
+    public static final double[] kKeepAnglePID = { 0.666, 0, 0 }; //Defines the PID values for the keep angle PID
 
   }
 
