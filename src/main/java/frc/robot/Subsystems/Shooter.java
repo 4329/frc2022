@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import com.revrobotics.CANEncoder;
+
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.*;
@@ -29,18 +30,18 @@ public class Shooter extends PIDSubsystem {
 
   private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);
 
-  private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kSVolts,
-      ShooterConstants.kVVoltSecondsPerRotation);
+  private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(0.0,
+      ShooterConstants.kShooterFF);
 
   public Shooter() {
     super(new PIDController(ShooterConstants.kShooterPID[0], ShooterConstants.kShooterPID[1],
         ShooterConstants.kShooterPID[2]));
-    getController().setTolerance(ShooterConstants.kShotHysteresis);
+    getController().setTolerance(ShooterConstants.kShotRPMTolerance);
     m_shooterMotor1.setSmartCurrentLimit(60, 40);
     m_shooterMotor2.setSmartCurrentLimit(60, 40);
     m_shooterMotor1.setInverted(true);
-    m_shooterMotor1.enableVoltageCompensation(10.0);
-    m_shooterMotor2.enableVoltageCompensation(10.0);
+    m_shooterMotor1.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
+    m_shooterMotor2.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
 
     m_shooterMotor1.burnFlash();
     m_shooterMotor2.burnFlash();

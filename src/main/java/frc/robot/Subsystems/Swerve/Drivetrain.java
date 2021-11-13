@@ -13,29 +13,40 @@ import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.Constants.*;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
 
+  private final PIDController m_keepAnglePID = new PIDController(2.5, 0.0, 0.0);
+  private double keepAngle = 0.0;
+  private double timeSinceRot = 0.0;
+  private double lastRotTime = 0.0;
+  private double timeSinceDrive = 0.0;
+  private double lastDriveTime = 0.0;
+
+  private final Timer keepAngleTimer = new Timer();
+
   private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
       DriveConstants.kFrontLeftTurningMotorPort, DriveConstants.kFrontLeftTurningEncoderPort,
-      DriveConstants.kFrontLeftOffset);
+      DriveConstants.kFrontLeftOffset, DriveConstants.kFrontLeftTuningVals);
 
   private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort,
       DriveConstants.kFrontRightTurningMotorPort, DriveConstants.kFrontRightTurningEncoderPort,
-      DriveConstants.kFrontRightOffset);
+      DriveConstants.kFrontRightOffset, DriveConstants.kFrontRightTuningVals);
 
   private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.kBackLeftDriveMotorPort,
       DriveConstants.kBackLeftTurningMotorPort, DriveConstants.kBackLeftTurningEncoderPort,
-      DriveConstants.kBackLeftOffset);
+      DriveConstants.kBackLeftOffset, DriveConstants.kBackLeftTuningVals);
 
   private final SwerveModule m_backRight = new SwerveModule(DriveConstants.kBackRightDriveMotorPort,
       DriveConstants.kBackRightTurningMotorPort, DriveConstants.kBackRightTurningEncoderPort,
-      DriveConstants.kBackRightOffset);
-
+      DriveConstants.kBackRightOffset, DriveConstants.kBackRightTuningVals);
+      
   private static AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
   private final SwerveDriveKinematics m_kinematics = DriveConstants.kDriveKinematics;
@@ -43,6 +54,9 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(m_kinematics, ahrs.getRotation2d());
 
   public Drivetrain() {
+    keepAngleTimer.reset();
+    keepAngleTimer.start();
+    m_keepAnglePID.enableContinuousInput(-Math.PI, Math.PI);
     ahrs.reset();
   }
 
@@ -57,6 +71,8 @@ public class Drivetrain extends SubsystemBase {
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    rot = performKeepAngle(xSpeed,ySpeed,rot);
+    SmartDashboard.putNumber("Rotation Command", rot);
     ChassisSpeeds diagnose = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d());
     SmartDashboard.putNumber("Robot Desired Speed X", diagnose.vxMetersPerSecond);
     SmartDashboard.putNumber("Robot Desired Speed Y", diagnose.vyMetersPerSecond);
@@ -69,7 +85,6 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
     getPose();
-    printTransEncoders();
   }
 
   /**
@@ -114,6 +129,7 @@ public class Drivetrain extends SubsystemBase {
   public void reset(double angle) {
     ahrs.reset();
     ahrs.setAngleAdjustment(angle);
+    keepAngle = getGyro().getRadians();
     m_odometry.resetPosition(new Pose2d(0, 0, new Rotation2d(0.0)), ahrs.getRotation2d());
   }
 
@@ -132,4 +148,25 @@ public class Drivetrain extends SubsystemBase {
     return encoders;
   }
 
+  private double performKeepAngle(double xSpeed, double ySpeed, double rot){
+    double output = rot;
+    if(Math.abs(rot)>=Math.pow(DriveConstants.kInnerDeadband,2)){
+      lastRotTime = keepAngleTimer.get();
+    }
+    if( Math.abs(xSpeed)>=Math.pow(DriveConstants.kInnerDeadband,2) 
+          || Math.abs(ySpeed)>=Math.pow(DriveConstants.kInnerDeadband,2)){
+      lastDriveTime = keepAngleTimer.get();
+    }
+    timeSinceRot = keepAngleTimer.get()-lastRotTime;
+    timeSinceDrive = keepAngleTimer.get()-lastDriveTime;
+    SmartDashboard.putNumber("Time Since Rot", timeSinceRot);
+    SmartDashboard.putNumber("Time Since Drive", timeSinceDrive);
+    if(timeSinceRot < 0.75){
+      keepAngle = getGyro().getRadians();
+    }
+    else if(Math.abs(rot)<Math.pow(DriveConstants.kInnerDeadband,2) && timeSinceDrive < 0.75){
+      output = m_keepAnglePID.calculate(getGyro().getRadians(), keepAngle);
+    }
+    return output;
+  }
 }

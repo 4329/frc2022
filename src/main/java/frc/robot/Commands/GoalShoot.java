@@ -27,6 +27,7 @@ public class GoalShoot extends CommandBase {
   public void execute() {
     m_shooter.setRPM(m_turret.getDistance());
     m_turret.setAngle( MathUtils.toUnitCircAngle(3 * Math.PI / 2.0 +m_robotDrive.getGyro().getRadians()));
+    m_shooter.getMeasurement();
   }
 
   @Override

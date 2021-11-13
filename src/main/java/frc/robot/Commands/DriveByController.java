@@ -2,20 +2,15 @@ package frc.robot.Commands;
 
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.Swerve.*;
-import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveByController extends CommandBase {
   private final Drivetrain m_robotDrive;
   private final XboxController m_controller;
   private boolean fieldOrient = true;
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kSlewRate);
 
   public DriveByController(Drivetrain drive, XboxController controller) {
     m_robotDrive = drive;
