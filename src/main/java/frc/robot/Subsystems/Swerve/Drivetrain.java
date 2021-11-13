@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.Constants.*;
 
-//Swerve Drivetrain class that extends the SubsystemBase which is used to allow command based programming
-public class Drivetrain extends SubsystemBase {
+  /**
+   * Implements a swerve Drivetrain Subsystem for the Robot
+   */
+  public class Drivetrain extends SubsystemBase {
 
   //Create the PIDController for the Keep Angle PID
   private final PIDController m_keepAnglePID = new PIDController(DriveConstants.kKeepAnglePID[0],
@@ -60,7 +62,9 @@ public class Drivetrain extends SubsystemBase {
   //Creates Odometry object to store the pose of the robot
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, ahrs.getRotation2d());
 
-  //When drivetrain subsystem is constructed reset and start the keepAngleTimer, reset the gyro, and enable continuous input for the Keep Angle PID
+    /**
+   * Constructs a Drivetrain and resets the Gyro and Keep Angle parameters
+   */
   public Drivetrain() {
     keepAngleTimer.reset();
     keepAngleTimer.start();

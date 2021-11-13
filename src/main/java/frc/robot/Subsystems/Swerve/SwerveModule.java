@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import frc.robot.Constants.*;
 
+  /**
+   * Implements a swerve module for the Robot
+   */
 public class SwerveModule {
 
   //Our swerve modules use NEOs for both translation and rotation motors

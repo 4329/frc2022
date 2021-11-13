@@ -4,7 +4,14 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
+  /**
+   * Static method containing all constant values for the robot in one location
+   */
 public final class Constants {
+
+  /**
+   * Static method containing all Drivetrain constants 
+   */
   public static final class DriveConstants {
     public static final int kFrontLeftDriveMotorPort = 3;   //CANID of the Translation SparkMAX
     public static final int kFrontRightDriveMotorPort = 1;  //CANID of the Translation SparkMAX
@@ -56,7 +63,9 @@ public final class Constants {
     public static final double[] kKeepAnglePID = { 0.666, 0, 0 }; //Defines the PID values for the keep angle PID
 
   }
-
+  /**
+   * Static method containing all Swerve Module constants 
+   */
   public static final class ModuleConstants {
     public static final double kTranslationRampRate = 4.0;          //Units of %power/s, ie 4.0 means it takes 0.25s to reach 100% power from 0%
     private static final double kTranslationGearRatio = 8.33333333; //Overall gear ratio of the swerve module
@@ -71,23 +80,31 @@ public final class Constants {
 
     public static final double[] kTurnPID = { 0.666, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
   }
-
+  /**
+   * Static method containing all User I/O constants 
+   */
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;    //When making use of multiple controllers for drivers each controller will be on a different port
     public static final int kOperatorControllerPort = 1;  //When making use of multiple controllers for drivers each controller will be on a different port
   }
-
+  /**
+   * Static method containing all Global constants 
+   */
   public static final class GlobalConstants {
     public static final double kVoltCompensation = 12.0;        //Sets a voltage compensation value ideally 12.0V
   }
-
+  /**
+   * Static method containing all Vision/Limelight constants 
+   */
   public static final class VisionConstants {
     public static final double kElevationOffset = 15.0;              // Degree offset of lens from horizontal due to camera mount
     public static final double kAzimuthalAngle = 0.0;                // Degree azimuthal offset of limelight
     public static final double kTargetCenterHeightFromLens = 63.25;  // Center Height of the Target in inches above the lens
     public static final double kTrackTolerance = 0.0140;             // Allowable Limelight angle error in radians
   }
-
+  /**
+   * Static method containing all Shooter constants 
+   */
   public static final class ShooterConstants {
     public static final int kFeederPort = 2;              //CANID of the Motor Controller for the Feeder Motor
     public static final double kFeederSpeed = -1.0;       //Motor % to command when feeding balls into the shooter
@@ -106,7 +123,9 @@ public final class Constants {
     public static final double kFlapDownDist = 320.0;           //Distance the robot must move away from the target before the flap will lower
     public static final double kFlapUpDist = 280.0;             //Distance the robot must move toward from the target before the flap will raise
   }
-
+  /**
+   * Static method containing all Turret constants 
+   */
   public static final class TurretConstants {
     public static final int kTurretPort = 1;                    //CANID of the turret motor controller
     public static final int kTurretPotentiometerPort = 4;       //Analog port of the turret analog potentiometer
@@ -116,16 +135,18 @@ public final class Constants {
     public static final double kTurretLow = 1.00;               //Minimum angle in radians allowed (defines the turret deadzone)
     public static final double kTurretHigh = 5.25;              //Maximum angle in radians allowed (defines the turret deadzone)
   }
-
+    /**
+   * Static method containing all Autonomous constants 
+   */
   public static final class AutoConstants {
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;        //sets the maximum desired autonomous angular speed in radians per second
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI; //sets the maximum desired autonomous angular acceleration in radians per second
+    public static final double kMaxAngularSpeed = Math.PI;        //sets the maximum desired autonomous angular speed in radians per second
+    public static final double kMaxAngularAcceleration = Math.PI; //sets the maximum desired autonomous angular acceleration in radians per second
 
     public static final double kPXController = 2.0;     //Sets proportional gain in the X direction for the auto SwerveControllerCommand
     public static final double kPYController = 2.0;     //Sets proportional gain in the Y direction for the auto SwerveControllerCommand
     public static final double kPThetaController = 1;   //Sets proportional gain in the angular heading for the auto SwerveControllerCommand
 
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared); //Creates a trapezoidal motion for the auto rotational commands
+        kMaxAngularSpeed, kMaxAngularAcceleration); //Creates a trapezoidal motion for the auto rotational commands
   }
 }

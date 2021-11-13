@@ -14,8 +14,10 @@ import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import frc.robot.Constants.*;
 
-//Shooter class that extends the PIDSubsystem class which is used to allow command based programming
-public class Shooter extends PIDSubsystem {
+  /**
+   * Implements a Shooter PIDSubsystem for the robot
+   */
+  public class Shooter extends PIDSubsystem {
 
   //Creates the SparkMAXs for each shooter motor at the defined CANID
   private final CANSparkMax m_shooterMotor1 = new CANSparkMax(ShooterConstants.kMotorPorts[0], MotorType.kBrushless);
@@ -38,8 +40,14 @@ public class Shooter extends PIDSubsystem {
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(0.0,
       ShooterConstants.kShooterFF);
 
-  //Constructs the Shooter object and defines the motor controller parameters
-  public Shooter() {
+  /**
+   * Creates a Shooter PIDSubsystem and sets the appropirate values for the motor controllers and PIDController.
+   * Because there will only ever be 1 shooter on the robot the appropriate values will be pulled in from the 
+   * Constants classses. If multiple shooters are required (unlikely) then the class contructor must be modified to read in
+   * the appropriate values for each motor controller.
+   * 
+   */
+    public Shooter() {
     //Super implementation that defines the PIDController for the PIDSubsystem with the PID values specified
     super(new PIDController(ShooterConstants.kShooterPID[0], ShooterConstants.kShooterPID[1],
         ShooterConstants.kShooterPID[2]));

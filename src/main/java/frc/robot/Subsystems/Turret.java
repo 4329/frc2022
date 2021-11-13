@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import frc.robot.Constants.*;
 import frc.robot.Utilities.*;
 
-//Turret class that extends the PIDSubsystem class which is used to allow command based programming
-public class Turret extends PIDSubsystem {
+  /**
+   * Implements a Turret PIDSubsystem for the robot
+   */
+  public class Turret extends PIDSubsystem {
 
   //Creates the TalonSRX for the feederMotor on the specified CAN ID
   private static TalonSRX m_turretMotor = new TalonSRX(TurretConstants.kTurretPort);
@@ -21,7 +23,13 @@ public class Turret extends PIDSubsystem {
 
   private boolean searchClockwise = true; //creates boolean to indicate if the turret is searching clockwise for a target 
   private boolean trackTarget = false;    //creates boolean to indicate if the turret is in trackTarget mode
-
+  /**
+   * Creates a Turret PIDSubsystem and sets the appropirate values for the motor controllers, analog encoder, and PIDController.
+   * Because there will only ever be 1 turret on the robot the appropriate values will be pulled in from the 
+   * Constants classses. If multiple turrets are required (unlikely) then the class contructor must be modified to read in
+   * the appropriate values for each motor controller and absolute encoder.
+   * 
+   */
   public Turret() {
     //Super implementation that defines the PIDController for the PIDSubsystem with the PID values specified
     super(

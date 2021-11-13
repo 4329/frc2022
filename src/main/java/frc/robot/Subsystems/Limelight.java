@@ -5,7 +5,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants.VisionConstants;
 
 //Code here is input from 2020 code and modified for photonvision OS on limelight so angles and distances are left in inches
-
+  /**
+   * The Limelight class uses a static method to call the functions, because there is only 1 limelight PC and it always outputs to the same Network 
+   * table the Limelight functions should be called without creating an instance of the object, IE Limelight.tx();
+   */
 public class Limelight {
     //Output Network Table from the limelight with photonvision OS defined so values can be read by the robot code.
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("photonvision"); 
