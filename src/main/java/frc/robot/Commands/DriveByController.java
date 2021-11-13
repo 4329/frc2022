@@ -28,10 +28,6 @@ public class DriveByController extends CommandBase {
         -quadraticTransform(applyDeadband(m_controller.getX(GenericHID.Hand.kRight)))
             * DriveConstants.kMaxAngularSpeed,
         fieldOrient);
-        SmartDashboard.putNumber("Robot Velocity X", m_robotDrive.getChassisSpeed().vxMetersPerSecond);
-        SmartDashboard.putNumber("Robot Velocity Y", m_robotDrive.getChassisSpeed().vyMetersPerSecond);
-        SmartDashboard.putNumber("Robot Velocity Z", m_robotDrive.getChassisSpeed().omegaRadiansPerSecond);
-
   }
 
   public void changeFieldOrient() {

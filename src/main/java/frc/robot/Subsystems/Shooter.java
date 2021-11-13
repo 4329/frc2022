@@ -12,99 +12,146 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.*;
 
+//Shooter class that extends the PIDSubsystem class which is used to allow command based programming
 public class Shooter extends PIDSubsystem {
 
+  //Creates the SparkMAXs for each shooter motor at the defined CANID
   private final CANSparkMax m_shooterMotor1 = new CANSparkMax(ShooterConstants.kMotorPorts[0], MotorType.kBrushless);
   private final CANSparkMax m_shooterMotor2 = new CANSparkMax(ShooterConstants.kMotorPorts[1], MotorType.kBrushless);
+  //Only one of the motor encoders is needed to feed the PIDcontroller
   private final CANEncoder m_shooterEncoder1 = m_shooterMotor1.getEncoder();
+  //Create double solenoid for the shooter "flap"
+  private static DoubleSolenoid flap = new DoubleSolenoid(ShooterConstants.kFlapSolenoids[0], 
+      ShooterConstants.kFlapSolenoids[1]);
+  
+  private static boolean currentlyClose = true; //Create a boolean to track if the robot is currently in the close flap position
+  private static boolean loading = false;       //Create boolean to track if the robot is currently loading a ball into the throat
 
-  private static DoubleSolenoid flap = new DoubleSolenoid(0, 4);
-  private static boolean currentlyClose = true;
-  private static boolean loading = false;
+  private final DigitalInput limitFeed = new DigitalInput(ShooterConstants.kLimitSwitchPorts[0]);  //Create normally open limit switch object for loading the throat
+  private final DigitalInput limitThroat = new DigitalInput(ShooterConstants.kLimitSwitchPorts[1]);  //Create normally closed limit switch object for loading the throat
 
-  private final DigitalInput limit1 = new DigitalInput(ShooterConstants.kLimitSwitchPorts[0]);
-  private final DigitalInput limit2 = new DigitalInput(ShooterConstants.kLimitSwitchPorts[1]);
+  private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);  //Creates the TalonSRX on the specified CAN ID
 
-  private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);
-
+  //Creates a SimpleMotorFeedForward with the specified feedforward gain
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(0.0,
       ShooterConstants.kShooterFF);
 
+  //Constructs the Shooter object and defines the motor controller parameters
   public Shooter() {
+    //Super implementation that defines the PIDController for the PIDSubsystem with the PID values specified
     super(new PIDController(ShooterConstants.kShooterPID[0], ShooterConstants.kShooterPID[1],
         ShooterConstants.kShooterPID[2]));
-    getController().setTolerance(ShooterConstants.kShotRPMTolerance);
-    m_shooterMotor1.setSmartCurrentLimit(60, 40);
-    m_shooterMotor2.setSmartCurrentLimit(60, 40);
-    m_shooterMotor1.setInverted(true);
-    m_shooterMotor1.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
-    m_shooterMotor2.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
 
-    m_shooterMotor1.burnFlash();
-    m_shooterMotor2.burnFlash();
+    //Sets the PIDController tolerance to the specified value so that the atSetpoint() function returns truw onyl when the error is below this value
+    getController().setTolerance(ShooterConstants.kShotRPMTolerance); 
 
-    setSetpoint(3000.0);
+    m_shooterMotor1.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);  //Sets the current limit for the SparkMAX Controller
+    m_shooterMotor2.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);  //Sets the current limit for the SparkMAX Controller
+    m_shooterMotor1.setInverted(true);                                            //Inverts the direction of motor 1 so that positive shooter RPMs shoot the ball
+    m_shooterMotor1.enableVoltageCompensation(GlobalConstants.kVoltCompensation); //Enable voltage compensation so gains scale with bus voltage
+    m_shooterMotor2.enableVoltageCompensation(GlobalConstants.kVoltCompensation); //Enable voltage compensation so gains scale with bus voltage
+
+    m_shooterMotor1.burnFlash();                                                  //Write parameters to the sparkMAX so it is certain the values are set
+    m_shooterMotor2.burnFlash();                                                  //Write parameters to the sparkMAX so it is certain the values are set
+
+    setSetpoint(3000.0);                                                          //It is important to set a default value here that is not 0RPMs, this ensures the
+                                                                                  //atSetpoint() function will not return true when the shooter is not spun up yet
+                                                                                  //and could potentially jam and stall the shooter with a ball prematurely                          
   }
-
+  /**
+   * Uses the output from the PIDController combined with the feedforward calculation to 
+   * set the motor%. The 2nd motor is set as an inverted follower to the 1st motor as it will
+   * spin the opposite direction. 
+   * 
+   * @param output is the PIDSubsystem's PIDController output motor%
+   * @param setpoint is the PIDSubsystem's current desired setpoint
+   */
   @Override
   public void useOutput(double output, double setpoint) {
-    SmartDashboard.putNumber("FeedFor", m_shooterFeedforward.calculate(setpoint));
-    SmartDashboard.putNumber("OutputShooter", output);
-
-    // m_shooterMotor1.setVoltage(output +
-    // m_shooterFeedforward.calculate(setpoint));
     m_shooterMotor1.set(output + m_shooterFeedforward.calculate(setpoint));
     m_shooterMotor2.follow(m_shooterMotor1, true);
   }
-
+  /** 
+   * 
+   * @return the shooter motor velocity in RPMs
+   */
   @Override
   public double getMeasurement() {
-    SmartDashboard.putNumber("Shooter Error", m_controller.getPositionError());
-    SmartDashboard.putNumber("Encoder Velocity", m_shooterEncoder1.getVelocity());
     return m_shooterEncoder1.getVelocity();
   }
 
+  /** 
+   * Function used to access the information on whether or not the Shooter RPM is at 
+   * the desired setpoint. 
+   * 
+   * @return true if the shooter velocity is within the acceptable tolerance of the setpoint
+   */
   public boolean atSetpoint() {
     return m_controller.atSetpoint();
   }
 
+  /** 
+   * Function used to set the desired setpoint in RPMs for the shooter motors. The functionality
+   * of the shooter flap is also contained within this function.
+   * 
+   * @param distance in inches from the shooter to the target center in inches
+   */
   public void setRPM(double distance) {
-    double RPMcommand = 3000.0;
-    SmartDashboard.putNumber("Distance", distance);
-    if (distance > 320.0 && currentlyClose) {
+    double RPMcommand = 3000.0; //Create a double to store the RPM command value and set it to a reasonable default value
+
+    //The follwoing if statements create a typical hysteresis for the currentlyClose var so that the mechanism can not be in a position where
+    //sensor noise will cause continual actuation back and forth
+    if (distance > ShooterConstants.kFlapDownDist && currentlyClose) {
       currentlyClose = false;
-    } else if (distance < 280.0 && !currentlyClose) {
+    } else if (distance < ShooterConstants.kFlapUpDist && !currentlyClose) {
       currentlyClose = true;
     }
 
     if (currentlyClose) {
+      //Experimentally determined 4th degree polynomial of best fit for the RPMCommand vs distance when the flap is up and distance <= 210.0
       RPMcommand = 0.00021811 * Math.pow(distance, 4) - 0.14587931 * Math.pow(distance, 3)
           + 36.33601566 * Math.pow(distance, 2) - 4001.14 * distance + 167946.35 - 250.0;
+      //Linear RPM Command for distances between 210 and 225
       if (distance > 210.0) {
         RPMcommand = 3025 + (distance - 210) * 6.667;
-      } else if (distance > 225) {
+      } 
+      //Linear RPM Command for distances greater than 225
+      else if (distance > 225) {
         RPMcommand = 4.0*distance+2225;
       }
+      //Linear RPM Command for distnaces shorter than 125
       else if (distance < 125){
         RPMcommand = -33.68*distance+7868;
       }
+      //When currently close the flap solenoid should be set to retract position
       setFlap(false);
     } else {
+      //Cosntant RPM for flap down shooting mode
       RPMcommand = 4400.0;
+      //When not currently close the flap solenoid should be extended position
       setFlap(true);
     }
+    //set the PIDController setpoint to the desired RPM command
     setSetpoint(RPMcommand);
-    SmartDashboard.putNumber("Shooter Command", RPMcommand);
   }
 
+  /** 
+   * Function to set the shooter to a persistent RPM with the flap up
+   * 
+   * @param rpm desired for persistent rpm
+   */  
   public void setPersistentRPM(double rpm){
     setSetpoint(rpm);
     setFlap(false);
   }
 
+  /** 
+   * Function to set the flap down or up
+   * 
+   * @param down will lower the flap when true
+   */  
   private void setFlap(boolean down) {
     if (down) {
       flap.set(DoubleSolenoid.Value.kForward);
@@ -112,31 +159,55 @@ public class Shooter extends PIDSubsystem {
       flap.set(DoubleSolenoid.Value.kReverse);
     }
   }
-
+  /** 
+   * Runs the feeder motor in reverse. Is very useful when needed to unjam stuck balls in the hopper.
+   * Will only run when the shooter is currently active.
+   */  
   public void reverseFeeder() {
     if (isEnabled()) {
       m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kFeederReverseSpeed);
     }
   }
-
+  /** 
+   * Runs the feeder motor to feed balls into the shooter.
+   * Will only run when the shooter is active and at the desired setpoint.
+   */  
   public void runFeeder() {
     if (isEnabled() && atSetpoint()) {
       m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kFeederSpeed);
     }
   }
-
+  /** 
+   * Stops the feeder motor by setting the desired power to 0%. This is very important to call anytime a command is interupted
+   * so the shooter is not stuck with the feeder motor running when not intended
+   */  
   public void stopFeeder() {
+    loading = false;
     m_feederMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
   }
 
+  /** 
+   * This function allows the feeder to preload the throat with 1 ball when avialable by tracking the position of the balls
+   * in the hopper and throat by the use of limit switches. This only runs when the shooter is not enabled. Upon enabling of the 
+   * shooter, the feeder motor is automatically stopped so that it can not get stuck in a feed position when not desired.
+   */  
   public void feedThroat() {
-    if ((!isEnabled() && !limit1.get() && !limit2.get())) {
+    //DIO ports read "true" when a connection is open. This means a normally open switch reads true until 
+    //pressed and vice versa for a normally closed switch. For the following the logic reads: if the shooter is not enabled
+    //and the NO limitFeed is pressed (which reads in as false) and the NC limitThroat switch is not pressed (which reads in as false) 
+    //then set the loading boolean to true and run the feeder at the specified speed
+    if ((!isEnabled() && !limitFeed.get() && !limitThroat.get())) {
       m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kThroatSpeed);
       loading = true;
-    } else if (!isEnabled() && loading && !limit2.get()) {
+    } 
+    //The follwing logic reads: If the shooter is not enabled and it is currently loading and the NC limit switch is not pressed 
+    //(which reads in as false) continue to set the feed motor at the specificed speed
+    else if (!isEnabled() && loading && !limitThroat.get()) {
       m_feederMotor.set(TalonSRXControlMode.PercentOutput, ShooterConstants.kThroatSpeed);
-    } else if (!isEnabled() && limit2.get()) {
-      loading = false;
+    } 
+    //Finally the following logic reads: If the shooter is not enabled and the NC limit switch is pressed (which reads in as true)
+    //then run the stopFeeder() function which sets the loading boolean to false and stops the feeder motor
+    else if (!isEnabled() && limitThroat.get()) {
       stopFeeder();
     }
   }

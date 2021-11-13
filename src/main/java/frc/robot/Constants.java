@@ -26,20 +26,18 @@ public final class Constants {
     public static final double kBackLeftOffset = -0.0884;   //Encoder Offset in Radians
     public static final double kBackRightOffset = -1.6194;  //Encoder Offset in Radians
 
-    public static final double onFloorFFAdj = 1.021;        //Value to adjust tuned ff values for when robot weight is applied (if values are tuned "on blocks") 
-
     //Drive motor PID is best done on the roboRIO currently as the SparkMAX does not allow for static gain values on the PID controller, 
     //    these are necessary to have high accuracy when moving at extremely low RPMs
-    public static final double[] kFrontLeftTuningVals =   {0.0072*0.83333*3,0.33993*0.83333*onFloorFFAdj,0.25,0};  //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kFrontRightTuningVals =  {0.0055*0.83333*3,0.33321*0.83333*onFloorFFAdj,0.25,1}; //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackLeftTuningVals =    {0.0085*0.83333*3,0.34095*0.83333*onFloorFFAdj,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackRightTuningVals =   {0.0065*0.83333*3,0.33241*0.83333*onFloorFFAdj,0.25,3};    //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kFrontLeftTuningVals   =   {0.0180,0.2892,0.25,0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kFrontRightTuningVals  =   {0.0138,0.2835,0.25,1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackLeftTuningVals    =   {0.0213,0.2901,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackRightTuningVals   =   {0.0163,0.2828,0.25,3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
 
     //NOTE: 2910 Swerve the wheels are not directly under the center of rotation (Take into consideration when measuring)
-    public static final double kWheelBaseWidth = 0.5588;  // Center distance between right and left wheels on robot
-    public static final double kWheelBaseLength = 0.6446;   // Center distance between front and back wheels on robot
+    public static final double kWheelBaseWidth = 0.5588;  // Center distance in meters between right and left wheels on robot
+    public static final double kWheelBaseLength = 0.6446;   // Center distance in meters between front and back wheels on robot
      
-    //Because the swerve modules poisition does not change, define a global SwerveDriveKinematics for the code
+    //Because the swerve modules poisition does not change, define a constant SwerveDriveKinematics for use throughout the code
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBaseLength / 2, kWheelBaseWidth / 2), new Translation2d(kWheelBaseLength / 2, -kWheelBaseWidth / 2),
         new Translation2d(-kWheelBaseLength / 2, kWheelBaseWidth / 2), new Translation2d(-kWheelBaseLength / 2, -kWheelBaseWidth / 2));
@@ -49,10 +47,18 @@ public final class Constants {
 
     public static final double kInnerDeadband = 0.10; //This value should exceed the maximum value the analog stick may read when not in use (Eliminates "Stick Drift")
     public static final double kOuterDeadband = 0.98; //This value should be lower than the analog stick X or Y reading when aimed at a 45deg angle (Such that X and Y are are maximized simultaneously)
+  
+    //Minimum allowable rotation command (in radians/s) assuming user input is squared using quadraticTransform, this value is always positive and should be compared agaisnt the absolute value of the drive command
+    public static final double kMinRotationCommand = DriveConstants.kMaxAngularSpeed * Math.pow(DriveConstants.kInnerDeadband,2);
+    //Minimum allowable tranlsation command (in m/s) assuming user input is squared using quadraticTransform, this value is always positive and should be compared agaisnt the absolute value of the drive command
+    public static final double kMinTranslationCommand = DriveConstants.kMaxSpeedMetersPerSecond * Math.pow(DriveConstants.kInnerDeadband,2);
+
+    public static final double[] kKeepAnglePID = { 0.666, 0, 0 };
+
   }
 
   public static final class ModuleConstants {
-    public static final double kTranslationRampRate = 0.25;         //Time in seconds the translation motors are allowed to go from 0 to 100% output, helps reduce wheelspin
+    public static final double kTranslationRampRate = 4.0;          //Units of %power/s, ie 4.0 means it takes 0.25s to reach 100% power from 0%
     private static final double kTranslationGearRatio = 8.33333333; //Overall gear ratio of the swerve module
     private static final double kWheelDiameter = 0.09845;           //Wheel Diameter in meters, may need to be experimentally determined due to compliance of floor/tread material
 
@@ -60,7 +66,7 @@ public final class Constants {
 
     //NOTE: You shoulds ALWAYS define a reasonable current limit when using brushless motors 
     //      due to the extremely high stall current avaialble
-    public static final int kDriveCurrentLimit = 40; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration speed)
+    public static final int kDriveCurrentLimit = 40; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
     public static final int kTurnCurrentLimit = 20;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
 
     public static final double[] kTurnPID = { 0.666, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
@@ -72,7 +78,13 @@ public final class Constants {
   }
 
   public static final class GlobalConstants {
-    public static final double kVoltCompensation = 12.0;        //Sets a voltage compensation value, should not exceed typical voltage while operating
+    public static final double kVoltCompensation = 12.0;        //Sets a voltage compensation value ideally 12.0V
+  }
+
+  public static final class VisionConstants {
+    public static final double kElevationOffset = 15.0;              // Degree offset of lens from horizontal due to camera mount
+    public static final double kAzimuthalAngle = 0.0;                // Degree azimuthal offset of limelight
+    public static final double kTargetCenterHeightFromLens = 63.25;  // Center Height of the Target in inches above the lens
   }
 
   public static final class ShooterConstants {
@@ -82,12 +94,16 @@ public final class Constants {
     public static final double kThroatSpeed = -0.75;      //Motor % to command when preloading a ball into the throat
 
     public static final int kMotorPorts[] = { 9, 10 };            //CANID of the SparkMAXs for the shooter motors
-    public static final double kShooterCurrentLimit = 60;         //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)
+    public static final int kShooterCurrentLimit = 60;            //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)
     public static final double kShotRPMTolerance = 75.0;          //RPMs of error allowed before a ball can be fed into t he shooter
     public static final double[] kShooterPID = { 0.00045, 0, 0 }; //Defines PID values for the shooter 0.00045
-    public static final double kShooterFF = 0.0001755;             //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
+    public static final double kShooterFF = 0.0001755;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
 
+    public static final int kFlapSolenoids[] = { 0, 4 };          //Solenoid ports of the Flap cylinder, forward and retract
     public static final int[] kLimitSwitchPorts = { 8, 9 };       //Limit Switch DIO ports for the feed throat functionality
+
+    public static final double kFlapDownDist = 320.0;           //Distance the robot must move away from the target before the flap will lower
+    public static final double kFlapUpDist = 280.0;             //Distance the robot must move toward from the target before the flap will raise
   }
 
   public static final class TurretConstants {

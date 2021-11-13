@@ -29,14 +29,14 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final Drivetrain m_robotDrive = new Drivetrain();
-  private final Shooter m_shooter = new Shooter();
-  private final Turret m_turret = new Turret();
+  private final Drivetrain m_robotDrive = new Drivetrain(); //Create Drivetrain Subsystem
+  private final Shooter m_shooter = new Shooter(); //Create Shooter Subsystem
+  private final Turret m_turret = new Turret(); //Create Turret Subsystem
 
-  private final GoalShoot m_goalShoot = new GoalShoot(m_shooter, m_turret, m_robotDrive);
-  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret);
-  private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);
-  private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);
+  private final GoalShoot m_goalShoot = new GoalShoot(m_shooter, m_turret, m_robotDrive);   //Create GoalShoot Command
+  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret);             //Create FeedShooter Command
+  private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
+  private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -48,14 +48,12 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+    configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings function
 
     // Configure default commands
-    // Set the default drive command to split-stick arcade drive
-    m_robotDrive.setDefaultCommand(m_drive);
-    m_turret.setDefaultCommand(m_faceTurret);
-    m_shooter.setDefaultCommand(m_shootDefault);
+    m_robotDrive.setDefaultCommand(m_drive); //Set drivetrain default command to "DriveByController" 
+    m_turret.setDefaultCommand(m_faceTurret); //Set turret default command to "FaceTurret"
+    m_shooter.setDefaultCommand(m_shootDefault); //Set shooter default command to "ShooterDefault"
 
   }
 
@@ -67,30 +65,31 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Reset drivetrain when down on the DPad is pressed
+    // Reset drivetrain when down/up on the DPad is pressed
     new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset(180.0));
     new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.reset(0.0));
 
-    // Spin up the shooter when the 'A' button is pressed
+    // Run "GoalShoot" command when A is pressed on the joystick
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(m_goalShoot);
 
-    // Turn off the shooter when the 'B' button is pressed
+    // Cancel "GoalShoot" command when A is pressed on the joystick
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_goalShoot.cancel());
 
-
-    // Run the feeder when the 'X' button is held, but only if the shooter is at
-    // speed and turret is aligned
+    // Run "FeedShooter" command when X is held down and canel it when button is released
     new JoystickButton(m_driverController, Button.kX.value).whileHeld(m_feedShoot)
         .whenReleased(() -> m_feedShoot.cancel());
 
+    // Call the reverseFeeder funciton from the shooter subclass when the Y button is held and stop the feeder when the button is released
     new JoystickButton(m_driverController, Button.kY.value).whileHeld(() -> m_shooter.reverseFeeder())
         .whenReleased(() -> m_shooter.stopFeeder());
 
+    // Call the changeFieldOrient function when the Right Bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
 
   }
 
   /**
+   * FYI AUTONOMOUS CODE IS WIP AND PROOF OF CONCEPT
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
