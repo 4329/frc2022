@@ -1,6 +1,5 @@
 package frc.robot.Commands;
 
-import frc.robot.Utilities.*;
 import frc.robot.Subsystems.*;
 import frc.robot.Subsystems.Swerve.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -25,8 +24,8 @@ public class GoalShoot extends CommandBase {
 
   @Override
   public void execute() {
-    m_shooter.setRPM(m_turret.getDistance());
-    m_turret.setAngle( m_robotDrive.getGyro().getRadians());
+    m_shooter.setRPM(Limelight.getDistance());
+    m_turret.setAngle(m_robotDrive.getGyro().getRadians());
     m_shooter.getMeasurement();
   }
 

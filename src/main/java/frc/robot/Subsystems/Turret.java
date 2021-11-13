@@ -141,20 +141,6 @@ public class Turret extends PIDSubsystem {
     trackTarget = track;
   }
 
-
-  /** 
-   * Allows user to pull Limelight distance using the turret class as the one stop shop for the limelight, it should be
-   * noted there is nothing stopping someone from using these functions outside of the Turret class as they are public static
-   * functions of the Limelight class
-   */
-  public double getDistance() {
-    if (Limelight.valid()) {
-      return Limelight.getDistance();
-    } else {
-      return Limelight.getDistance();
-    }
-  }
-
   /**
    * 
    * Obtains the potentiometer reading, this "if-else if-else" may be a remnant of buggy code and is proabbly unecessary now 
