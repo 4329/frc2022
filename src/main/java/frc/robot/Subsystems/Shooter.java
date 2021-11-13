@@ -32,7 +32,7 @@ public class Shooter extends PIDSubsystem {
   private final DigitalInput limitFeed = new DigitalInput(ShooterConstants.kLimitSwitchPorts[0]);  //Create normally open limit switch object for loading the throat
   private final DigitalInput limitThroat = new DigitalInput(ShooterConstants.kLimitSwitchPorts[1]);  //Create normally closed limit switch object for loading the throat
 
-  private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);  //Creates the TalonSRX on the specified CAN ID
+  private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);  //Creates the TalonSRX for the feederMotor on the specified CAN ID
 
   //Creates a SimpleMotorFeedForward with the specified feedforward gain
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(0.0,

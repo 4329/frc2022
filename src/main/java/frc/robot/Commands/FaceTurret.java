@@ -2,7 +2,6 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.Utilities.*;
 import frc.robot.Subsystems.*;
 import frc.robot.Subsystems.Swerve.*;
 
@@ -24,7 +23,7 @@ public class FaceTurret extends CommandBase {
 
     @Override
     public void execute() {
-        m_turret.setAngle( MathUtils.toUnitCircAngle(3 * Math.PI / 2.0 +m_robotDrive.getGyro().getRadians()));
+        m_turret.setAngle(m_robotDrive.getGyro().getRadians());
     }
 
     @Override
