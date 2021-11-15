@@ -35,10 +35,16 @@ public final class Constants {
 
     //Drive motor PID is best done on the roboRIO currently as the SparkMAX does not allow for static gain values on the PID controller, 
     //    these are necessary to have high accuracy when moving at extremely low RPMs
-    public static final double[] kFrontLeftTuningVals   =   {0.0180,0.2892,0.25,0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kFrontRightTuningVals  =   {0.0138,0.2835,0.25,1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackLeftTuningVals    =   {0.0213,0.2901,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackRightTuningVals   =   {0.0163,0.2828,0.25,3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    //public static final double[] kFrontLeftTuningVals   =   {0.0120,0.2892,0.25,0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    //public static final double[] kFrontRightTuningVals  =   {0.0092,0.2835,0.25,1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    //public static final double[] kBackLeftTuningVals    =   {0.0142,0.2901,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    //public static final double[] kBackRightTuningVals   =   {0.0108,0.2828,0.25,3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+
+    public static final double[] kFrontLeftTuningVals   =   {0.0150,0.2850,0.25,0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kFrontRightTuningVals  =   {0.0150,0.2850,0.25,1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackLeftTuningVals    =   {0.0150,0.2850,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackRightTuningVals   =   {0.0150,0.2850,0.25,3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+
 
     //NOTE: 2910 Swerve the wheels are not directly under the center of rotation (Take into consideration when measuring)
     public static final double kWheelBaseWidth = 0.5588;  // Center distance in meters between right and left wheels on robot
@@ -60,7 +66,7 @@ public final class Constants {
     //Minimum allowable tranlsation command (in m/s) assuming user input is squared using quadraticTransform, this value is always positive and should be compared agaisnt the absolute value of the drive command
     public static final double kMinTranslationCommand = DriveConstants.kMaxSpeedMetersPerSecond * Math.pow(DriveConstants.kInnerDeadband,2);
 
-    public static final double[] kKeepAnglePID = { 0.666, 0, 0 }; //Defines the PID values for the keep angle PID
+    public static final double[] kKeepAnglePID = { 0.800, 0, 0 }; //Defines the PID values for the keep angle PID
 
   }
   /**
@@ -76,7 +82,7 @@ public final class Constants {
     //NOTE: You shoulds ALWAYS define a reasonable current limit when using brushless motors 
     //      due to the extremely high stall current avaialble
     public static final int kDriveCurrentLimit = 40; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
-    public static final int kTurnCurrentLimit = 20;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
+    public static final int kTurnCurrentLimit = 30;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
 
     public static final double[] kTurnPID = { 0.666, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
   }
@@ -100,7 +106,7 @@ public final class Constants {
     public static final double kElevationOffset = 15.0;              // Degree offset of lens from horizontal due to camera mount
     public static final double kAzimuthalAngle = 0.0;                // Degree azimuthal offset of limelight
     public static final double kTargetCenterHeightFromLens = 63.25;  // Center Height of the Target in inches above the lens
-    public static final double kTrackTolerance = 0.0140;             // Allowable Limelight angle error in radians
+    public static final double kTrackTolerance = 0.0200;             // Allowable Limelight angle error in radians
   }
   /**
    * Static method containing all Shooter constants 

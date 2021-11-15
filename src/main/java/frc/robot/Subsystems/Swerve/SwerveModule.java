@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
@@ -114,10 +116,14 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurnEncoder()));
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
-    //Calculates the desired feedForward motor % from the current velocity and the static and feedforward gains
-    final double driveFF = driveFeedForward.calculate(m_driveEncoder.getVelocity());
+    //Calculates the desired feedForward motor % from the current desired velocity and the static and feedforward gains
+    final double driveFF = driveFeedForward.calculate(state.speedMetersPerSecond);
     //Set the drive motor to the sum of the feedforward calculation and PID calculation
-    m_driveMotor.set(m_driveLimiter.calculate(driveOutput+driveFF));
+    final double finalDriveOutput = m_driveLimiter.calculate(driveOutput+driveFF);
+    SmartDashboard.putNumber("output" + moduleID, finalDriveOutput);
+    SmartDashboard.putNumber("Desired Speed" + moduleID, state.speedMetersPerSecond);
+    SmartDashboard.putNumber("Actual Speed"+ moduleID, m_driveEncoder.getVelocity());
+    m_driveMotor.set(finalDriveOutput);
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPIDController.calculate(getTurnEncoder(), state.angle.getRadians());
     //Set the turning motor to this output value

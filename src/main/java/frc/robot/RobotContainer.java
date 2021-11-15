@@ -20,7 +20,6 @@ import frc.robot.Commands.GoalShoot;
 import frc.robot.Commands.ShooterDefault;
 import frc.robot.Constants.*;
 
-
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -38,12 +37,12 @@ public class RobotContainer {
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
 
-  // The driver's controller
+  // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
-
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -54,7 +53,6 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(m_drive); //Set drivetrain default command to "DriveByController" 
     m_turret.setDefaultCommand(m_faceTurret); //Set turret default command to "FaceTurret"
     m_shooter.setDefaultCommand(m_shootDefault); //Set shooter default command to "ShooterDefault"
-
   }
 
   /**
@@ -85,7 +83,6 @@ public class RobotContainer {
 
     // Call the changeFieldOrient function when the Right Bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
-
   }
 
   /**

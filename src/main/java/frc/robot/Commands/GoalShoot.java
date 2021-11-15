@@ -26,7 +26,7 @@ public class GoalShoot extends CommandBase {
   public void execute() {
     m_shooter.setRPM(Limelight.getDistance());
     m_turret.setAngle(m_robotDrive.getGyro().getRadians());
-    m_shooter.getMeasurement();
+    //m_shooter.getMeasurement();
   }
 
   @Override
