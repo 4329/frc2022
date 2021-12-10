@@ -57,7 +57,6 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(m_drive); //Set drivetrain default command to "DriveByController" 
     m_turret.setDefaultCommand(m_faceTurret); //Set turret default command to "FaceTurret"
     m_shooter.setDefaultCommand(m_shootDefault); //Set shooter default command to "ShooterDefault"
-    m_intake.setDefaultCommand(new InstantCommand(()->m_intake.stop()));
   }
 
   /**

@@ -56,11 +56,9 @@ public class Intake extends PIDSubsystem {
 
   public void feedIn(){
     setSetpoint(2000.0);
-    m_intakeValve.set(kReverse);
   }
   public void feedOut(){
     setSetpoint(-2000.0);
-    m_intakeValve.set(kReverse);
   }
 
   public void floorIntake(){
@@ -72,8 +70,10 @@ public class Intake extends PIDSubsystem {
     return m_intakeMotor.getOutputCurrent();
   }
 
-  public void stop(){
+  public void end(){
     setSetpoint(0.0);
+    m_intakeValve.set(kReverse);
+    disable();
   }
 
 }

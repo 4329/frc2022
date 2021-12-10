@@ -114,8 +114,8 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int kMotorPort = 11;
     public static final int[] kSolenoidPorts = {5,1};  
-    public static final double[] kPID = { 0.0, 0, 0 };
-    public static final double kIntakeFF = 0.0000909;     //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
+    public static final double[] kPID = { 0.000025, 0, 0 };
+    public static final double kIntakeFF = 0.0000909*0.97;     //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
     public static final double kTolerance = 100.0;
     public static final int kCurrentLimit = 20;  
   }
