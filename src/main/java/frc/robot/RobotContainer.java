@@ -2,12 +2,13 @@ package frc.robot;
 
 import frc.robot.Subsystems.*;
 import frc.robot.Subsystems.Swerve.*;
-
+import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
 import edu.wpi.first.wpilibj2.command.*;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.FaceTurret;
 import frc.robot.Commands.FeedShooter;
+import frc.robot.Commands.FloorIntake;
 import frc.robot.Commands.GoalShoot;
 import frc.robot.Commands.ShooterDefault;
 import frc.robot.Constants.*;
@@ -31,11 +33,13 @@ public class RobotContainer {
   private final Drivetrain m_robotDrive = new Drivetrain(); //Create Drivetrain Subsystem
   private final Shooter m_shooter = new Shooter(); //Create Shooter Subsystem
   private final Turret m_turret = new Turret(); //Create Turret Subsystem
+  private final Intake m_intake = new Intake(); //Create Intake Subsystem
 
   private final GoalShoot m_goalShoot = new GoalShoot(m_shooter, m_turret, m_robotDrive);   //Create GoalShoot Command
-  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret);             //Create FeedShooter Command
+  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret,m_intake);    //Create FeedShooter Command
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
+  private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -53,6 +57,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(m_drive); //Set drivetrain default command to "DriveByController" 
     m_turret.setDefaultCommand(m_faceTurret); //Set turret default command to "FaceTurret"
     m_shooter.setDefaultCommand(m_shootDefault); //Set shooter default command to "ShooterDefault"
+    m_intake.setDefaultCommand(new InstantCommand(()->m_intake.stop()));
   }
 
   /**
@@ -74,8 +79,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_goalShoot.cancel());
 
     // Run "FeedShooter" command when X is held down and canel it when button is released
-    new JoystickButton(m_driverController, Button.kX.value).whileHeld(m_feedShoot)
-        .whenReleased(() -> m_feedShoot.cancel());
+    new JoystickButton(m_driverController, Button.kX.value).whenHeld(m_feedShoot);
 
     // Call the reverseFeeder funciton from the shooter subclass when the Y button is held and stop the feeder when the button is released
     new JoystickButton(m_driverController, Button.kY.value).whileHeld(() -> m_shooter.reverseFeeder())
@@ -83,6 +87,9 @@ public class RobotContainer {
 
     // Call the changeFieldOrient function when the Right Bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
+  
+    new JoystickAnalogButton(m_driverController, GenericHID.Hand.kRight).whenHeld(m_floorIntake);
+  
   }
 
   /**

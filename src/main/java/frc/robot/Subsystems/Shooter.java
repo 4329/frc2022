@@ -49,8 +49,7 @@ import frc.robot.Constants.*;
    */
     public Shooter() {
     //Super implementation that defines the PIDController for the PIDSubsystem with the PID values specified
-    super(new PIDController(ShooterConstants.kShooterPID[0], ShooterConstants.kShooterPID[1],
-        ShooterConstants.kShooterPID[2]));
+    super(new PIDController(ShooterConstants.kPID[0], ShooterConstants.kPID[1], ShooterConstants.kPID[2]));
 
     //Sets the PIDController tolerance to the specified value so that the atSetpoint() function returns truw onyl when the error is below this value
     getController().setTolerance(ShooterConstants.kShotRPMTolerance); 
