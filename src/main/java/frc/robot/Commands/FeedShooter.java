@@ -2,6 +2,7 @@ package frc.robot.Commands;
 
 import frc.robot.Subsystems.*;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class FeedShooter extends CommandBase {
@@ -10,8 +11,10 @@ public class FeedShooter extends CommandBase {
     private final Intake m_intake;
     private final Timer m_intakeTimer = new Timer();
     private final Timer m_unjamTimer = new Timer();
-    private double feedBallTime = 0.0;
-    private boolean fedFirstBall = false;
+    private double shotBallTime = 0.0;
+    private double adjShotBallTime = 0.0;
+    private boolean shotBall = false;
+    private boolean firstBallShot = false;
     private boolean ready = false;
     
     public FeedShooter(Shooter shooter, Turret turret, Intake intake){
@@ -31,22 +34,36 @@ public class FeedShooter extends CommandBase {
     @Override
     public void execute() {
         ready = m_turret.visionAligned() && m_shooter.atSetpoint();
-        if(ready && !fedFirstBall){
-            m_shooter.runFeeder();
-            feedBallTime = m_unjamTimer.get();
-            fedFirstBall = true;
+        SmartDashboard.putBoolean("First Ball Shot", firstBallShot);
+        if(shotBall && m_unjamTimer.get() - shotBallTime > 0.15){
+            shotBall = false;
         }
-        else if(m_unjamTimer.get() - feedBallTime > 0.30 && m_unjamTimer.get()-feedBallTime < 0.50)
+        else if(!shotBall && m_shooter.getTotalCurrent() > 35.0 && ready){
+            shotBall = true;
+            shotBallTime = m_unjamTimer.get();
+            if(firstBallShot){
+                adjShotBallTime = shotBallTime;
+            }
+            else{
+                adjShotBallTime = shotBallTime-0.50;
+                firstBallShot = true;
+            }
+        }
+        
+        if(ready && m_unjamTimer.get() - adjShotBallTime < 0.75){
+            m_shooter.runFeeder();
+        }
+        else if(m_unjamTimer.get() - adjShotBallTime >= 0.75+0.25)
+        {
+            m_unjamTimer.reset();
+            shotBallTime = 0.0;
+            adjShotBallTime = 0.0;
+        }
+        else if(m_unjamTimer.get() - adjShotBallTime >= 0.75)
         {
             m_shooter.reverseFeeder();
         }
-        else if(ready)
-        {
-            m_shooter.runFeeder();
-        }
-        else{
-            m_shooter.stopFeeder();
-        }
+
         if(m_intakeTimer.get() > 0.50){
             m_intakeTimer.reset();
             m_intake.disable();
@@ -62,6 +79,10 @@ public class FeedShooter extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.stopFeeder();
         m_intake.disable();
-        fedFirstBall = false;
+        shotBallTime = 0.0;
+        adjShotBallTime = 0.0;
+        shotBall = false;
+        firstBallShot = false;
     }
 }
+ 

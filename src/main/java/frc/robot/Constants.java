@@ -81,8 +81,8 @@ public final class Constants {
 
     //NOTE: You shoulds ALWAYS define a reasonable current limit when using brushless motors 
     //      due to the extremely high stall current avaialble
-    public static final int kDriveCurrentLimit = 40; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
-    public static final int kTurnCurrentLimit = 30;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
+    public static final int kDriveCurrentLimit = 35; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
+    public static final int kTurnCurrentLimit = 25;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
 
     public static final double[] kTurnPID = { 0.800, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
   }
@@ -129,11 +129,12 @@ public final class Constants {
     public static final double kThroatSpeed = -0.75;      //Motor % to command when preloading a ball into the throat
 
     public static final int kMotorPorts[] = { 9, 10 };            //CANID of the SparkMAXs for the shooter motors
-    public static final int kShooterCurrentLimit = 60;            //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)
+    public static final int kShooterCurrentLimit = 50;            //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)
     public static final double kShotRPMTolerance = 75.0;          //RPMs of error allowed before a ball can be fed into t he shooter
-    public static final double[] kPID = { 0.00045, 0, 0 };        //Defines PID values for the shooter 0.00045
-    public static final double kShooterFF = 0.0001755;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
-
+    public static final double[] kPID = { 0.0002, 0, 0 };        //Defines PID values for the shooter 0.00045
+    public static final double kShooterFF = 0.0001715;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
+    public static final double kStaticGain = 0.01;
+    
     public static final int kFlapSolenoids[] = { 0, 4 };          //Solenoid ports of the Flap cylinder, forward and retract
     public static final int[] kLimitSwitchPorts = { 8, 9 };       //Limit Switch DIO ports for the feed throat functionality
 

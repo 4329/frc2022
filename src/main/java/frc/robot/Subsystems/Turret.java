@@ -23,6 +23,7 @@ import frc.robot.Utilities.*;
 
   private boolean searchClockwise = true; //creates boolean to indicate if the turret is searching clockwise for a target 
   private boolean trackTarget = false;    //creates boolean to indicate if the turret is in trackTarget mode
+  private boolean visionSolution = false;
   /**
    * Creates a Turret PIDSubsystem and sets the appropirate values for the motor controllers, analog encoder, and PIDController.
    * Because there will only ever be 1 turret on the robot the appropriate values will be pulled in from the 
@@ -98,9 +99,11 @@ import frc.robot.Utilities.*;
       Limelight.disable();
     }
 
+    visionSolution = Limelight.valid() && (Math.abs(getPotentionmeter()-angle) < Math.PI/6.0);
+
     //When the limelight does not have a valid solution, keep the turret facing the alliance wall and search back and
     //forth until a solution is found
-    if (trackTarget && !Limelight.valid()) {
+    if (trackTarget && !visionSolution) {
       if (searchClockwise && getPotentionmeter() > angle + Math.PI / 6.0) {
         searchClockwise = false;
       }
@@ -111,15 +114,15 @@ import frc.robot.Utilities.*;
       //when searching clockwise add 0.10 radians to the desired setpoint every isntance of the loop (20ms)
       //vice versa when searching counter clockwise
       if (searchClockwise) {
-        angle = getPotentionmeter() + 0.10;
+        angle = getPotentionmeter() + 0.20;
       } else {
-        angle = getPotentionmeter() - 0.10;
+        angle = getPotentionmeter() - 0.20;
       }
     } 
     
     //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
-    else if (trackTarget && Limelight.valid()) {
+    else if (trackTarget && visionSolution) {
       angle = getPotentionmeter() + Limelight.tx();
     }
     //if the angle setpoint is lower than the minimum allowed position, set the setpoint to the minimum allowed position

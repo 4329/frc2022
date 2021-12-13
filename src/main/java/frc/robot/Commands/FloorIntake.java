@@ -37,13 +37,13 @@ public class FloorIntake extends CommandBase {
         }
 
 
-        if(m_ballIntaking && m_timer.get()-m_ballTime > 0.50)
+        if(m_ballIntaking && m_timer.get()-m_ballTime > 0.55)
         {
             m_timer.reset();
             m_ballTime = 0.0;
             m_ballIntaking = false;
         }
-        else if(m_ballIntaking && m_timer.get()-m_ballTime > 0.30)
+        else if(m_ballIntaking && m_timer.get()-m_ballTime > 0.35)
         {
             m_intake.feedOut();
         }

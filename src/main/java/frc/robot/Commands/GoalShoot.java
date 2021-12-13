@@ -2,6 +2,8 @@ package frc.robot.Commands;
 
 import frc.robot.Subsystems.*;
 import frc.robot.Subsystems.Swerve.*;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class GoalShoot extends CommandBase {
@@ -26,6 +28,10 @@ public class GoalShoot extends CommandBase {
   public void execute() {
     m_shooter.setRPM(Limelight.getDistance());
     m_turret.setAngle(m_robotDrive.getGyro().getRadians());
+    SmartDashboard.putNumber("Shooter Current", m_shooter.getTotalCurrent());
+    SmartDashboard.putNumber("Shooter RPMs", m_shooter.getMeasurement());
+    SmartDashboard.putNumber("Shooter Error", m_shooter.getMeasurement()-m_shooter.getSetpoint());
+    SmartDashboard.putNumber("Distance", Limelight.getDistance());
   }
 
   @Override

@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import com.revrobotics.CANEncoder;
@@ -36,8 +37,10 @@ import frc.robot.Constants.*;
 
   private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);  //Creates the TalonSRX for the feederMotor on the specified CAN ID
 
+  private final Timer m_enableTimer = new Timer();
+
   //Creates a SimpleMotorFeedForward with the specified feedforward gain
-  private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(0.0,
+  private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kStaticGain,
       ShooterConstants.kShooterFF);
 
   /**
@@ -88,8 +91,16 @@ import frc.robot.Constants.*;
   public double getMeasurement() {
     return m_shooterEncoder1.getVelocity();
   }
+  @Override
+  public void enable() {
+    m_enabled = true;
+    m_controller.reset();
+    m_enableTimer.reset();
+    m_enableTimer.start();
+  }
 
   /** 
+   * 
    * Function used to access the information on whether or not the Shooter RPM is at 
    * the desired setpoint. 
    * 
@@ -119,24 +130,24 @@ import frc.robot.Constants.*;
     if (currentlyClose) {
       //Experimentally determined 4th degree polynomial of best fit for the RPMCommand vs distance when the flap is up and distance <= 210.0
       RPMcommand = 0.00021811 * Math.pow(distance, 4) - 0.14587931 * Math.pow(distance, 3)
-          + 36.33601566 * Math.pow(distance, 2) - 4001.14 * distance + 167946.35 - 250.0;
+          + 36.33601566 * Math.pow(distance, 2) - 4001.14 * distance + 167946.35 - 225.0;
       //Linear RPM Command for distances between 210 and 225
       if (distance > 210.0) {
-        RPMcommand = 3025 + (distance - 210) * 6.667;
+        RPMcommand = 3050 + (distance - 210) * 6.667;
       } 
       //Linear RPM Command for distances greater than 225
       else if (distance > 225) {
-        RPMcommand = 4.0*distance+2225;
+        RPMcommand = 4.0*distance+2250;
       }
       //Linear RPM Command for distnaces shorter than 125
       else if (distance < 125){
-        RPMcommand = -33.68*distance+7868;
+        RPMcommand = -33.68*distance+7868+25.0;
       }
       //When currently close the flap solenoid should be set to retract position
       setFlap(false);
     } else {
       //Cosntant RPM for flap down shooting mode
-      RPMcommand = 4400.0;
+      RPMcommand = 4350.0;
       //When not currently close the flap solenoid should be extended position
       setFlap(true);
     }
@@ -218,4 +229,13 @@ import frc.robot.Constants.*;
       stopFeeder();
     }
   }
+
+  public double getTotalCurrent() {
+    return m_shooterMotor1.getOutputCurrent() + m_shooterMotor2.getOutputCurrent();
+  }
+
+  public double timeSinceEnabled() {
+    return m_enableTimer.get();
+  }
+
 }
