@@ -38,7 +38,7 @@ public class RobotContainer {
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
-  private final AutoDriveLinear m_testAutoMove = new AutoDriveLinear(m_robotDrive, 3.0, 6.0, 0.0, Math.PI, 5.0,true);
+  private final AutoDriveLinear m_testAutoMove = new AutoDriveLinear(m_robotDrive, 3.0, 6.0, 3.25, Math.PI, 5.0,true);
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);

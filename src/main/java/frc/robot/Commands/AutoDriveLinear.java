@@ -82,6 +82,11 @@ public class AutoDriveLinear extends CommandBase {
             currentPose.getY()+m_yPID.getSetpoint().position, 
             new Rotation2d(currentPose.getRotation().getRadians() + m_rotPID.getSetpoint().position));
 
+        SmartDashboard.putNumber("Expected X", expectedPose.getX());
+        SmartDashboard.putNumber("Expected Y", expectedPose.getY());
+        SmartDashboard.putNumber("Expected Heading", expectedPose.getRotation().getRadians());
+
+
         final double xPIDoutput = m_xPID.calculate(currentPose.getX(), m_xPIDGoal);
         final double yPIDoutput = m_yPID.calculate(currentPose.getY(), m_yPIDGoal);
         final double rotPIDoutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), m_rotPIDGoal);
