@@ -55,8 +55,10 @@ public final class Constants {
         new Translation2d(kWheelBaseLength / 2, kWheelBaseWidth / 2), new Translation2d(kWheelBaseLength / 2, -kWheelBaseWidth / 2),
         new Translation2d(-kWheelBaseLength / 2, kWheelBaseWidth / 2), new Translation2d(-kWheelBaseLength / 2, -kWheelBaseWidth / 2));
 
+    public static final double kMaxAcceleration = 3.0;
     public static final double kMaxSpeedMetersPerSecond = 3.25; //Maximum Sustainable Drivetrain Speed under Normal Conditions & Battery, Robot will not exceed this speed in closed loop control
     public static final double kMaxAngularSpeed = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
+    public static final double kMaxAngularAccel = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
 
     public static final double kInnerDeadband = 0.10; //This value should exceed the maximum value the analog stick may read when not in use (Eliminates "Stick Drift")
     public static final double kOuterDeadband = 0.98; //This value should be lower than the analog stick X or Y reading when aimed at a 45deg angle (Such that X and Y are are maximized simultaneously)
@@ -93,6 +95,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;    //When making use of multiple controllers for drivers each controller will be on a different port
     public static final int kOperatorControllerPort = 1;  //When making use of multiple controllers for drivers each controller will be on a different port
   }
+
   /**
    * Static method containing all Global constants 
    */
@@ -130,7 +133,7 @@ public final class Constants {
 
     public static final int kMotorPorts[] = { 9, 10 };            //CANID of the SparkMAXs for the shooter motors
     public static final int kShooterCurrentLimit = 50;            //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)
-    public static final double kShotRPMTolerance = 75.0;          //RPMs of error allowed before a ball can be fed into t he shooter
+    public static final double kShotRPMTolerance = 100.0;          //RPMs of error allowed before a ball can be fed into t he shooter
     public static final double[] kPID = { 0.0002, 0, 0 };        //Defines PID values for the shooter 0.00045
     public static final double kShooterFF = 0.0001715;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
     public static final double kStaticGain = 0.01;

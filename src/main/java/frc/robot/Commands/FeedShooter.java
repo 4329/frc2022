@@ -45,23 +45,26 @@ public class FeedShooter extends CommandBase {
                 adjShotBallTime = shotBallTime;
             }
             else{
-                adjShotBallTime = shotBallTime-0.50;
+                adjShotBallTime = shotBallTime-0.75;
                 firstBallShot = true;
             }
         }
         
-        if(ready && m_unjamTimer.get() - adjShotBallTime < 0.75){
+        if(ready && m_unjamTimer.get() - adjShotBallTime < 1.0){
             m_shooter.runFeeder();
         }
-        else if(m_unjamTimer.get() - adjShotBallTime >= 0.75+0.25)
+        else if(m_unjamTimer.get() - adjShotBallTime >= 1.0+0.25)
         {
             m_unjamTimer.reset();
             shotBallTime = 0.0;
             adjShotBallTime = 0.0;
         }
-        else if(m_unjamTimer.get() - adjShotBallTime >= 0.75)
+        else if(m_unjamTimer.get() - adjShotBallTime >= 1.0)
         {
             m_shooter.reverseFeeder();
+        }
+        else if(!ready){
+            m_shooter.stopFeeder();
         }
 
         if(m_intakeTimer.get() > 0.50){

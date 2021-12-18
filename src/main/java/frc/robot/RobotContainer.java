@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Commands.AutoDriveLinear;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.FaceTurret;
 import frc.robot.Commands.FeedShooter;
@@ -40,6 +41,7 @@ public class RobotContainer {
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
+  private final AutoDriveLinear m_testAutoMove = new AutoDriveLinear(m_robotDrive, -3.0, -6.0, 0.0, 0.0, 5.0,true);
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -81,8 +83,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value).whenHeld(m_feedShoot);
 
     // Call the reverseFeeder funciton from the shooter subclass when the Y button is held and stop the feeder when the button is released
-    new JoystickButton(m_driverController, Button.kY.value).whileHeld(() -> m_shooter.reverseFeeder())
-        .whenReleased(() -> m_shooter.stopFeeder());
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(m_testAutoMove).whenReleased(() -> m_testAutoMove.cancel());
 
     // Call the changeFieldOrient function when the Right Bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
