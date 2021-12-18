@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.State;
@@ -64,9 +65,10 @@ public class AutoDriveLinear extends CommandBase {
     @Override
     public void initialize() {
         m_startPose = m_drivetrain.getPose();
-        m_xPID.reset(new State(m_startPose.getX(), m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond));
-        m_yPID.reset(new State(m_startPose.getY(), m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond));
-        m_rotPID.reset(new State(m_startPose.getRotation().getRadians(),m_drivetrain.getChassisSpeed().omegaRadiansPerSecond));
+        final ChassisSpeeds robotSpeed = m_drivetrain.getFieldRelativeSpeeds();
+        m_xPID.reset(new State(m_startPose.getX(), robotSpeed.vxMetersPerSecond));
+        m_yPID.reset(new State(m_startPose.getY(), robotSpeed.vyMetersPerSecond));
+        m_rotPID.reset(new State(m_startPose.getRotation().getRadians(),robotSpeed.omegaRadiansPerSecond));
         m_timer.reset();
         m_timer.start();
     }
