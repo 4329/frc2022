@@ -178,6 +178,13 @@ import frc.robot.Constants.*;
     m_backRight.getState());
   }
 
+  public ChassisSpeeds getFieldRelativeSpeeds(){    
+    return new ChassisSpeeds(
+        getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getCos() - getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getSin(),
+        getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getCos() + getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getSin(),
+        getChassisSpeed().omegaRadiansPerSecond);
+  }
+
   /**
    * Keep angle function is performed to combat drivetrain drift without the need of constant "micro-adjustments" from the driver.
    * A PIDController is used to attempt to maintain the robot heading to the keepAngle value. This value is updated when the robot 

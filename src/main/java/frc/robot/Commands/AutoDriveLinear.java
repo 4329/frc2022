@@ -1,61 +1,72 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Subsystems.Swerve.*;
 
 public class AutoDriveLinear extends CommandBase {
 
-    private final TrapezoidProfile m_xProfile;
-    private final TrapezoidProfile m_yProfile;
-    private final TrapezoidProfile m_rotProfile;
+    private final ProfiledPIDController m_xPID;
+    private final ProfiledPIDController m_yPID;
+    private final ProfiledPIDController m_rotPID;
+
     private final Drivetrain m_drivetrain;
     private final Timer m_timer = new Timer();
     private final double m_timeOut;
-    private final Pose2d m_startPose;
-    private final Pose2d m_finalPose;
+    private Pose2d m_startPose;
     private final boolean m_fieldOrient;
+    private final State m_xPIDGoal;
+    private final State m_yPIDGoal;
+    private final State m_rotPIDGoal;
 
-    public AutoDriveLinear(Drivetrain drive, double xMeters, double yMeters, double finalVel, double finalHeading, double timeOut, boolean fieldOrient)
-    {
+    public AutoDriveLinear(Drivetrain drive, double xMeters, double yMeters, double finalVel, double finalHeading,
+            double timeOut, boolean fieldOrient) {
+
         m_timeOut = timeOut;
         m_fieldOrient = fieldOrient;
 
-        final double distance = Math.sqrt(Math.pow(xMeters,2)+Math.pow(yMeters,2));
-        final double xScale = xMeters/(distance);
-        final double yScale = yMeters/(distance);
+        final double distance = Math.sqrt(Math.pow(xMeters, 2) + Math.pow(yMeters, 2));
+        final double xScale = xMeters / (distance);
+        final double yScale = yMeters / (distance);
 
         SmartDashboard.putNumber("xScale", xScale);
         SmartDashboard.putNumber("yScale", yScale);
 
         m_drivetrain = drive;
 
-        m_startPose = m_drivetrain.getPose();
-        m_finalPose = new Pose2d(m_startPose.getX()+xMeters, m_startPose.getY()+yMeters, new Rotation2d (finalHeading));
+        m_rotPID = new ProfiledPIDController(AutoConstants.kRotPropGain, 0.0, 0.0,
+            new Constraints(AutoConstants.kMaxAngularSpeed, AutoConstants.kMaxAngularAccel));
+        m_rotPID.setTolerance(AutoConstants.kRotTolerance);
+        m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
+        m_rotPIDGoal = new State(finalHeading, 0.0); 
+            
+        m_xPID = new ProfiledPIDController(AutoConstants.kPosPropGain, 0.0, 0.0,
+            new Constraints(AutoConstants.kMaxSpeedMetersPerSecond * Math.abs(xScale),
+                AutoConstants.kMaxAcceleration * Math.abs(xScale)));
+        m_xPID.setTolerance(AutoConstants.kPosTolerance);
+        m_xPIDGoal = new State(xMeters, finalVel * xScale); 
 
-        m_xProfile = new TrapezoidProfile( 
-            new Constraints(DriveConstants.kMaxSpeedMetersPerSecond*Math.abs(xScale), DriveConstants.kMaxAcceleration*Math.abs(xScale)), 
-            new State(xMeters,finalVel*xScale),
-            new State(0.0,m_drivetrain.getChassisSpeed().vxMetersPerSecond));
-        m_yProfile = new TrapezoidProfile(
-            new Constraints(DriveConstants.kMaxSpeedMetersPerSecond*Math.abs(yScale), DriveConstants.kMaxAcceleration*Math.abs(yScale)), 
-            new State(yMeters,finalVel*yScale),
-            new State(0.0,m_drivetrain.getChassisSpeed().vyMetersPerSecond));
-        m_rotProfile = new TrapezoidProfile(
-            new Constraints(DriveConstants.kMaxAngularSpeed, DriveConstants.kMaxAngularAccel),
-            new State(finalHeading,0),
-            new State(m_startPose.getRotation().getRadians(),m_drivetrain.getChassisSpeed().omegaRadiansPerSecond));
+        m_yPID = new ProfiledPIDController(AutoConstants.kPosPropGain, 0.0, 0.0,
+        new Constraints(AutoConstants.kMaxSpeedMetersPerSecond * Math.abs(yScale),
+            AutoConstants.kMaxAcceleration * Math.abs(yScale)));
+        m_yPID.setTolerance(AutoConstants.kPosTolerance);
+        m_yPIDGoal = new State(yMeters, finalVel * yScale); 
 
     }
+
     @Override
     public void initialize() {
+        m_startPose = m_drivetrain.getPose();
+        m_xPID.reset(new State(m_startPose.getX(), m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond));
+        m_yPID.reset(new State(m_startPose.getY(), m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond));
+        m_rotPID.reset(new State(m_startPose.getRotation().getRadians(),m_drivetrain.getChassisSpeed().omegaRadiansPerSecond));
         m_timer.reset();
         m_timer.start();
     }
@@ -63,20 +74,31 @@ public class AutoDriveLinear extends CommandBase {
     @Override
     public void execute() {
         final double time = m_timer.get();
-        final double xCommand = m_xProfile.calculate(time).velocity;
-        final double yCommand = m_yProfile.calculate(time).velocity;
-        final double rotCommand = m_rotProfile.calculate(time).velocity;
+        final Pose2d currentPose = m_drivetrain.getPose();  
+        final Pose2d expectedPose = new Pose2d(
+            currentPose.getX()+m_xPID.getSetpoint().position,
+            currentPose.getY()+m_yPID.getSetpoint().position, 
+            new Rotation2d(currentPose.getRotation().getRadians() + m_rotPID.getSetpoint().position));
+
+        final double xPIDoutput = m_xPID.calculate(currentPose.getX(), m_xPIDGoal);
+        final double yPIDoutput = m_yPID.calculate(currentPose.getY(), m_yPIDGoal);
+        final double rotPIDoutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), m_rotPIDGoal);
+
+        final double xDrive = xPIDoutput + m_xPID.getSetpoint().velocity;
+        final double yDrive = yPIDoutput + m_yPID.getSetpoint().velocity;
+        final double rotDrive = rotPIDoutput + m_rotPID.getSetpoint().velocity;
 
 
-        SmartDashboard.putNumber("xAutoCommand", xCommand);
-        SmartDashboard.putNumber("yAutoCommand", yCommand);
-        SmartDashboard.putNumber("rotAutoCommand", rotCommand);
+        SmartDashboard.putNumber("xAutoCommand", xDrive);
+        SmartDashboard.putNumber("yAutoCommand", yDrive);
+        SmartDashboard.putNumber("rotAutoCommand", rotDrive);
         SmartDashboard.putNumber("AutoTimer", time);
 
-        m_drivetrain.drive(xCommand,yCommand,rotCommand,m_fieldOrient);
+        m_drivetrain.drive(xDrive,yDrive,rotDrive,m_fieldOrient);
 
+        final boolean atGoals = m_xPID.atGoal() && m_yPID.atGoal() && m_rotPID.atGoal();
 
-        if(m_xProfile.isFinished(time) && m_yProfile.isFinished(time) && m_rotProfile.isFinished(time) || (time > m_timeOut))
+        if(atGoals || (time > m_timeOut))
         {
             cancel();
         }
