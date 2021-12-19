@@ -84,9 +84,9 @@ public final class Constants {
     //NOTE: You shoulds ALWAYS define a reasonable current limit when using brushless motors 
     //      due to the extremely high stall current avaialble
     public static final int kDriveCurrentLimit = 35; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
-    public static final int kTurnCurrentLimit = 25;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
+    public static final int kTurnCurrentLimit = 30;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
 
-    public static final double[] kTurnPID = { 0.800, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
+    public static final double[] kTurnPID = { 0.600, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
   }
   /**
    * Static method containing all User I/O constants 
@@ -160,15 +160,15 @@ public final class Constants {
    * Static method containing all Autonomous constants 
    */
   public static final class AutoConstants {
-    public static final double kMaxAcceleration = 3.0;
+    public static final double kMaxAcceleration = 3000000000.0;
     public static final double kMaxSpeedMetersPerSecond = 3.25; //Maximum Sustainable Drivetrain Speed under Normal Conditions & Battery, Robot will not exceed this speed in closed loop control
     public static final double kMaxAngularSpeed = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
     public static final double kMaxAngularAccel = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
 
     public static final double kPosTolerance = 0.05;     
     public static final double kRotTolerance= 0.05; 
-    public static final double kPosPropGain = 0.1;
-    public static final double kRotPropGain = 0.1; 
+    public static final double kPosPropGain = 0.25;
+    public static final double kRotPropGain = 0.25; 
     public static final double kPXController = 0.1;
     public static final double kPYController = 0.1;
     public static final double kPThetaController = 0.1;

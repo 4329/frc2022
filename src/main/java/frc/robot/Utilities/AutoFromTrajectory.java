@@ -24,7 +24,7 @@ import frc.robot.Subsystems.Swerve.Drivetrain;
 public class AutoFromTrajectory {
   static Trajectory m_trajectory = new Trajectory();
   static Drivetrain m_drive;
-  public static Command autoCommand(String CSV, Drivetrain drive) {
+  public static Command autoCSVCommand(String CSV, Drivetrain drive) {
     m_drive = drive;
     generate(CSV);
     
@@ -42,6 +42,28 @@ public class AutoFromTrajectory {
 
     // Reset odometry to the starting pose of the trajectory.
     m_drive.resetOdometry(m_trajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return swerveControllerCommand;
+  }
+
+  public static Command autoTrajectoryCommand(Trajectory trajectory, Drivetrain drive) {
+    m_drive = drive;
+    
+    var thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0,
+        AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory,
+        m_drive::getPose, // Functional interface to feed supplier
+        DriveConstants.kDriveKinematics,
+
+        // Position controllers
+        new PIDController(AutoConstants.kPXController, 0, 0), new PIDController(AutoConstants.kPYController, 0, 0),
+        thetaController, m_drive::setModuleStates, m_drive);
+
+    // Reset odometry to the starting pose of the trajectory.
+    m_drive.resetOdometry(trajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand;

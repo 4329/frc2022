@@ -7,10 +7,11 @@ import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Commands.AutoDriveLinear;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.FaceTurret;
 import frc.robot.Commands.FeedShooter;
@@ -38,7 +39,8 @@ public class RobotContainer {
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
-  private final AutoDriveLinear m_testAutoMove = new AutoDriveLinear(m_robotDrive, 3.0, 6.0, 3.25, Math.PI, 5.0,true);
+
+  private final Command complexAuto = new SequentialCommandGroup();
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -79,17 +81,22 @@ public class RobotContainer {
     // Run "FeedShooter" command when X is held down and canel it when button is released
     new JoystickButton(m_driverController, Button.kX.value).whenHeld(m_feedShoot);
 
-    new JoystickButton(m_driverController, Button.kY.value).whenPressed(m_testAutoMove).whenReleased(() -> m_testAutoMove.cancel());
-
     // Call the changeFieldOrient function when the Right Bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
   
     new JoystickAnalogButton(m_driverController, GenericHID.Hand.kRight).whenHeld(m_floorIntake);
-  
+
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(complexAuto);
+
+
   }
 
 public Command autoFromTrajectory(String CSV) {
-	return AutoFromTrajectory.autoCommand(CSV, m_robotDrive);
+	return AutoFromTrajectory.autoCSVCommand(CSV, m_robotDrive);
+}
+
+public Command autoFromTrajectory(Trajectory trajectory){
+  return AutoFromTrajectory.autoTrajectoryCommand(trajectory,m_robotDrive);
 }
 
 }
