@@ -160,7 +160,7 @@ public final class Constants {
    * Static method containing all Autonomous constants 
    */
   public static final class AutoConstants {
-    public static final double kMaxAcceleration = 3000000000.0;
+    public static final double kMaxAcceleration = 3.00;
     public static final double kMaxSpeedMetersPerSecond = 3.25; //Maximum Sustainable Drivetrain Speed under Normal Conditions & Battery, Robot will not exceed this speed in closed loop control
     public static final double kMaxAngularSpeed = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
     public static final double kMaxAngularAccel = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly

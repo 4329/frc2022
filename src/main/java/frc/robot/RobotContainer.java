@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.List;
+
 import frc.robot.Subsystems.*;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.AutoFromTrajectory;
@@ -7,9 +9,13 @@ import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
@@ -40,7 +46,7 @@ public class RobotContainer {
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
 
-  private final Command complexAuto = new SequentialCommandGroup();
+  private final Command complexAuto = autoFromTrajectory();
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -86,7 +92,7 @@ public class RobotContainer {
   
     new JoystickAnalogButton(m_driverController, GenericHID.Hand.kRight).whenHeld(m_floorIntake);
 
-    new JoystickButton(m_driverController, Button.kY.value).whenPressed(complexAuto);
+    new JoystickButton(m_driverController, Button.kY.value).whileHeld(complexAuto).whenReleased(()->complexAuto.cancel());
 
 
   }
@@ -95,7 +101,26 @@ public Command autoFromTrajectory(String CSV) {
 	return AutoFromTrajectory.autoCSVCommand(CSV, m_robotDrive);
 }
 
-public Command autoFromTrajectory(Trajectory trajectory){
+public Command autoFromTrajectory(){
+
+  TrajectoryConfig config =
+        new TrajectoryConfig(
+                AutoConstants.kMaxSpeedMetersPerSecond,
+                AutoConstants.kMaxAcceleration)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DriveConstants.kDriveKinematics);
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory trajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            config);
+
   return AutoFromTrajectory.autoTrajectoryCommand(trajectory,m_robotDrive);
 }
 
