@@ -83,7 +83,7 @@ public final class Constants {
 
     //NOTE: You shoulds ALWAYS define a reasonable current limit when using brushless motors 
     //      due to the extremely high stall current avaialble
-    public static final int kDriveCurrentLimit = 35; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
+    public static final int kDriveCurrentLimit = 40; //Limits Translation Motor Current to improve efficiency and reduce voltage drop (Lower numbers will reduce acceleration)
     public static final int kTurnCurrentLimit = 30;  //Limits Rotation Motor Current, this is generally not an issue with NEOs/Falcons on 2910 swerve but may be if smaller brushed motors are used
 
     public static final double[] kTurnPID = { 0.600, 0, 0 }; //Defines the PID values for rotation of the serve modules, should show some minor oscillation when no weight is loaded on the modules
@@ -151,8 +151,8 @@ public final class Constants {
     public static final int kTurretPort = 1;                    //CANID of the turret motor controller
     public static final int kTurretPotentiometerPort = 4;       //Analog port of the turret analog potentiometer
     public static final double kTurretTolerance = 0.0139626;    //allowable angle error in radians for the PIDSubsystem to report atSetpoint() to true
-    public static final double[] kTurretPID = { 1.6, 2.0, 0 };  //Defines the PID values for rotation of the turret
-    public static final double kTurretILimit = 0.025;           //Limits Integral term so as to not wind up values when making larger moves
+    public static final double[] kTurretPID = { 1.6, 0.0, 0 };  //Defines the PID values for rotation of the turret
+    public static final double kStaticGain = 0.025;           //Limits Integral term so as to not wind up values when making larger moves
     public static final double kTurretLow = 1.00;               //Minimum angle in radians allowed (defines the turret deadzone)
     public static final double kTurretHigh = 5.25;              //Maximum angle in radians allowed (defines the turret deadzone)
   }

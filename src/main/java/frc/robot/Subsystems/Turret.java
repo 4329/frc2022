@@ -41,10 +41,6 @@ import frc.robot.Utilities.*;
 
     //Enables voltage compensation on the TalonSRX to attempt to normalize output over wide range of bus voltage throughout a match
     m_turretMotor.configVoltageCompSaturation(GlobalConstants.kVoltCompensation);
-
-    //Sets a max integrator range for the integral term of the PID, this term will most likely be removed once time can be made for creating a 
-    //feedforward with a static gain value
-    m_controller.setIntegratorRange(-TurretConstants.kTurretILimit, TurretConstants.kTurretILimit);
   }
   /**
    * Uses the output from the PIDController to set the motor%.
@@ -54,7 +50,8 @@ import frc.robot.Utilities.*;
    */
   @Override
   public void useOutput(double output, double setpoint) {
-    m_turretMotor.set(TalonSRXControlMode.PercentOutput, output);
+    final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
+    m_turretMotor.set(TalonSRXControlMode.PercentOutput, output+staticGain);
   }
   /** 
    * 
