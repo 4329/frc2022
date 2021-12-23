@@ -46,7 +46,7 @@ public class RobotContainer {
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
 
-  private final Command complexAuto = autoFromTrajectory("paths/TestPath.csv");
+  private final Command complexAuto = autoFromTrajectory();
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -96,10 +96,6 @@ public class RobotContainer {
 
 
   }
-
-public Command autoFromTrajectory(String CSV) {
-	return AutoFromTrajectory.autoCSVCommand(CSV, m_robotDrive);
-}
 
 public Command autoFromTrajectory(){
 

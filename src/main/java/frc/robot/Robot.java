@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.lang.String;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Subsystems.Limelight;
@@ -20,7 +18,6 @@ import frc.robot.Subsystems.Limelight;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private String trajectoryCSV = "paths/TestPath.csv";
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -74,7 +71,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.autoFromTrajectory(trajectoryCSV);
+    m_autonomousCommand = m_robotContainer.autoFromTrajectory();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");

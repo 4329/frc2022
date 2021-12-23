@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.pathplanner.lib.PathPlanner;
+
 import java.lang.String;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -24,9 +27,8 @@ import frc.robot.Subsystems.Swerve.Drivetrain;
 public class AutoFromTrajectory {
   static Trajectory m_trajectory = new Trajectory();
   static Drivetrain m_drive;
-  public static Command autoCSVCommand(String CSV, Drivetrain drive) {
+  public static Command autoCSVCommand(Drivetrain drive) {
     m_drive = drive;
-    generate(CSV);
     
     var thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0,
         AutoConstants.kThetaControllerConstraints);
