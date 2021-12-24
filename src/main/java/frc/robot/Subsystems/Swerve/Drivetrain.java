@@ -96,17 +96,15 @@ import frc.robot.Constants.*;
     //normalize wheel speeds so all individual states are scaled to achievable velocities
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond); 
 
-    //Set the 4 swerve module desired states from the previous functions
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    setModuleStates(swerveModuleStates);
+  }
+  @Override
+  public void periodic(){
+        //Update swerve drive odometry periodically so robot pose can be tracked
+        updateOdometry();    
 
-    //Update swerve drive odometry periodically so robot pose can be tracked
-    updateOdometry();    
-
-    //Calls get pose function which sends the Pose information to the SmartDashboard
-    getPose();
+        //Calls get pose function which sends the Pose information to the SmartDashboard
+        getPose();
   }
 
   /**
@@ -116,10 +114,18 @@ import frc.robot.Constants.*;
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.normalizeWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    SmartDashboard.putNumber("desired angle 1",desiredStates[0].angle.getRadians());
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_backLeft.setDesiredState(desiredStates[2]);
     m_backRight.setDesiredState(desiredStates[3]);
+  }
+
+  public void stop(){
+    m_frontLeft.stop();
+    m_frontRight.stop();
+    m_backLeft.stop();
+    m_backRight.stop();
   }
 
   /**

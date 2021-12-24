@@ -7,22 +7,27 @@ import edu.wpi.first.wpilibj2.command.button.*;
 public class JoystickAnalogButton extends Button {
 
   XboxController m_controller;
-  Hand m_hand;
   private double m_threshold = 0.25;
+  private boolean m_side;
 
   /**
    * Create a button for triggering commands off a controller's analog axis
    * 
    * @param controller The controller to use
-   * @param hand Which side of the controller
+   * @param side Which side of the controller (Left = true, Right = false)
    */
-  public JoystickAnalogButton(XboxController controller, Hand hand) {
+  public JoystickAnalogButton(XboxController controller, boolean side) {
       m_controller = controller;
-      m_hand = hand;
+      m_side = side;
   }
 
   public boolean get() {
-      return m_controller.getTriggerAxis(m_hand) > m_threshold; 
+    if(m_side){
+      return m_controller.getTriggerAxis(Hand.kLeft) > m_threshold; 
+    }
+    else{
+      return m_controller.getTriggerAxis(Hand.kRight) > m_threshold; 
+    }
   }
 
 }

@@ -15,6 +15,7 @@ public class GoalShoot extends CommandBase {
     m_shooter = shooter;
     m_turret = turret;
     m_robotDrive = drive;
+    addRequirements(turret);
   }
 
   @Override

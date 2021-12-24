@@ -160,18 +160,14 @@ public final class Constants {
    * Static method containing all Autonomous constants 
    */
   public static final class AutoConstants {
-    public static final double kMaxAcceleration = 3.00;
-    public static final double kMaxSpeedMetersPerSecond = 3.25; //Maximum Sustainable Drivetrain Speed under Normal Conditions & Battery, Robot will not exceed this speed in closed loop control
+    public static final double kMaxAcceleration = 3.25;
+    public static final double kMaxSpeed = 3.25; //Maximum Sustainable Drivetrain Speed under Normal Conditions & Battery, Robot will not exceed this speed in closed loop control
     public static final double kMaxAngularSpeed = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
     public static final double kMaxAngularAccel = Math.PI;      //Maximum Angular Speed desired. NOTE: Robot can exceed this but spinning fast is not particularly useful or driver friendly
 
-    public static final double kPosTolerance = 0.05;     
-    public static final double kRotTolerance= 0.05; 
-    public static final double kPosPropGain = 0.25;
-    public static final double kRotPropGain = 0.25; 
-    public static final double kPXController = 0.1;
-    public static final double kPYController = 0.1;
-    public static final double kPThetaController = 0.1;
+    public static final double kPXController = 2.0;
+    public static final double kPYController = 2.0;
+    public static final double kPThetaController = 2.0;
 
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeed, kMaxAngularAccel); //Creates a trapezoidal motion for the auto rotational commands

@@ -1,20 +1,12 @@
 package frc.robot;
 
-import java.util.List;
-
 import frc.robot.Subsystems.*;
 import frc.robot.Subsystems.Swerve.*;
-import frc.robot.Utilities.AutoFromTrajectory;
 import frc.robot.Utilities.JoystickAnalogButton;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -24,7 +16,7 @@ import frc.robot.Commands.FeedShooter;
 import frc.robot.Commands.FloorIntake;
 import frc.robot.Commands.GoalShoot;
 import frc.robot.Commands.ShooterDefault;
-
+import frc.robot.Commands.Autos.AutoRight;
 import frc.robot.Constants.*;
 
 /*
@@ -46,11 +38,17 @@ public class RobotContainer {
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
 
-  private final Command complexAuto = autoFromTrajectory();
-
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
+  private final Command autoRight = new AutoRight(m_robotDrive, m_intake, m_shooter, m_turret, m_driverController);
+  
+  private final Command autoShootOnly = new GoalShoot(m_shooter, m_turret, m_robotDrive).
+    alongWith(new FeedShooter(m_shooter, m_turret, m_intake));
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
   private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
   
@@ -58,8 +56,8 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings function
-
     // Configure default commands
     m_robotDrive.setDefaultCommand(m_drive); //Set drivetrain default command to "DriveByController" 
     m_turret.setDefaultCommand(m_faceTurret); //Set turret default command to "FaceTurret"
@@ -90,34 +88,21 @@ public class RobotContainer {
     // Call the changeFieldOrient function when the Right Bumper is pressed
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
   
-    new JoystickAnalogButton(m_driverController, GenericHID.Hand.kRight).whenHeld(m_floorIntake);
+    new JoystickAnalogButton(m_driverController, false).whenHeld(m_floorIntake);
 
-    new JoystickButton(m_driverController, Button.kY.value).whileHeld(complexAuto).whenReleased(()->complexAuto.cancel());
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(autoShootOnly).whenReleased(()->autoShootOnly.cancel());
 
 
   }
 
-public Command autoFromTrajectory(){
+private void configureAutoChooser(){
+  m_chooser.addOption("Right", autoRight);
+  m_chooser.setDefaultOption("Shoot Only", autoShootOnly);
+  SmartDashboard.putData(m_chooser);  
+}
 
-  TrajectoryConfig config =
-        new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
-                AutoConstants.kMaxAcceleration)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow.  All units in meters.
-    Trajectory trajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(-0.5, 0), new Translation2d(-1, 0)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(-1.5, 0, new Rotation2d(0)),
-            config);
-
-  return AutoFromTrajectory.autoTrajectoryCommand(trajectory,m_robotDrive);
+public Command getAuto(){
+  return m_chooser.getSelected();
 }
 
 }
