@@ -16,6 +16,7 @@ import frc.robot.Commands.FeedShooter;
 import frc.robot.Commands.FloorIntake;
 import frc.robot.Commands.GoalShoot;
 import frc.robot.Commands.ShooterDefault;
+import frc.robot.Commands.Autos.AutoFromFeeder;
 import frc.robot.Commands.Autos.AutoRight;
 import frc.robot.Constants.*;
 
@@ -36,13 +37,14 @@ public class RobotContainer {
   private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret,m_intake);    //Create FeedShooter Command
   private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
   private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
-  private final FloorIntake m_floorIntake = new FloorIntake(m_intake);
+  private final FloorIntake m_floorIntake = new FloorIntake(m_intake, true);
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
-  private final Command autoRight = new AutoRight(m_robotDrive, m_intake, m_shooter, m_turret, m_driverController);
+  private final Command autoRight = new AutoRight(m_robotDrive, m_intake, m_shooter, m_turret);
+  private final Command autoFeeder = new AutoFromFeeder(m_robotDrive, m_intake, m_shooter, m_turret);
   
   private final Command autoShootOnly = new GoalShoot(m_shooter, m_turret, m_robotDrive).
     alongWith(new FeedShooter(m_shooter, m_turret, m_intake));
@@ -90,13 +92,14 @@ public class RobotContainer {
   
     new JoystickAnalogButton(m_driverController, false).whenHeld(m_floorIntake);
 
-    new JoystickButton(m_driverController, Button.kY.value).whenPressed(autoShootOnly).whenReleased(()->autoShootOnly.cancel());
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(autoFeeder).whenReleased(()->autoFeeder.cancel());
 
 
   }
 
 private void configureAutoChooser(){
   m_chooser.addOption("Right", autoRight);
+  m_chooser.addOption("AutoCycle", autoFeeder);
   m_chooser.setDefaultOption("Shoot Only", autoShootOnly);
   SmartDashboard.putData(m_chooser);  
 }

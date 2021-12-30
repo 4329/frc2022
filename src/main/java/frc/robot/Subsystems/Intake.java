@@ -37,6 +37,7 @@ public class Intake extends PIDSubsystem {
     getController().setTolerance(IntakeConstants.kTolerance);
     m_intakeMotor.setSmartCurrentLimit(IntakeConstants.kCurrentLimit);
     m_intakeMotor.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
+    m_intakeMotor.setInverted(true);
     m_intakeMotor.burnFlash();
   }
 
@@ -62,7 +63,7 @@ public class Intake extends PIDSubsystem {
   }
 
   public void floorIntake(){
-    setSetpoint(10000.0);
+    setSetpoint(11000.0);
     m_intakeValve.set(kForward);
   }
 

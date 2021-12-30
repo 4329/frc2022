@@ -16,19 +16,21 @@ import frc.robot.Utilities.AutoFromPathPlanner;
 
 public class AutoRight extends ParallelCommandGroup {
 
-    public AutoRight(Drivetrain drive, Intake intake, Shooter shooter, Turret turret, XboxController controller){
-        addCommands( new SequentialCommandGroup( new WaitCommand(0.10),
+    public AutoRight(Drivetrain drive, Intake intake, Shooter shooter, Turret turret){
+        addCommands( new SequentialCommandGroup( new WaitCommand(0.20),
 
-        new AutoFromPathPlanner(drive,"InitialBackup",AutoConstants.kMaxSpeed),
+        new AutoFromPathPlanner(drive,"InitialBackup",AutoConstants.kMaxSpeed).withTimeout(4.00),
 
-        new FeedShooter(shooter, turret, intake).withTimeout(1.25),
+        new FeedShooter(shooter, turret, intake).withTimeout(2.00),
 
-        new AutoFromPathPlanner(drive, "IntakeBalls",AutoConstants.kMaxSpeed).raceWith(
-            new FloorIntake(intake)),
+        new AutoFromPathPlanner(drive, "IntakeBalls",AutoConstants.kMaxSpeed*0.750).raceWith(
+            new FloorIntake(intake,false)).withTimeout(4.00), 
+
+            new WaitCommand(0.25),
             
-            new AutoFromPathPlanner(drive, "DriveToShoot",AutoConstants.kMaxSpeed),
+            new AutoFromPathPlanner(drive, "DriveToShoot",AutoConstants.kMaxSpeed).withTimeout(4.00),
 
-        new FeedShooter(shooter, turret, intake).withTimeout(1.75),
+        new FeedShooter(shooter, turret, intake).withTimeout(3.00),
         
         new AutoFromPathPlanner(drive, "FinalMove",AutoConstants.kMaxSpeed)),  
 

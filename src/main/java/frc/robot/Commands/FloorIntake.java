@@ -10,9 +10,11 @@ public class FloorIntake extends CommandBase {
     private final Timer m_timer = new Timer();
     private boolean m_ballIntaking = false;
     private double m_ballTime = 0.0;
+    private final boolean m_unjam;
     
-    public FloorIntake(Intake intake){
+    public FloorIntake(Intake intake, boolean unjam){
         m_intake = intake;
+        m_unjam = unjam;
     }
 
     @Override
@@ -27,30 +29,35 @@ public class FloorIntake extends CommandBase {
         m_intake.floorIntake();
         SmartDashboard.putNumber("Intake Current", m_intake.getCurrent());
         SmartDashboard.putNumber("Intake Velocity", m_intake.getMeasurement());
-        if(m_timer.get() <= 0.35){
-            m_intake.floorIntake();
-        }
-        else if(m_timer.get() > 0.35 && m_intake.getCurrent() >= 10.0 && !m_ballIntaking)
-        {
-            m_ballIntaking = true;
-            m_ballTime = m_timer.get();
-        }
+        
+        if(m_unjam){
+            if(m_timer.get() <= 0.35){
+                m_intake.floorIntake();
+            }
+            else if(m_timer.get() > 0.35 && m_intake.getCurrent() >= 10.0 && !m_ballIntaking)
+            {
+                m_ballIntaking = true;
+                m_ballTime = m_timer.get();
+            }
 
 
-        if(m_ballIntaking && m_timer.get()-m_ballTime > 0.55)
-        {
-            m_timer.reset();
-            m_ballTime = 0.0;
-            m_ballIntaking = false;
-        }
-        else if(m_ballIntaking && m_timer.get()-m_ballTime > 0.35)
-        {
-            m_intake.feedOut();
+            if(m_ballIntaking && m_timer.get()-m_ballTime > 0.55)
+            {
+                m_timer.reset();
+                m_ballTime = 0.0;
+                m_ballIntaking = false;
+            }
+            else if(m_ballIntaking && m_timer.get()-m_ballTime > 0.35)
+            {
+                m_intake.feedOut();
+            }
         }
     }
   
     @Override
     public void end(boolean interrupted) {
+        m_ballTime = 0.0;
+        m_ballIntaking = false;
         m_intake.end();
     }
 }
