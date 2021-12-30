@@ -94,7 +94,6 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(autoFeeder).whenReleased(()->autoFeeder.cancel());
 
-
   }
 
 private void configureAutoChooser(){

@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
 import frc.robot.Constants.*;
@@ -90,7 +91,7 @@ import frc.robot.Utilities.*;
     angle = MathUtils.toUnitCircAngle(3 * Math.PI / 2.0 + angle);
 
     //If trackTarget is set to true the turret will use the limelight to determine setpoint
-    if (trackTarget) {
+    if (trackTarget || SmartDashboard.getBoolean("Limelight", false)) {
       Limelight.enable();
     } else {
       Limelight.disable();
