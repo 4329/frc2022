@@ -107,7 +107,7 @@ public final class Constants {
    */
   public static final class VisionConstants {
     public static final double kElevationOffset = 15.0;              // Degree offset of lens from horizontal due to camera mount
-    public static final double kAzimuthalAngle = 0.00;                // Degree azimuthal offset of limelight
+    public static final double kAzimuthalAngle = -0.50;                // Degree azimuthal offset of limelight
     public static final double kTargetCenterHeightFromLens = 63.25;  // Center Height of the Target in inches above the lens
     public static final double kTrackTolerance = 0.0200;             // Allowable Limelight angle error in radians
   }
@@ -141,8 +141,8 @@ public final class Constants {
     public static final int kFlapSolenoids[] = { 0, 4 };          //Solenoid ports of the Flap cylinder, forward and retract
     public static final int[] kLimitSwitchPorts = { 8, 9 };       //Limit Switch DIO ports for the feed throat functionality
 
-    public static final double kFlapDownDist = 320.0;           //Distance the robot must move away from the target before the flap will lower
-    public static final double kFlapUpDist = 280.0;             //Distance the robot must move toward from the target before the flap will raise
+    public static final double kFlapDownDist = 250.0;           //Distance the robot must move away from the target before the flap will lower
+    public static final double kFlapUpDist = 230.0;             //Distance the robot must move toward from the target before the flap will raise
   }
   /**
    * Static method containing all Turret constants 

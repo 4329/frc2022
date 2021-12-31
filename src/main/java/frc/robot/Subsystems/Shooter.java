@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.*;
 import java.awt.geom.Point2D;
 import frc.robot.Utilities.LinearInterpolationTable;
@@ -41,17 +42,36 @@ import frc.robot.Utilities.LinearInterpolationTable;
 
   private final Timer m_enableTimer = new Timer();
 
-  private Point2D[] interpolationTable = 
+  private Point2D[] flapUpTable = 
     new Point2D.Double[]{
       new Point2D.Double(100,4525),
-      new Point2D.Double(125,3700),
-      new Point2D.Double(150,3175),
-      new Point2D.Double(175,3025),
-      new Point2D.Double(200,2900),
-      new Point2D.Double(225,3150),
-      new Point2D.Double(250,3250),
+      new Point2D.Double(110,4275),
+      new Point2D.Double(120,3875),
+      new Point2D.Double(130,3275),
+      new Point2D.Double(140,3125),
+      new Point2D.Double(150,3075),
+      new Point2D.Double(160,3025),
+      new Point2D.Double(180,3000),
+      new Point2D.Double(200,3025),
+      new Point2D.Double(210,3050),
+      new Point2D.Double(220,3100),
+      new Point2D.Double(230,3175),
+      new Point2D.Double(240,3300),
+      new Point2D.Double(250,3425),
+      new Point2D.Double(275,3700),
     };  
-  private LinearInterpolationTable m_RPMTable = new LinearInterpolationTable(interpolationTable);
+  private LinearInterpolationTable m_FlapUpTable = new LinearInterpolationTable(flapUpTable);
+
+  private Point2D[] flapDownTable = 
+  new Point2D.Double[]{
+    new Point2D.Double(230,3700),
+    new Point2D.Double(250,3900),
+    new Point2D.Double(270,3925),
+    new Point2D.Double(290,4125),
+    new Point2D.Double(310,4250),
+    new Point2D.Double(335,4750)
+  };  
+private LinearInterpolationTable m_FlapDownTable = new LinearInterpolationTable(flapDownTable);
 
   //Creates a SimpleMotorFeedForward with the specified feedforward gain
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kStaticGain,
@@ -83,7 +103,9 @@ import frc.robot.Utilities.LinearInterpolationTable;
     setSetpoint(3000.0);                                                          //It is important to set a default value here that is not 0RPMs, this ensures the
                                                                                   //atSetpoint() function will not return true when the shooter is not spun up yet
                                                                                   //and could potentially jam and stall the shooter with a ball prematurely                          
-
+    SmartDashboard.putNumber("ManualShooterRPM", 3000);
+    SmartDashboard.putBoolean("ManualShooter",false);
+    SmartDashboard.putBoolean("ManualShooterFlap", false);
 
   }
   /**
@@ -144,15 +166,26 @@ import frc.robot.Utilities.LinearInterpolationTable;
     }
 
     if (currentlyClose) {
-      RPMcommand = m_RPMTable.getOutput(distance);
+      RPMcommand = m_FlapUpTable.getOutput(distance);
+      setFlap(false);
     } else {
       //Cosntant RPM for flap down shooting mode
-      RPMcommand = 4350.0;
+      RPMcommand = m_FlapDownTable.getOutput(distance);
       //When not currently close the flap solenoid should be extended position
       setFlap(true);
     }
+
+  final boolean manual = SmartDashboard.getBoolean("ManualShooter", false); 
+
+    if(manual){
+      setSetpoint(SmartDashboard.getNumber("ManualShooterRPM", 3000));
+      setFlap(SmartDashboard.getBoolean("ManualShooterFlap", false));
+
+    }
+    else{
     //set the PIDController setpoint to the desired RPM command
     setSetpoint(RPMcommand);
+    }
   }
 
   /** 

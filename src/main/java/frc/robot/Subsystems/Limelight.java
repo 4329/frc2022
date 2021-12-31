@@ -2,6 +2,7 @@ package frc.robot.Subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.VisionConstants;
 
 //Code here is input from 2020 code and modified for photonvision OS on limelight so angles and distances are left in inches
@@ -59,7 +60,9 @@ public class Limelight {
     * @return the distance to the target in inches
     */
     public static double getDistance() {
-        return VisionConstants.kTargetCenterHeightFromLens / Math.tan(ty()); 
+        final double distance = VisionConstants.kTargetCenterHeightFromLens / Math.tan(ty()); 
+        SmartDashboard.putNumber("LimelightDistance", distance);
+        return distance;
     }
 
     /**

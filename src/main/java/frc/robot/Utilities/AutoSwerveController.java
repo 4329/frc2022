@@ -38,7 +38,6 @@ public class AutoSwerveController extends CommandBase {
     private final SwerveDriveKinematics m_kinematics;
     private final HolonomicDriveController m_controller;
     private final Consumer<SwerveModuleState[]> m_outputModuleStates;
-    private final Supplier<Rotation2d> m_desiredRotation;
 
     /**
      * Constructs a new SwerveControllerCommand that when executed will follow the
@@ -84,8 +83,6 @@ public class AutoSwerveController extends CommandBase {
         m_controller.setTolerance(new Pose2d(0.25,0.25,new Rotation2d(0.10)));
 
         m_outputModuleStates = requireNonNullParam(outputModuleStates, "frontLeftOutput", "SwerveControllerCommand");
-
-        m_desiredRotation = requireNonNullParam(desiredRotation, "desiredRotation", "SwerveControllerCommand");
 
         addRequirements(requirements);
     }

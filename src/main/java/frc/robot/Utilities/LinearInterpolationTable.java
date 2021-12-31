@@ -28,12 +28,12 @@ public class LinearInterpolationTable {
             index = 0;
         }
         else if(input >= m_maxInput){
-            index = size-1;
+            index = size-2;
         }
         else{
-            for(int i=0;i<m_points.length;i++){
-                if(input > m_points[i].getX() && input <= m_points[i+1].getX()){
-                    index = i;
+            for(int i=1;i<m_points.length;i++){
+                if(input > m_points[i-1].getX() && input <= m_points[i].getX()){
+                    index = i-1;
                 }
             }
         }
