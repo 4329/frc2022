@@ -53,7 +53,6 @@ public class DriveByController extends CommandBase {
     } else {
       fieldOrient = true;
     }
-
   }
 
   /**

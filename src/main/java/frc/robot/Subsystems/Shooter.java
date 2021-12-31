@@ -14,6 +14,8 @@ import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import frc.robot.Constants.*;
+import java.awt.geom.Point2D;
+import frc.robot.Utilities.LinearInterpolationTable;
 
   /**
    * Implements a Shooter PIDSubsystem for the robot
@@ -38,6 +40,18 @@ import frc.robot.Constants.*;
   private final TalonSRX m_feederMotor = new TalonSRX(ShooterConstants.kFeederPort);  //Creates the TalonSRX for the feederMotor on the specified CAN ID
 
   private final Timer m_enableTimer = new Timer();
+
+  private Point2D[] interpolationTable = 
+    new Point2D.Double[]{
+      new Point2D.Double(100,4525),
+      new Point2D.Double(125,3700),
+      new Point2D.Double(150,3175),
+      new Point2D.Double(175,3025),
+      new Point2D.Double(200,2900),
+      new Point2D.Double(225,3150),
+      new Point2D.Double(250,3250),
+    };  
+  private LinearInterpolationTable m_RPMTable = new LinearInterpolationTable(interpolationTable);
 
   //Creates a SimpleMotorFeedForward with the specified feedforward gain
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.kStaticGain,
@@ -69,6 +83,8 @@ import frc.robot.Constants.*;
     setSetpoint(3000.0);                                                          //It is important to set a default value here that is not 0RPMs, this ensures the
                                                                                   //atSetpoint() function will not return true when the shooter is not spun up yet
                                                                                   //and could potentially jam and stall the shooter with a ball prematurely                          
+
+
   }
   /**
    * Uses the output from the PIDController combined with the feedforward calculation to 
@@ -128,23 +144,7 @@ import frc.robot.Constants.*;
     }
 
     if (currentlyClose) {
-      //Experimentally determined 4th degree polynomial of best fit for the RPMCommand vs distance when the flap is up and distance <= 210.0
-      RPMcommand = 0.00021811 * Math.pow(distance, 4) - 0.14587931 * Math.pow(distance, 3)
-          + 36.33601566 * Math.pow(distance, 2) - 4001.14 * distance + 167946.35 - 225.0;
-      //Linear RPM Command for distances between 210 and 225
-      if (distance > 210.0) {
-        RPMcommand = 3050 + (distance - 210) * 6.667;
-      } 
-      //Linear RPM Command for distances greater than 225
-      else if (distance > 225) {
-        RPMcommand = 4.0*distance+2250;
-      }
-      //Linear RPM Command for distnaces shorter than 125
-      else if (distance < 125){
-        RPMcommand = -33.68*distance+7868+25.0;
-      }
-      //When currently close the flap solenoid should be set to retract position
-      setFlap(false);
+      RPMcommand = m_RPMTable.getOutput(distance);
     } else {
       //Cosntant RPM for flap down shooting mode
       RPMcommand = 4350.0;
