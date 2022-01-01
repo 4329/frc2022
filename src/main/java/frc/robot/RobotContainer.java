@@ -5,6 +5,7 @@ import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -75,8 +76,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Reset drivetrain when down/up on the DPad is pressed
-    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset(180.0));
-    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.reset(0.0));
+    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset(new Pose2d(),180.0));
+    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.reset(new Pose2d(),0.0));
 
     // Run "GoalShoot" command when A is pressed on the joystick
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(m_goalShoot);

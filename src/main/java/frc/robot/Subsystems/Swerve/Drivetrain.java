@@ -167,14 +167,18 @@ import frc.robot.Constants.*;
   /**
    * Resets the drivetrain gyro, keepAngle, and odometry to fix "Gyro Drift".
    * Gyro will be reset to desired angle and then the odometry will be reset at that gyro angle as well
+   * 
+   * NOTE: THIS MAY BE ABLE TO BE CLEANED UP TO REMOVE THE AHRS ANGLE ADJUSTMENT, NEEDS TESTING
+   * 
    * @param angle (in radians) that the robot will be reset to
    */  
-  public void reset(double angle) {
+  public void reset(Pose2d newPose, double angle) {
     ahrs.reset();
     ahrs.setAngleAdjustment(angle);
     keepAngle = getGyro().getRadians();
-    m_odometry.resetPosition(new Pose2d(0, 0, new Rotation2d(0.0)), ahrs.getRotation2d());
+    m_odometry.resetPosition(newPose, ahrs.getRotation2d());
   }
+
   /**
    * Converts the 4 swerve module states into a chassisSpeed by making use of the swerve drive kinematics.
    * @return ChassisSpeeds object containing robot X, Y, and Angular velocity 
