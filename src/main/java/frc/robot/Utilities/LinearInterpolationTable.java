@@ -61,4 +61,7 @@ public class LinearInterpolationTable {
         }
         return yVals;
     }
+    public Point2D[] getTable(){
+        return m_points;
+    }
 }
