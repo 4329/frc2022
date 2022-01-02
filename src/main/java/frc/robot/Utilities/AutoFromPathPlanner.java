@@ -33,7 +33,7 @@ public class AutoFromPathPlanner extends SequentialCommandGroup {
 
     // Run path following command, then stop at the end.
     addCommands(
-      new InstantCommand(()->drive.resetOdometry(getInitialHolonomicPose())),
+      new InstantCommand(()->drive.resetOdometry(getInitialHolonomicPose())), //potentially remove this code and set odometry in Auto commands
       swerveControllerCommand, 
       new InstantCommand(()->drive.stop()));
 
