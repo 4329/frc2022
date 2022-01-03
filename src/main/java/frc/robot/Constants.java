@@ -129,7 +129,7 @@ public final class Constants {
     public static final int kFeederPort = 2;              //CANID of the Motor Controller for the Feeder Motor
     public static final double kFeederSpeed = -1.0;       //Motor % to command when feeding balls into the shooter
     public static final double kFeederReverseSpeed = 0.5; //Motor % to command when reverse the balls to "unjam"
-    public static final double kThroatSpeed = -0.75;      //Motor % to command when preloading a ball into the throat
+    public static final double kThroatSpeed = -0.65;      //Motor % to command when preloading a ball into the throat
 
     public static final int kMotorPorts[] = { 9, 10 };            //CANID of the SparkMAXs for the shooter motors
     public static final int kShooterCurrentLimit = 50;            //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)

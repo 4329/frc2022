@@ -64,12 +64,12 @@ import frc.robot.Utilities.LinearInterpolationTable;
 
   private Point2D[] flapDownTable = 
   new Point2D.Double[]{
-    new Point2D.Double(230,3700),
-    new Point2D.Double(250,3900),
-    new Point2D.Double(270,3925),
-    new Point2D.Double(290,4125),
-    new Point2D.Double(310,4250),
-    new Point2D.Double(335,4750)
+    new Point2D.Double(230,3600),
+    new Point2D.Double(250,3700),
+    new Point2D.Double(270,3800),
+    new Point2D.Double(290,3900),
+    new Point2D.Double(310,4100),
+    new Point2D.Double(335,4800)
   };  
 private LinearInterpolationTable m_FlapDownTable = new LinearInterpolationTable(flapDownTable);
 

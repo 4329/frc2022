@@ -6,6 +6,8 @@ import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +20,7 @@ import frc.robot.Commands.FloorIntake;
 import frc.robot.Commands.GoalShoot;
 import frc.robot.Commands.ShooterDefault;
 import frc.robot.Commands.Autos.AutoFromFeeder;
+import frc.robot.Commands.Autos.AutoMiddle;
 import frc.robot.Commands.Autos.AutoRight;
 import frc.robot.Constants.*;
 
@@ -29,15 +32,15 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final Drivetrain m_robotDrive = new Drivetrain(); //Create Drivetrain Subsystem
-  private final Shooter m_shooter = new Shooter(); //Create Shooter Subsystem
-  private final Turret m_turret = new Turret(); //Create Turret Subsystem
-  private final Intake m_intake = new Intake(); //Create Intake Subsystem
+  private final Drivetrain m_robotDrive = new Drivetrain(); // Create Drivetrain Subsystem
+  private final Shooter m_shooter = new Shooter(); // Create Shooter Subsystem
+  private final Turret m_turret = new Turret(); // Create Turret Subsystem
+  private final Intake m_intake = new Intake(); // Create Intake Subsystem
 
-  private final GoalShoot m_goalShoot = new GoalShoot(m_shooter, m_turret, m_robotDrive);   //Create GoalShoot Command
-  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret,m_intake);    //Create FeedShooter Command
-  private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive);           //Create FaceTurret Command
-  private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter);              //Create ShooterDefault Command
+  private final GoalShoot m_goalShoot = new GoalShoot(m_shooter, m_turret, m_robotDrive); // Create GoalShoot Command
+  private final FeedShooter m_feedShoot = new FeedShooter(m_shooter, m_turret, m_intake); // Create FeedShooter Command
+  private final FaceTurret m_faceTurret = new FaceTurret(m_turret, m_robotDrive); // Create FaceTurret Command
+  private final ShooterDefault m_shootDefault = new ShooterDefault(m_shooter); // Create ShooterDefault Command
   private final FloorIntake m_floorIntake = new FloorIntake(m_intake, true);
 
   // The driver's controllers
@@ -46,25 +49,26 @@ public class RobotContainer {
 
   private final Command autoRight = new AutoRight(m_robotDrive, m_intake, m_shooter, m_turret);
   private final Command autoFeeder = new AutoFromFeeder(m_robotDrive, m_intake, m_shooter, m_turret);
-  
-  private final Command autoShootOnly = new GoalShoot(m_shooter, m_turret, m_robotDrive).
-    alongWith(new FeedShooter(m_shooter, m_turret, m_intake));
+  private final Command autoMiddle = new AutoMiddle(m_robotDrive, m_intake, m_shooter, m_turret);
+
+  private final Command autoShootOnly = new GoalShoot(m_shooter, m_turret, m_robotDrive)
+      .alongWith(new FeedShooter(m_shooter, m_turret, m_intake));
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-
   private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
-  
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     configureAutoChooser();
-    configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings function
+    configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
+                               // function
     // Configure default commands
-    m_robotDrive.setDefaultCommand(m_drive); //Set drivetrain default command to "DriveByController" 
-    m_turret.setDefaultCommand(m_faceTurret); //Set turret default command to "FaceTurret"
-    m_shooter.setDefaultCommand(m_shootDefault); //Set shooter default command to "ShooterDefault"
+    m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
+    m_turret.setDefaultCommand(m_faceTurret); // Set turret default command to "FaceTurret"
+    m_shooter.setDefaultCommand(m_shootDefault); // Set shooter default command to "ShooterDefault"
   }
 
   /**
@@ -76,8 +80,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Reset drivetrain when down/up on the DPad is pressed
-    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.reset(new Pose2d(),180.0));
-    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.reset(new Pose2d(),0.0));
+    new POVButton(m_driverController, 180)
+        .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));
+    new POVButton(m_driverController, 0)
+        .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
     // Run "GoalShoot" command when A is pressed on the joystick
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(m_goalShoot);
@@ -100,6 +106,7 @@ public class RobotContainer {
 private void configureAutoChooser(){
   m_chooser.addOption("Right", autoRight);
   m_chooser.addOption("AutoCycle", autoFeeder);
+  m_chooser.addOption("AutoMiddle", autoMiddle);
   m_chooser.setDefaultOption("Shoot Only", autoShootOnly);
   SmartDashboard.putData(m_chooser);  
 }

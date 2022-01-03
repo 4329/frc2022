@@ -33,13 +33,12 @@ public class AutoFromPathPlanner extends SequentialCommandGroup {
 
     // Run path following command, then stop at the end.
     addCommands(
-      new InstantCommand(()->drive.resetOdometry(getInitialHolonomicPose())), //potentially remove this code and set odometry in Auto commands
       swerveControllerCommand, 
       new InstantCommand(()->drive.stop()));
 
   }
 
-  private Pose2d getInitialHolonomicPose(){
+  public Pose2d getInitialPose(){
     return new Pose2d(m_trajectory.getInitialState().poseMeters.getX(),
     m_trajectory.getInitialState().poseMeters.getY(),
     m_trajectory.getInitialState().holonomicRotation);

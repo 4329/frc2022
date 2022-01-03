@@ -156,27 +156,15 @@ import frc.robot.Constants.*;
   }
 
   /**
-   * Resets the odometry to the specified pose.
+   * Resets the odometry and gyro to the specified pose.
    *
-   * @param pose in which to set the odometry.
+   * @param pose in which to set the odometry and gyro.
    */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(pose, ahrs.getRotation2d());
-  }
-
-  /**
-   * Resets the drivetrain gyro, keepAngle, and odometry to fix "Gyro Drift".
-   * Gyro will be reset to desired angle and then the odometry will be reset at that gyro angle as well
-   * 
-   * NOTE: THIS MAY BE ABLE TO BE CLEANED UP TO REMOVE THE AHRS ANGLE ADJUSTMENT, NEEDS TESTING
-   * 
-   * @param angle (in radians) that the robot will be reset to
-   */  
-  public void reset(Pose2d newPose, double angle) {
     ahrs.reset();
-    ahrs.setAngleAdjustment(angle);
+    ahrs.setAngleAdjustment(pose.getRotation().getDegrees());
     keepAngle = getGyro().getRadians();
-    m_odometry.resetPosition(newPose, ahrs.getRotation2d());
+    m_odometry.resetPosition(pose, ahrs.getRotation2d());
   }
 
   /**
