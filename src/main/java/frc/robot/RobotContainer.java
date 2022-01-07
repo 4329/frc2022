@@ -22,6 +22,7 @@ import frc.robot.Commands.ShooterDefault;
 import frc.robot.Commands.Autos.AutoFromFeeder;
 import frc.robot.Commands.Autos.AutoMiddle;
 import frc.robot.Commands.Autos.AutoRight;
+import frc.robot.Commands.Autos.AutoTest;
 import frc.robot.Constants.*;
 
 /*
@@ -50,6 +51,7 @@ public class RobotContainer {
   private final Command autoRight = new AutoRight(m_robotDrive, m_intake, m_shooter, m_turret);
   private final Command autoFeeder = new AutoFromFeeder(m_robotDrive, m_intake, m_shooter, m_turret);
   private final Command autoMiddle = new AutoMiddle(m_robotDrive, m_intake, m_shooter, m_turret);
+  private final Command autoTest = new AutoTest(m_robotDrive, m_intake, m_shooter, m_turret);
 
   private final Command autoShootOnly = new GoalShoot(m_shooter, m_turret, m_robotDrive)
       .alongWith(new FeedShooter(m_shooter, m_turret, m_intake));
@@ -106,7 +108,8 @@ public class RobotContainer {
 private void configureAutoChooser(){
   m_chooser.addOption("Right", autoRight);
   m_chooser.addOption("AutoCycle", autoFeeder);
-  m_chooser.addOption("AutoMiddle", autoMiddle);
+  m_chooser.addOption("AutoMiddle", autoMiddle);  
+  m_chooser.addOption("AutoTest", autoTest);
   m_chooser.setDefaultOption("Shoot Only", autoShootOnly);
   SmartDashboard.putData(m_chooser);  
 }
