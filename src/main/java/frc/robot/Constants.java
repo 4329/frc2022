@@ -13,25 +13,25 @@ public final class Constants {
    * Static method containing all Drivetrain constants 
    */
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = 3;   //CANID of the Translation SparkMAX
-    public static final int kFrontRightDriveMotorPort = 1;  //CANID of the Translation SparkMAX
-    public static final int kBackLeftDriveMotorPort = 5;    //CANID of the Translation SparkMAX
-    public static final int kBackRightDriveMotorPort = 7;   //CANID of the Translation SparkMAX
+    public static final int kFrontLeftDriveMotorPort = 7;   //CANID of the Translation SparkMAX
+    public static final int kFrontRightDriveMotorPort = 5;  //CANID of the Translation SparkMAX
+    public static final int kBackLeftDriveMotorPort = 1;    //CANID of the Translation SparkMAX
+    public static final int kBackRightDriveMotorPort = 3;   //CANID of the Translation SparkMAX
 
-    public static final int kFrontLeftTurningMotorPort = 4;   //CANID of the Rotation SparkMAX
-    public static final int kFrontRightTurningMotorPort = 2;  //CANID of the Rotation SparkMAX
-    public static final int kBackLeftTurningMotorPort = 6;    //CANID of the Rotation SparkMAX
-    public static final int kBackRightTurningMotorPort = 8;   //CANID of the Rotation SparkMAX
+    public static final int kFrontLeftTurningMotorPort = 8;   //CANID of the Rotation SparkMAX
+    public static final int kFrontRightTurningMotorPort = 6;  //CANID of the Rotation SparkMAX
+    public static final int kBackLeftTurningMotorPort = 2;    //CANID of the Rotation SparkMAX
+    public static final int kBackRightTurningMotorPort = 4;   //CANID of the Rotation SparkMAX
 
-    public static final int kFrontLeftTurningEncoderPort = 1;   //Analog Port of the Module Absolute Encoder
-    public static final int kFrontRightTurningEncoderPort = 0;  //Analog Port of the Module Absolute Encoder
-    public static final int kBackLeftTurningEncoderPort = 2;    //Analog Port of the Module Absolute Encoder
-    public static final int kBackRightTurningEncoderPort = 3;   //Analog Port of the Module Absolute Encoder
+    public static final int kFrontLeftTurningEncoderPort = 3;   //Analog Port of the Module Absolute Encoder
+    public static final int kFrontRightTurningEncoderPort = 2;  //Analog Port of the Module Absolute Encoder
+    public static final int kBackLeftTurningEncoderPort = 0;    //Analog Port of the Module Absolute Encoder
+    public static final int kBackRightTurningEncoderPort = 1;   //Analog Port of the Module Absolute Encoder
 
-    public static final double kFrontLeftOffset = -1.1634;  //Encoder Offset in Radians
-    public static final double kFrontRightOffset = 1.5366;  //Encoder Offset in Radians
+    public static final double kFrontLeftOffset = 0.0;  //Encoder Offset in Radians
+    public static final double kFrontRightOffset = 0.7853;  //Encoder Offset in Radians
     public static final double kBackLeftOffset = -0.0884;   //Encoder Offset in Radians
-    public static final double kBackRightOffset = -1.6194;  //Encoder Offset in Radians
+    public static final double kBackRightOffset = 2.79;  //Encoder Offset in Radians
 
     //Drive motor PID is best done on the roboRIO currently as the SparkMAX does not allow for static gain values on the PID controller, 
     //    these are necessary to have high accuracy when moving at extremely low RPMs
