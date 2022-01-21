@@ -1,0 +1,50 @@
+# Translation Motor IDs -DO NOT CHANGE-
+frontLeftDriveMotorPort = 7
+frontRightDriveMotorPort = 5
+backLeftDriveMotorPort = 1
+backRightDriveMotorPort = 3
+
+# Rotation Motor IDs -DO NOT CHANGE-
+frontLeftTurningMotorPort = 8
+frontRightTurningMotorPort = 6
+backLeftTurningMotorPort = 2
+backRightTurningMotorPort = 4
+
+# Encoder IDs -DO NOT CHANGE-
+frontLeftTurningEncoderPort = 3
+frontRightTurningEncoderPort = 2
+backLeftTurningEncoderPort = 0
+backRightTurningEncoderPort = 1
+
+# Motor Offsets in Radians
+frontLeftOffset = 0.0
+frontRightOffset = 0.7853
+backLeftOffset = -0.0884
+backRightOffset = 2.79
+
+# We're no stranger to love
+# You know the rules and so do I
+# A full commiment's what I'm thinking of
+# You wouldn't ge this from any other guy
+# I just wanna tell you how I'm feeling
+# Gotta make you understand
+# Never gonna give you up
+# Never gonna let you down
+# Never gonna run around and desert you
+# Never gonna make you cry
+# Never gonna say goodbye
+# Never gonna tell a lie and hurt you
+# Never gonna give you up
+# Never gonna let you down
+# Never gonna run around and desert you
+# Never gonna make you cry
+# Never gonna say goodbye
+# Never gonna tell a lie and hurt you
+# Never gonna give you up
+# Never gonna let you down
+# Never gonna run around and desert you
+# Never gonna make you cry
+# Never gonna say goodbye
+# Never gonna tell a lie and hurt you
+
+# NSP

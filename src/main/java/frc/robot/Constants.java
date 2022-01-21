@@ -1,5 +1,5 @@
 package frc.robot;
-
+import frc.robot.Configrun;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
@@ -13,25 +13,25 @@ public final class Constants {
    * Static method containing all Drivetrain constants 
    */
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = 7;   //CANID of the Translation SparkMAX
-    public static final int kFrontRightDriveMotorPort = 5;  //CANID of the Translation SparkMAX
-    public static final int kBackLeftDriveMotorPort = 1;    //CANID of the Translation SparkMAX
-    public static final int kBackRightDriveMotorPort = 3;   //CANID of the Translation SparkMAX
+    public static final int kFrontLeftDriveMotorPort = (Configrun.get(7, "frontLeftDriveMotorPort"));   //CANID of the Translation SparkMAX
+    public static final int kFrontRightDriveMotorPort = (Configrun.get(5, "frontRightDriveMotorPort"));  //CANID of the Translation SparkMAX
+    public static final int kBackLeftDriveMotorPort = (Configrun.get(1, "backLeftDriveMotorPort"));    //CANID of the Translation SparkMAX
+    public static final int kBackRightDriveMotorPort = (Configrun.get(3, "backRightDriveMotorPort"));   //CANID of the Translation SparkMAX
 
-    public static final int kFrontLeftTurningMotorPort = 8;   //CANID of the Rotation SparkMAX
-    public static final int kFrontRightTurningMotorPort = 6;  //CANID of the Rotation SparkMAX
-    public static final int kBackLeftTurningMotorPort = 2;    //CANID of the Rotation SparkMAX
-    public static final int kBackRightTurningMotorPort = 4;   //CANID of the Rotation SparkMAX
+    public static final int kFrontLeftTurningMotorPort = (Configrun.get(8, "frontLeftTurningMotorPort"));   //CANID of the Rotation SparkMAX
+    public static final int kFrontRightTurningMotorPort = (Configrun.get(6, "frontRightTurningMotorPort"));  //CANID of the Rotation SparkMAX
+    public static final int kBackLeftTurningMotorPort = (Configrun.get(2, "backLeftTurningMotorPort"));    //CANID of the Rotation SparkMAX
+    public static final int kBackRightTurningMotorPort = (Configrun.get(4, "backRightTurningMotorPort"));   //CANID of the Rotation SparkMAX
 
-    public static final int kFrontLeftTurningEncoderPort = 3;   //Analog Port of the Module Absolute Encoder
-    public static final int kFrontRightTurningEncoderPort = 2;  //Analog Port of the Module Absolute Encoder
-    public static final int kBackLeftTurningEncoderPort = 0;    //Analog Port of the Module Absolute Encoder
-    public static final int kBackRightTurningEncoderPort = 1;   //Analog Port of the Module Absolute Encoder
+    public static final int kFrontLeftTurningEncoderPort = (Configrun.get(3, "frontLeftTurningEncoderPort"));   //Analog Port of the Module Absolute Encoder
+    public static final int kFrontRightTurningEncoderPort = (Configrun.get(2, "frontRightTurningEncoderPort"));  //Analog Port of the Module Absolute Encoder
+    public static final int kBackLeftTurningEncoderPort = (Configrun.get(0, "backLeftTurningEncoderPort"));    //Analog Port of the Module Absolute Encoder
+    public static final int kBackRightTurningEncoderPort = (Configrun.get(1, "backRightTurningEncoderPort"));   //Analog Port of the Module Absolute Encoder
 
-    public static final double kFrontLeftOffset = 0.0;  //Encoder Offset in Radians
-    public static final double kFrontRightOffset = 0.7853;  //Encoder Offset in Radians
-    public static final double kBackLeftOffset = -0.0884;   //Encoder Offset in Radians
-    public static final double kBackRightOffset = 2.79;  //Encoder Offset in Radians
+    public static final double kFrontLeftOffset = (Configrun.get(0.0, "frontLeftOffset"));  //Encoder Offset in Radians
+    public static final double kFrontRightOffset = (Configrun.get(0.7853, "frontRightOffset"));  //Encoder Offset in Radians
+    public static final double kBackLeftOffset = (Configrun.get(-0.0884, "backLeftOffset"));   //Encoder Offset in Radians
+    public static final double kBackRightOffset = (Configrun.get(2.79, "backRightOffset"));  //Encoder Offset in Radians
 
     //Drive motor PID is best done on the roboRIO currently as the SparkMAX does not allow for static gain values on the PID controller, 
     //    these are necessary to have high accuracy when moving at extremely low RPMs

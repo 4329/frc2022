@@ -1,0 +1,123 @@
+shooterSpeed = -0.37
+shooterIntakeSpeed = 0.38
+spindexerSpeed = .28
+spindexerFireSpeed = .3
+maxSpindexerSpeed = .75
+spindexerDelay = .4
+spindexporterInSpeed = .16
+spindexporterSpeed = -1
+intakeSpeed = -0.85
+intakeUp = false
+controlPanelActuatorUp = true
+armSolenoidUp = true
+shooterStopDelay = 0.5
+
+shooterP = 6
+shooterI = 0
+shooterD = .1
+shooterTolerance = 200
+shooterStaticFeedforward = -.054
+shooterVelocityFeedforward = .95
+overrideRPM = -11000
+
+hoodP = 24
+hoodI = 0
+hoodD = 0
+hoodStaticFeedforward = 0
+hoodMin = 0
+hoodMax = 188
+minDistance = 132
+maxDistance = 228
+hoodOffset = 86
+
+#shooter equation constants (near zone)
+aMin = -0.0165774498457
+bMin = 4.38368055556
+cMin = -364.409722222
+dMin = 0
+hoodSetpointNear = 30.61
+
+#shooter equation constants (middle zone)
+aMed = 0.0210985725309
+bMed = -12.5868055556
+cMed = 2487.84722222
+dMed = -176250
+hoodSetpointMiddle = 80.65
+
+#shooter equation constants (far zone)
+aMax = 0.00301408179012
+bMax = -2.72817460317
+cMax = 819.692460317
+dMax = -100242.857143
+hoodSetpointFar = 130.72
+
+h1In = 25
+h21n = 90.75
+a1Degree = 2
+limelightTolerance = 1
+limelightP = 1.5
+limelightI = 0
+limelightD = 0.08
+taTolerance = .3
+
+driveP = .1
+driveI = 0
+driveD = 0
+driveStaticFeedforward = .105
+driveDelay = .1
+aDrive = .015
+bDrive = .4
+maxSpeed = .7
+headingHoldP = 6
+headingHoldI = 0
+headingHoldD = 0
+headingHoldStaticFeedforward = 0
+autoLime = 1
+turnP = 12
+turnI = 0
+turnD = 1
+turnTolerance = 1.8
+turnStaticFeedforward = 0.103
+
+offset0 = 161.4
+offset1 = 195.0
+offset2 = 188.8
+offset3 = 114.46
+
+greenRPM = -9700
+yellowRPM = -9250
+blueRPM = -13250
+redRPM = -19000
+greenHood = 30.61
+yellowHood = 30.61
+blueHood = 80.65
+redHood = 130.72
+
+simpleAutoAngle = 90
+simpleAutoSpeed = 0.5
+simpleAutoAngle2 = 270
+timeDriveAuto = 1
+autoFireTime = 10
+crazyAutoFireTime1 = 3
+crazyAutoFireTime2 = 7
+complexTimeDriveAuto = 3.75
+complexTimeDriveAuto2 = 2.75
+timeoutLimeLight = 1
+
+climbSpeedMax = 0.5
+
+Intake_ID = 12
+Pigeon_ID = 9
+Intakewheel_ID = 10
+Spindexporter_ID = 11
+Intake_ID = 12
+Shooterwheelone_ID = 13
+Shooterwheeltwo_ID = 14
+Spindexmotor_ID = 15
+hoodMotorID = 16
+
+armSolenoid = 1
+armSolenoid2 = 2
+controlPanelActuator = 4
+armAssistSolenoid = 5
+
