@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Subsystems.Swerve.Drivetrain;
+import frc.robot.Utilities.SwerveAlignment;
 
 
 
@@ -19,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.*;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private SwerveAlignment m_swerveAlignment;
+  private Drivetrain drivetrain;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -29,9 +33,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
+    drivetrain = new Drivetrain();
+    m_robotContainer = new RobotContainer(drivetrain);
 
-    m_robotContainer = new RobotContainer();
-    }
+  }
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for
@@ -112,10 +117,13 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    m_swerveAlignment = new SwerveAlignment(drivetrain);
+    m_swerveAlignment.initSwerveAlignment();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    m_swerveAlignment.updateSwerveAlignment();
   }
 }

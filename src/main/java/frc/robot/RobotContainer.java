@@ -24,7 +24,7 @@ import frc.robot.Constants.*;
 public class RobotContainer {
 
   // The robot's subsystems
-  private final Drivetrain m_robotDrive = new Drivetrain(); // Create Drivetrain Subsystem
+  private final Drivetrain m_robotDrive;
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -32,12 +32,15 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private final DriveByController m_drive = new DriveByController(m_robotDrive, m_driverController);
+  private final DriveByController m_drive;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
+ * @param drivetrain
    */
-  public RobotContainer() {
+  public RobotContainer(Drivetrain drivetrain) {
+    m_robotDrive = drivetrain;
+    m_drive = new DriveByController(m_robotDrive, m_driverController);
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
                                // function

@@ -210,4 +210,7 @@ import frc.robot.Constants.*;
     }
     return output;
   }
+  public double getFrontLeftAngle(){
+    return m_frontLeft.getTurnEncoder();
+  }
 }
