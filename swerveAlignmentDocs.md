@@ -4,7 +4,7 @@ Swerve debug is designed to make alignment of the swerve drive easier. All infor
 
 ## What each section does
 
-The menu is divided into four sections, `Angle`, `Raw Angle`, `Offset`, and `Test Offset`
+The menu is divided into four sections, `Angle`, `Raw Angle`, `Offset`, and `Test Offset`.
 
 ### Angle
 
@@ -16,7 +16,7 @@ The menu is divided into four sections, `Angle`, `Raw Angle`, `Offset`, and `Tes
 
 ### Offset
 
-`Offset` is the offset from the `protoConfig.txt` file which is applied to `Raw Angle` to get `Angle`
+`Offset` is an angle value which is applied to `Raw Angle` to get `Angle`.
 
 ### Test Offset
 
