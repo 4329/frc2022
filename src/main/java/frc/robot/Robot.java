@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
@@ -117,8 +118,10 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    if(m_swerveAlignment == null){
     m_swerveAlignment = new SwerveAlignment(drivetrain);
     m_swerveAlignment.initSwerveAlignment();
+    }
   }
 
   /** This function is called periodically during test mode. */

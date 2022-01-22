@@ -10,7 +10,7 @@ public class SwerveAlignment {
     private Drivetrain m_dDrivetrain;
     public static final String SWERVE_ALIGNMENT = "Swerve Alignment";
     //
-    private boolean hasBeenInitialized;
+    private static boolean hasBeenInitialized;
     //Front left
     private NetworkTableEntry frontLeftAngleDisplay;
     private NetworkTableEntry frontLeftRawAngleDisplay;
