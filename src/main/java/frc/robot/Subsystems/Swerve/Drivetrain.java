@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.*;
+import frc.robot.RobotContainer;
 
   /**
    * Implements a swerve Drivetrain Subsystem for the Robot
@@ -212,7 +213,7 @@ import frc.robot.Constants.*;
     }
     return output;
   }
-<<<<<<< HEAD
+
   public double getFrontLeftAngle(){
     return m_frontLeft.getTurnEncoder();
   }
@@ -225,7 +226,5 @@ import frc.robot.Constants.*;
   public double getBackRightAngle(){
     return m_backRight.getTurnEncoder();
   }
-=======
 
->>>>>>> ad06093 (didnt really change anything)
 }
