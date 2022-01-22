@@ -35,7 +35,7 @@ public class RobotContainer {
 
   private final DriveByController m_drive;
 
-  private final Command autoTest = new AutoTest(m_robotDrive);
+  private final Command autoTest;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -43,6 +43,7 @@ public class RobotContainer {
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
+    autoTest = new AutoTest(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
