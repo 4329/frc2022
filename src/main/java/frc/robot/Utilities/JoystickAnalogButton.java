@@ -1,7 +1,6 @@
 package frc.robot.Utilities;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.button.*;
 
 public class JoystickAnalogButton extends Button {
@@ -23,10 +22,10 @@ public class JoystickAnalogButton extends Button {
 
   public boolean get() {
     if(m_side){
-      return m_controller.getTriggerAxis(Hand.kLeft) > m_threshold; 
+      return m_controller.getLeftTriggerAxis() > m_threshold; 
     }
     else{
-      return m_controller.getTriggerAxis(Hand.kRight) > m_threshold; 
+      return m_controller.getRightTriggerAxis() > m_threshold; 
     }
   }
 

@@ -39,11 +39,11 @@ public class DriveByController extends CommandBase {
   @Override
   public void execute() {
     m_robotDrive.drive(
-        -inputTransform(m_controller.getY(GenericHID.Hand.kLeft)) 
+        -inputTransform(m_controller.getLeftY()) 
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        -inputTransform(m_controller.getX(GenericHID.Hand.kLeft))
+        -inputTransform(m_controller.getLeftX())
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        -inputTransform(m_controller.getX(GenericHID.Hand.kRight))
+        -inputTransform(m_controller.getRightX())
             * DriveConstants.kMaxAngularSpeed,
         fieldOrient);
   }
