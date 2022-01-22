@@ -4,19 +4,19 @@
 
 package frc.robot.Subsystems.Swerve;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
 
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.SlewRateLimiter;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.robot.Constants.*;
 
   /**
@@ -28,11 +28,11 @@ public class SwerveModule {
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
-  //Create a CANEncoder object for the translation position and velocity
-  private final CANEncoder m_driveEncoder;
+  //Create a RelativeEncoder     object for the translation position and velocity
+  private final RelativeEncoder m_driveEncoder;
   
   //Create a Potentiometer to store the output of the absolute encoder that tracks the angular position of the swerve module
-  private final Potentiometer m_turningEncoder;
+  private final AnalogPotentiometer m_turningEncoder;
 
   //Creates a variable to store the moduleID for various tuning and debugging (Currently not being used)
   //This value should be passed into the class contructor as part of the "tuningVals" array
