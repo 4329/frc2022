@@ -17,8 +17,6 @@ public class Configrun
 
     static
     {
-        // System.err.println("in config");
-        // System.err.println("in config");
         System.err.println("in config");
         loadconfig();
 
@@ -28,10 +26,8 @@ public class Configrun
     {
         if (keys.get(key) != null)
         {
-            // System.out.println("Run");
             return Integer.valueOf(keys.get(key));
 
-            // return(keys.get(key));
         } else
         {
             System.err.println("No such value/type1");
@@ -44,7 +40,6 @@ public class Configrun
         if (keys.get(key) != null)
         {
             return Double.valueOf(keys.get(key));
-            // return(keys.get(key));
         } else
         {
             System.err.println("No such value/type2");
@@ -58,7 +53,6 @@ public class Configrun
         if (keys.get(key) != null)
         {
             return Boolean.valueOf(keys.get(key));
-            // return(keys.get(key));
         } else
         {
             System.err.println("No such value/type");
@@ -73,8 +67,6 @@ public class Configrun
 
         try
         {
-            // int linenumber=0;
-            // Files.exists(Paths.get("/home/lvuser/proto")
             if (new File("/home/lvuser/proto").exists())
             {
                 reader = new BufferedReader(new FileReader("/home/lvuser/deploy/protoConfig.txt"));
@@ -89,39 +81,19 @@ public class Configrun
                 theRobot.setString("Comp");
             }
             String line;
-            // System.out.println("in load config");
-            // reader.readLine();
-            // System.out.println(line);
-            // for (int run2 = 0; run2 <= line.length() - 1;) {
-            // int run2=0;
-            // System.out.println(line);
-            // if (line.charAt(run2) == '#'){
+
             while ((line = reader.readLine()) != null)
             {
-                // System.out.println("trim config");
                 int linelength = line.trim().length();
 
-                // line = reader.readLine();
-                // System.out.println(linelength);
                 if (linelength > 0)
                 {
                     if (!line.startsWith("#"))
                     {
-                        // if (!line.startsWith(" ")) {
-
-                        // System.out.println(line);
                         String[] array = line.split("=");
-                        // System.out.println(array[0]);
-                        // System.out.println(array[1]);
-                        // System.out.println("hashmap config");
-
                         keys.put(array[0].trim(), array[1].trim());
                     }
                 }
-
-                /*
-                 * else { line = reader.readLine(); //}
-                 */
 
             }
             reader.close();

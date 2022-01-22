@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Configrun;
 import frc.robot.Constants.*;
 
   /**
@@ -27,7 +26,7 @@ import frc.robot.Constants.*;
   //Create the PIDController for the Keep Angle PID
   private final PIDController m_keepAnglePID = new PIDController(DriveConstants.kKeepAnglePID[0],
     DriveConstants.kKeepAnglePID[1],DriveConstants.kKeepAnglePID[2]);
-  
+
   private double keepAngle = 0.0;       //Double to store the current target keepAngle in radians
   private double timeSinceRot = 0.0;    //Double to store the time since last rotation command
   private double lastRotTime = 0.0;     //Double to store the time of the last rotation command
@@ -55,7 +54,7 @@ import frc.robot.Constants.*;
   private final SwerveModule m_backRight = new SwerveModule(DriveConstants.kBackRightDriveMotorPort,
       DriveConstants.kBackRightTurningMotorPort, DriveConstants.kBackRightTurningEncoderPort,
       DriveConstants.kBackRightOffset, DriveConstants.kBackRightTuningVals);
-  
+
   //Creates an ahrs gyro (NavX) on the MXP port of the RoboRIO
   private static AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
@@ -84,7 +83,7 @@ import frc.robot.Constants.*;
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     rot = performKeepAngle(xSpeed,ySpeed,rot); //Calls the keep angle function to update the keep angle or rotate depending on driver input
-    
+
     SmartDashboard.putNumber("xSpeed Commanded", xSpeed);
     SmartDashboard.putNumber("ySpeed Commanded", ySpeed);
 
@@ -94,14 +93,14 @@ import frc.robot.Constants.*;
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
     //normalize wheel speeds so all individual states are scaled to achievable velocities
-    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond); 
+    SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
     setModuleStates(swerveModuleStates);
   }
   @Override
   public void periodic(){
         //Update swerve drive odometry periodically so robot pose can be tracked
-        updateOdometry();    
+        updateOdometry();
 
         //Calls get pose function which sends the Pose information to the SmartDashboard
         getPose();
@@ -131,7 +130,7 @@ import frc.robot.Constants.*;
   /**
    * Updates odometry for the swerve drivetrain. This should be called
    * once per loop to minimize error.
-   */  
+   */
   public void updateOdometry() {
     m_odometry.update(ahrs.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
         m_backRight.getState());
@@ -140,7 +139,7 @@ import frc.robot.Constants.*;
   /**
    * Function to retrieve latest robot gyro angle.
    * @return Rotation2d object containing Gyro angle
-   */  
+   */
   public Rotation2d getGyro() {
     return ahrs.getRotation2d();
   }
@@ -148,7 +147,7 @@ import frc.robot.Constants.*;
     /**
    * Function created to retreieve and push the robot pose to the SmartDashboard for diagnostics
    * @return Pose2d object containing the X and Y position and the heading of the robot.
-   */  
+   */
   public Pose2d getPose() {
     SmartDashboard.putNumber("Robot X", m_odometry.getPoseMeters().getX());
     SmartDashboard.putNumber("Robot Y", m_odometry.getPoseMeters().getY());
@@ -169,14 +168,14 @@ import frc.robot.Constants.*;
 
   /**
    * Converts the 4 swerve module states into a chassisSpeed by making use of the swerve drive kinematics.
-   * @return ChassisSpeeds object containing robot X, Y, and Angular velocity 
-   */  
+   * @return ChassisSpeeds object containing robot X, Y, and Angular velocity
+   */
   public ChassisSpeeds getChassisSpeed(){
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
     m_backRight.getState());
   }
 
-  public ChassisSpeeds getFieldRelativeSpeeds(){    
+  public ChassisSpeeds getFieldRelativeSpeeds(){
     return new ChassisSpeeds(
         getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getCos() - getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getSin(),
         getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getCos() + getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getSin(),
@@ -185,19 +184,19 @@ import frc.robot.Constants.*;
 
   /**
    * Keep angle function is performed to combat drivetrain drift without the need of constant "micro-adjustments" from the driver.
-   * A PIDController is used to attempt to maintain the robot heading to the keepAngle value. This value is updated when the robot 
+   * A PIDController is used to attempt to maintain the robot heading to the keepAngle value. This value is updated when the robot
    * is rotated manually by the driver input
    * @return rotation command in radians/s
    * @param xSpeed is the input drive X speed command
    * @param ySpeed is the input drive Y speed command
    * @param rot is the input drive rotation speed command
-   */  
+   */
   private double performKeepAngle(double xSpeed, double ySpeed, double rot){
     double output = rot; //Output shouold be set to the input rot command unless the Keep Angle PID is called
     if(Math.abs(rot) >= DriveConstants.kMinRotationCommand){  //If the driver commands the robot to rotate set the last rotate time to the current time
       lastRotTime = keepAngleTimer.get();
     }
-    if( Math.abs(xSpeed) >= DriveConstants.kMinTranslationCommand  
+    if( Math.abs(xSpeed) >= DriveConstants.kMinTranslationCommand
           || Math.abs(ySpeed) >= DriveConstants.kMinTranslationCommand){ //if driver commands robot to translate set the last drive time to the current time
       lastDriveTime = keepAngleTimer.get();
     }
@@ -207,7 +206,7 @@ import frc.robot.Constants.*;
       keepAngle = getGyro().getRadians();
     }
     else if(Math.abs(rot) < DriveConstants.kMinRotationCommand && timeSinceDrive < 0.75){ //Run Keep angle pid until 0.75s after drive command stops to combat decel drift
-      output = m_keepAnglePID.calculate(getGyro().getRadians(), keepAngle);               //Set output command to the result of the Keep Angle PID 
+      output = m_keepAnglePID.calculate(getGyro().getRadians(), keepAngle);               //Set output command to the result of the Keep Angle PID
     }
     return output;
   }
