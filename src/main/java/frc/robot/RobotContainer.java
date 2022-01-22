@@ -1,5 +1,5 @@
 package frc.robot;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Constants.*;
+import frc.robot.Commands.SimpleAuto;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,9 +24,11 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
 
+
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
 
+  private final Command simpleAuto = new SimpleAuto(m_robotDrive);
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -68,6 +71,7 @@ public class RobotContainer {
   }
 
 private void configureAutoChooser(){
+  m_chooser.addOption("Simple Auto", simpleAuto);
   SmartDashboard.putData(m_chooser);
 }
 

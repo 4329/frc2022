@@ -23,7 +23,9 @@ import frc.robot.Constants.*;
    */
   public class Drivetrain extends SubsystemBase {
 
-  //Create the PIDController for the Keep Angle PID
+  public static final String FORWARD = null;
+
+//Create the PIDController for the Keep Angle PID
   private final PIDController m_keepAnglePID = new PIDController(DriveConstants.kKeepAnglePID[0],
     DriveConstants.kKeepAnglePID[1],DriveConstants.kKeepAnglePID[2]);
 
@@ -210,6 +212,7 @@ import frc.robot.Constants.*;
     }
     return output;
   }
+<<<<<<< HEAD
   public double getFrontLeftAngle(){
     return m_frontLeft.getTurnEncoder();
   }
@@ -222,4 +225,7 @@ import frc.robot.Constants.*;
   public double getBackRightAngle(){
     return m_backRight.getTurnEncoder();
   }
+=======
+
+>>>>>>> ad06093 (didnt really change anything)
 }
