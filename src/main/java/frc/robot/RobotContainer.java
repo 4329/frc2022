@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Commands.AutoTest;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Constants.*;
 
@@ -33,6 +34,8 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   private final DriveByController m_drive;
+
+  private final Command autoTest = new AutoTest(m_robotDrive);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,6 +71,7 @@ public class RobotContainer {
   }
 
 private void configureAutoChooser(){
+  m_chooser.addOption("AutoTest",autoTest);
   SmartDashboard.putData(m_chooser);
 }
 
