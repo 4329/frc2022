@@ -25,13 +25,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    Configrun.loadconfig();
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    
+
     m_robotContainer = new RobotContainer();
-  
-  }
+    }
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-  
+
   }
 
   @Override
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+
   }
 
   @Override

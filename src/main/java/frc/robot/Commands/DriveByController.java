@@ -4,8 +4,10 @@ import frc.robot.Constants.*;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.MathUtils;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
   /**
    * Implements a DriveByController command which extends the CommandBase class
@@ -14,6 +16,10 @@ public class DriveByController extends CommandBase {
   private final Drivetrain m_robotDrive;
   private final XboxController m_controller;
   private boolean fieldOrient = true;
+
+  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field orient on", true).getEntry();
+
+ 
 
   /**
    * Contructs a DriveByController object which applys the driver inputs from the controller to the swerve drivetrain
@@ -33,7 +39,7 @@ public class DriveByController extends CommandBase {
   @Override
   public void execute() {
     m_robotDrive.drive(
-        -inputTransform(m_controller.getY(GenericHID.Hand.kLeft))
+        -inputTransform(m_controller.getY(GenericHID.Hand.kLeft)) 
             * DriveConstants.kMaxSpeedMetersPerSecond,
         -inputTransform(m_controller.getX(GenericHID.Hand.kLeft))
             * DriveConstants.kMaxSpeedMetersPerSecond,
@@ -50,8 +56,10 @@ public class DriveByController extends CommandBase {
   public void changeFieldOrient() {
     if (fieldOrient) {
       fieldOrient = false;
+      fieldOrientStatus.setBoolean(true);
     } else {
       fieldOrient = true;
+      fieldOrientStatus.setBoolean(false);
     }
   }
 

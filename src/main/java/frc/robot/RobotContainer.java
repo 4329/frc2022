@@ -22,9 +22,10 @@ import frc.robot.Constants.*;
  * (including subsystems, commands, and button mappings) should be declared here
  */
 public class RobotContainer {
+
   // The robot's subsystems
   private final Drivetrain m_robotDrive = new Drivetrain(); // Create Drivetrain Subsystem
-  
+
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -59,12 +60,12 @@ public class RobotContainer {
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_drive.changeFieldOrient());
-  
-    
+
+
   }
 
 private void configureAutoChooser(){
-  SmartDashboard.putData(m_chooser);  
+  SmartDashboard.putData(m_chooser);
 }
 
 public Command getAuto(){

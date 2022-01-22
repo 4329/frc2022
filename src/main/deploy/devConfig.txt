@@ -1,0 +1,23 @@
+# Translation Motor IDs -DO NOT CHANGE-
+frontLeftDriveMotorPort = 7
+frontRightDriveMotorPort = 5
+backLeftDriveMotorPort = 1
+backRightDriveMotorPort = 3
+
+# Rotation Motor IDs -DO NOT CHANGE-
+frontLeftTurningMotorPort = 8
+frontRightTurningMotorPort = 6
+backLeftTurningMotorPort = 2
+backRightTurningMotorPort = 4
+
+# Encoder IDs -DO NOT CHANGE-
+frontLeftTurningEncoderPort = 3
+frontRightTurningEncoderPort = 2
+backLeftTurningEncoderPort = 0
+backRightTurningEncoderPort = 1
+
+# Motor Offsets in Radians
+frontLeftOffset = 0.0
+frontRightOffset = 0.7853
+backLeftOffset = -0.0884
+backRightOffset = 2.79
