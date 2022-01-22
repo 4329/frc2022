@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 public class Configrun
 {
     private static HashMap<String, String> keys = new HashMap<String, String>();
-    private static NetworkTableEntry theRobot = Shuffleboard.getTab("TestValues").add("ConfigFile", "NoConfig")
+    private static NetworkTableEntry theRobot = Shuffleboard.getTab("RobotData").add("ConfigFile", "NoConfig")
             .getEntry();
 
     static
