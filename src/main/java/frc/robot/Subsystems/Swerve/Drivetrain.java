@@ -213,4 +213,13 @@ import frc.robot.Constants.*;
   public double getFrontLeftAngle(){
     return m_frontLeft.getTurnEncoder();
   }
+  public double getFrontRightAngle(){
+    return m_frontRight.getTurnEncoder();
+  }
+  public double getBackLeftAngle(){
+    return m_backLeft.getTurnEncoder();
+  }
+  public double getBackRightAngle(){
+    return m_backRight.getTurnEncoder();
+  }
 }
