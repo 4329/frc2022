@@ -120,8 +120,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     if(m_swerveAlignment == null){//This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
-      m_swerveAlignment.initSwerveAlignment();
+      m_swerveAlignment.initSwerveAlignmentWidgets();
     }
+    m_swerveAlignment.initSwerveAlignmentVars();
   }
 
   /** This function is called periodically during test mode. */
