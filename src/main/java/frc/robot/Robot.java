@@ -127,7 +127,6 @@ public class Robot extends TimedRobot {
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
-    m_swerveAlignment.initSwerveAlignmentVars();//currently unused; enable in SwerveAlignment.java
   }
 
   /** This function is called periodically during test mode. */
