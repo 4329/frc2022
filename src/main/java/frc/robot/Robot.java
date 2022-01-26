@@ -154,5 +154,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
+    RobotContainer.limelightSubsystem.putDistance();
   }
 }

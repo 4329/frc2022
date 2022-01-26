@@ -36,6 +36,7 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import frc.robot.Subsystems.LimelightSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -60,6 +61,8 @@ public class RobotContainer {
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+
+  public static final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
