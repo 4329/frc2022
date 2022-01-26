@@ -42,12 +42,6 @@ public class SwerveAlignment {
 	public SwerveAlignment(Drivetrain drivetrain) {
         m_dDrivetrain = drivetrain;
 	}
-    public void initSwerveAlignmentVars(){//gets new variables every time the robot is enabled.
-        // frontLeftInitialAngle = m_dDrivetrain.getFrontLeftAngle() - DriveConstants.kFrontLeftOffset;
-        // frontRightInitialAngle = m_dDrivetrain.getFrontRightAngle() - DriveConstants.kFrontRightOffset;
-        // backLeftInitialAngle = m_dDrivetrain.getBackLeftAngle() - DriveConstants.kBackLeftOffset;
-        // backRightInitialAngle = m_dDrivetrain.getBackRightAngle() - DriveConstants.kBackRightOffset;
-    }
     //This section creates the widgets
     public void initSwerveAlignmentWidgets(){
         frontLeftInitialAngle = m_dDrivetrain.getFrontLeftAngle() - DriveConstants.kFrontLeftOffset;
