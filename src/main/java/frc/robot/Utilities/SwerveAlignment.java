@@ -42,7 +42,7 @@ public class SwerveAlignment {
 	public SwerveAlignment(Drivetrain drivetrain) {
         m_dDrivetrain = drivetrain;
 	}
-    public void initSwerveAlignmentVars(){
+    public void initSwerveAlignmentVars(){//gets new variables every time the robot is enabled.
         // frontLeftInitialAngle = m_dDrivetrain.getFrontLeftAngle() - DriveConstants.kFrontLeftOffset;
         // frontRightInitialAngle = m_dDrivetrain.getFrontRightAngle() - DriveConstants.kFrontRightOffset;
         // backLeftInitialAngle = m_dDrivetrain.getBackLeftAngle() - DriveConstants.kBackLeftOffset;
@@ -55,7 +55,7 @@ public class SwerveAlignment {
         backLeftInitialAngle = m_dDrivetrain.getBackLeftAngle() - DriveConstants.kBackLeftOffset;
         backRightInitialAngle = m_dDrivetrain.getBackRightAngle() - DriveConstants.kBackRightOffset;
         //Documentation:
-        Shuffleboard.getTab(SWERVE_ALIGNMENT).add("Documentation","https://github.com/4329/frc2022/blob/main/swerveAlignmentDocs.md").withPosition(7,1).withSize(4,2).withWidget(BuiltInWidgets.kTextView).getEntry();
+        Shuffleboard.getTab(SWERVE_ALIGNMENT).add("Documentation","stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={ee32bd41-c1a3-423a-87d6-f53d8420ff36}&action=edit&wd=target%28Software.one%7C2a079b56-fdcc-4604-b12e-be6a0710f6e0%2FSwerve%20Alignment%20Documentation%7Cc3883e58-a23c-4335-9693-aaef763459b2%2F%29").withPosition(7,1).withSize(4,2).withWidget(BuiltInWidgets.kTextView).getEntry();
         //Front left
         frontLeftAngleDisplay = Shuffleboard.getTab(SWERVE_ALIGNMENT).add("Front Left Angle",m_dDrivetrain.getFrontLeftAngle()).withWidget(BuiltInWidgets.kTextView).getEntry();
         frontLeftRawAngleDisplay = Shuffleboard.getTab(SWERVE_ALIGNMENT).add("FL Raw Angle",m_dDrivetrain.getFrontLeftAngle() - DriveConstants.kFrontLeftOffset).withPosition(1,0).withWidget(BuiltInWidgets.kTextView).getEntry();
