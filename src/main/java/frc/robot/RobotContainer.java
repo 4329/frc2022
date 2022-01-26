@@ -72,7 +72,8 @@ public class RobotContainer {
   }
 
 private void configureAutoChooser(){
-  m_chooser.addOption("AutoTest",autoTest);
+  //m_chooser.addOption("AutoTest",autoTest);
+  m_chooser.setDefaultOption("autoTest",autoTest);
   SmartDashboard.putData(m_chooser);
 }
 
