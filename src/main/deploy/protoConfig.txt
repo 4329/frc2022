@@ -22,11 +22,18 @@ frontRightOffset = 0.7853
 backLeftOffset = -0.0884
 backRightOffset = 2.79
 
+<<<<<<< HEAD
 Intake_ID = 40
 intakeSpeed = 0.2
 intakeUp = false
 
 PH_CAN_ID = 61
+=======
+# Storage Intake
+storageIntakeID = 41
+storageIntakeInPower = 0
+storageIntakeOutPower = 0
+>>>>>>> fee0c28 (added storage intake motor control, but missing inputs)
 
 # RIP rickroll
 # NSP
