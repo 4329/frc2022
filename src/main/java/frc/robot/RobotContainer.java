@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.IntakeCommand;
 import frc.robot.Constants.*;
+import frc.robot.Subsystems.Swerve.IntakeMotor;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,7 +25,18 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
+  public static final String intakeSolenoid = null;
+
+private IntakeMotor intakeMotor = new IntakeMotor();
+private IntakeSolenoid intakeUp = new IntakeSolenoid();
+
+
+
+
+
+
+
+// The robot's subsystems
   private final Drivetrain m_robotDrive;
 
   // The driver's controllers
@@ -63,6 +76,10 @@ public class RobotContainer {
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
+
+    
+    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(RunIntakeIn);
+    new JoystickButton(m_operatorController, Button.kA.value).whenReleased(StopIntakeIn);
 
 
   }
