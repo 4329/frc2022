@@ -19,6 +19,8 @@ import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
+import frc.robot.Commands.IntakeCommand;
+import frc.robot.Subsystems.Swerve.IntakeMotor;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,7 +30,18 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
+  public static final String intakeSolenoid = null;
+
+private IntakeMotor intakeMotor = new IntakeMotor();
+private IntakeSolenoid intakeUp = new IntakeSolenoid();
+
+
+
+
+
+
+
+// The robot's subsystems
   private final Drivetrain m_robotDrive;
 
   // The driver's controllers
@@ -78,6 +91,9 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
     new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
+    
+    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(RunIntakeIn);
+    new JoystickButton(m_operatorController, Button.kA.value).whenReleased(StopIntakeIn);
 
 
   }
