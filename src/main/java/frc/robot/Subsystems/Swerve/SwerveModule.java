@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
@@ -30,7 +32,7 @@ public class SwerveModule {
 
   //Create a RelativeEncoder     object for the translation position and velocity
   private final RelativeEncoder m_driveEncoder;
-  
+
   //Create a Potentiometer to store the output of the absolute encoder that tracks the angular position of the swerve module
   private final AnalogPotentiometer m_turningEncoder;
 
@@ -43,7 +45,7 @@ public class SwerveModule {
   private final PIDController m_drivePIDController;
 
   // Creates a SlewRateLimiter for the translation motors to reduce shock load on the tranlsation gears and to reduce wheelspin
-  // For 2910 swerve this can help reduce the wear down the teeth on the steel spur gears just before the bevel gears 
+  // For 2910 swerve this can help reduce the wear down the teeth on the steel spur gears just before the bevel gears
   private final SlewRateLimiter m_driveLimiter = new SlewRateLimiter(ModuleConstants.kTranslationRampRate);
 
   // Creates a SimpleMotorFeedForward for the translation motor on the swerve module
@@ -81,7 +83,7 @@ public class SwerveModule {
     m_turningMotor.burnFlash();                                                   //Write these parameters to the SparkMAX so we can be sure the values are correct
 
     //Creates the analog potentiometer for the tracking of the swerve module position converted to the range of 0-2*PI in radians offset by the tuned module offset
-    m_turningEncoder = new AnalogPotentiometer(turningEncoderChannel, 2.0 * Math.PI, angularOffset); 
+    m_turningEncoder = new AnalogPotentiometer(turningEncoderChannel, 2.0 * Math.PI, angularOffset);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous so the PID will command the shortest path.
@@ -137,12 +139,20 @@ public class SwerveModule {
   }
 
   /**
-   * Obtains the negative of the turning absolute encoder value as this encoder reads opposite of the module rotation on 
+   * Obtains the negative of the turning absolute encoder value as this encoder reads opposite of the module rotation on
    * 2910 MK2 swerve.
    *
    * @return the modified absolute encoder value.
    */
   public double getTurnEncoder() {
     return -1.0 * m_turningEncoder.get();
+  }
+  public void brakeModeModule(){
+    m_driveMotor.setIdleMode(IdleMode.kBrake);
+    m_turningMotor.setIdleMode(IdleMode.kBrake);
+  }
+  public void coastModeModule(){
+    m_driveMotor.setIdleMode(IdleMode.kCoast);
+    m_turningMotor.setIdleMode(IdleMode.kCoast);
   }
 }

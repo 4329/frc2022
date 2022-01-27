@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-
+    drivetrain.coastMode();
   }
 
   @Override
@@ -77,6 +77,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    drivetrain.brakeMode();
+
     m_autonomousCommand = m_robotContainer.getAuto();
 
     /*
@@ -99,6 +101,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    drivetrain.brakeMode();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -118,9 +121,11 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    drivetrain.coastMode();
+
     if(m_swerveAlignment == null){//This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
-      m_swerveAlignment.initSwerveAlignment();
+      m_swerveAlignment.initSwerveAlignmentWidgets();
     }
   }
 
