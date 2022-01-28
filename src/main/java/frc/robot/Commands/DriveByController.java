@@ -54,12 +54,13 @@ public class DriveByController extends CommandBase {
    * a robot oreinted when they please (not recommended in most instances)
    */
   public void changeFieldOrient() {
-    if (fieldOrient) {
+    if (fieldOrient == true) {
       fieldOrient = false;
-      fieldOrientStatus.setBoolean(true);
-    } else {
-      fieldOrient = true;
       fieldOrientStatus.setBoolean(false);
+    } 
+    else {
+      fieldOrient = true;
+      fieldOrientStatus.setBoolean(true);
     }
   }
 
