@@ -26,5 +26,7 @@ Intake_ID = 40
 intakeSpeed = 0.2
 intakeUp = false
 
+PH_CAN_ID = 61
+
 # RIP rickroll
 # NSP
