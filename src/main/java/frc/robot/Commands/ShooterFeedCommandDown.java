@@ -1,12 +1,12 @@
 package frc.robot.Commands;
 
-import frc.robot.RobotContainer;
+import frc.robot.Subsystems.ShooterFeedSubsytem;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 public class ShooterFeedCommandDown extends StartEndCommand {
-    public ShooterFeedCommandDown() {
+    public ShooterFeedCommandDown(ShooterFeedSubsytem shooterFeedSubsytem) {
 
-        super(RobotContainer.shooterFeedSubsytem::shooterFeedDown, RobotContainer.shooterFeedSubsytem::shooterFeedStop,
-                RobotContainer.shooterFeedSubsytem);
+        super(shooterFeedSubsytem::shooterFeedDown, shooterFeedSubsytem::shooterFeedStop,
+                shooterFeedSubsytem);
     }
 }

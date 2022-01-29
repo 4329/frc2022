@@ -10,12 +10,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.AutoTest;
 import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
@@ -37,7 +37,7 @@ public class RobotContainer {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  public static final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
+  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
 
   private final DriveByController m_drive;
 
@@ -76,7 +76,8 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
-    new Button(operatorController, OIConstants.kOperatorControllerPort).whileHeld(new ShooterFeedCommandUp());
+    new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
+    new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
 
 
   }
