@@ -24,3 +24,6 @@ backRightOffset = 2.79
 
 # RIP rickroll
 # NSP
+
+FrontShooterFeed_ID = 42
+BackShooterFeed_ID = 43

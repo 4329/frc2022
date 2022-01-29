@@ -21,3 +21,6 @@ frontLeftOffset = 0.0
 frontRightOffset = 0.7853
 backLeftOffset = -0.0884
 backRightOffset = 2.79
+
+FrontShooterFeed_ID = 42
+BackShooterFeed_ID = 43
