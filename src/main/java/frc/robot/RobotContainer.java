@@ -10,24 +10,19 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-=======
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
->>>>>>> d5168f4 (added button to test motor (a on xbox controller))
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.AutoTest;
 import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
-<<<<<<< HEAD
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
-=======
-import frc.robot.Commands.StorageIntakeCommand;
->>>>>>> d5168f4 (added button to test motor (a on xbox controller))
+import frc.robot.Commands.StorageIntakeInCommand;
+import frc.robot.Commands.StorageIntakeOutCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -111,9 +106,8 @@ ParallelCommandGroup intakeCommandGroup() {
     new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
     //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenPressed(() -> new StorageIntakeCommand(storageIntake));
-
-
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
   }
 
 private void configureAutoChooser(){

@@ -31,9 +31,14 @@ PH_CAN_ID = 61
 =======
 # Storage Intake
 storageIntakeID = 41
+<<<<<<< HEAD
 storageIntakeInPower = 0
 storageIntakeOutPower = 0
 >>>>>>> fee0c28 (added storage intake motor control, but missing inputs)
+=======
+storageIntakeInPower = 0.2
+storageIntakeOutPower = -0.2
+>>>>>>> 64430e1 (intake (a) & outtake (b) both work)
 
 # RIP rickroll
 # NSP
