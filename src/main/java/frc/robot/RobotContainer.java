@@ -24,7 +24,7 @@ import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
-
+import edu.wpi.first.wpilibj.PneumaticHub;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -34,9 +34,11 @@ import frc.robot.Subsystems.Swerve.IntakeMotor;
  */
 public class RobotContainer {
 
+private static final int PH_CAN_ID = Configrun.get(61, "PH_CAN_ID");
+private PneumaticHub pneumaticHub = new PneumaticHub(PH_CAN_ID);;
 
 private IntakeMotor intakeMotor = new IntakeMotor();
-private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem();
+private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
 
 
 
