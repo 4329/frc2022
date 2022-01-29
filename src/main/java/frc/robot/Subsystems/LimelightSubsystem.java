@@ -108,7 +108,7 @@ public class LimelightSubsystem extends SubsystemBase {
         NetworkTableEntry tx = table.getEntry("tx");
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
-        NetworkTableEntry limeLightDistance = table.getEntry("Limelight Distance");
+        NetworkTableEntry limeLightDistance = table.getEntry("LimeDis");
         // NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");
 
 
