@@ -36,7 +36,7 @@ public class RobotContainer {
 
 
 private IntakeMotor intakeMotor = new IntakeMotor();
-private IntakeSolenoid intakeSolenoid = new IntakeSolenoid();
+private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem();
 
 
 
