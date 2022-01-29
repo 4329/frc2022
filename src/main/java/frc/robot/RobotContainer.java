@@ -15,7 +15,10 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.AutoTest;
 import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.ShooterFeedCommandDown;
+import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Constants.*;
+import frc.robot.Subsystems.ShooterFeedSubsytem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -33,6 +36,8 @@ public class RobotContainer {
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
 
   private final DriveByController m_drive;
 
@@ -71,6 +76,9 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
+    new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
+    new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
+
 
   }
 
@@ -81,8 +89,8 @@ private void configureAutoChooser(){
   SmartDashboard.putData(m_chooser);
 }
 
-public Command getAuto(){
-  return m_chooser.getSelected();
-}
+  public Command getAuto(){
+    return m_chooser.getSelected();
+  }
 
 }
