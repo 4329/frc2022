@@ -10,12 +10,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
-import frc.robot.Commands.IntakeCommand;
+import frc.robot.Commands.IntakeRunCommand;
+import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -25,14 +28,15 @@ import frc.robot.Subsystems.Swerve.IntakeMotor;
  */
 public class RobotContainer {
 
-  public static final String intakeSolenoid = null;
 
 private IntakeMotor intakeMotor = new IntakeMotor();
-private IntakeSolenoid intakeUp = new IntakeSolenoid();
+private IntakeSolenoid intakeSolenoid = new IntakeSolenoid();
 
 
 
-
+ParallelCommandGroup intakeCommandGroup() {
+  return new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor));
+}
 
 
 
@@ -78,9 +82,9 @@ private IntakeSolenoid intakeUp = new IntakeSolenoid();
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
     
-    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(RunIntakeIn);
-    new JoystickButton(m_operatorController, Button.kA.value).whenReleased(StopIntakeIn);
+    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
+    //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
 
   }
 
