@@ -22,8 +22,8 @@ frontRightOffset = 0.7853
 backLeftOffset = -0.0884
 backRightOffset = 2.79
 
-Intake_ID = 12
-intakeSpeed = 0
+Intake_ID = 40
+intakeSpeed = 0.2
 intakeUp = false
 
 # RIP rickroll

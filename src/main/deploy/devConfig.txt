@@ -31,3 +31,7 @@ FrontShooterFeedDown = 0.5
 BackShooterFeedDown = 0.5
 FrontShooterFeedStop = 0
 BackShooterFeedStop = 0
+
+Intake_ID = 40
+intakeSpeed = 0
+intakeUp = false
