@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Commands.AutoTest;
+import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Constants.*;
 
@@ -34,12 +36,17 @@ public class RobotContainer {
 
   private final DriveByController m_drive;
 
+  private final Command autoTest;
+  private final Command straightLine;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
  * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
+    autoTest = new AutoTest(m_robotDrive);
+    straightLine = new StraightLine(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -68,6 +75,9 @@ public class RobotContainer {
   }
 
 private void configureAutoChooser(){
+  //m_chooser.addOption("AutoTest",autoTest);
+  m_chooser.setDefaultOption("autoTest",autoTest);
+  m_chooser.addOption("StraightLine", straightLine);
   SmartDashboard.putData(m_chooser);
 }
 
