@@ -22,7 +22,6 @@ import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
-import frc.robot.Commands.IntakeCommand;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 
