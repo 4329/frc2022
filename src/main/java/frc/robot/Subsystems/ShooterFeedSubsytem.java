@@ -10,28 +10,28 @@ public class ShooterFeedSubsytem extends SubsystemBase {
 
     public ShooterFeedSubsytem(){
         brakeShooterFeed();
-    } 
+    }
 
     private TalonSRX frontShooterFeed = new TalonSRX(Configrun.get(42, "FrontShooterFeed_ID"));
     private TalonSRX backShooterFeed = new TalonSRX(Configrun.get(43, "BackShooterFeed_ID"));
 
-    public void shooterFeedUp() { 
-        frontShooterFeed.set(TalonSRXControlMode.PercentOutput, Configrun.get(0.5, "FrontShooterFeedUp")); 
+    public void shooterFeedUp() {
+        frontShooterFeed.set(TalonSRXControlMode.PercentOutput, Configrun.get(0.5, "FrontShooterFeedUp"));
         backShooterFeed.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "BackShooterFeedUp"));
     }
 
-    public void shooterFeedDown() { 
-        frontShooterFeed.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "FrontShooterFeedDown")); 
+    public void shooterFeedDown() {
+        frontShooterFeed.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "FrontShooterFeedDown"));
         backShooterFeed.set(TalonSRXControlMode.PercentOutput, Configrun.get(0.5, "BackShooterFeedDown"));
     }
 
-    public void shooterFeedStop() { 
-        frontShooterFeed.set(TalonSRXControlMode.PercentOutput, Configrun.get(0, "FrontShooterFeedStop")); 
-        backShooterFeed.set(TalonSRXControlMode.PercentOutput, Configrun.get(0, "BackShooterFeedStop"));
+    public void shooterFeedStop() {
+        frontShooterFeed.set(TalonSRXControlMode.PercentOutput,0);
+        backShooterFeed.set(TalonSRXControlMode.PercentOutput,0);
     }
 
     public void brakeShooterFeed(){
         frontShooterFeed.setNeutralMode(NeutralMode.Brake);
         backShooterFeed.setNeutralMode(NeutralMode.Brake);
-    }    
+    }
 }
