@@ -29,8 +29,6 @@ intakeUp = false
 PH_CAN_ID = 61
 # Storage Intake
 storageIntakeID = 41
-storageIntakeInPower = 0
-storageIntakeOutPower = 0
 storageIntakeInPower = 0.2
 storageIntakeOutPower = -0.2
 
