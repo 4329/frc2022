@@ -38,3 +38,7 @@ intakeUp = false
 storageIntakeID = 41
 storageIntakeInPower = 0.2
 storageIntakeOutPower = -0.2
+
+#Digital input IDs
+shooterFeedTriggerPort = 1
+storageIntakeTriggerPort = 3

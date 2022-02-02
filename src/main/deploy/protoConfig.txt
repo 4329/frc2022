@@ -22,21 +22,20 @@ frontRightOffset = 0.7853
 backLeftOffset = -0.0884
 backRightOffset = 2.79
 
-<<<<<<< HEAD
 Intake_ID = 40
 intakeSpeed = 0.2
 intakeUp = false
 
 PH_CAN_ID = 61
+
 # Storage Intake
 storageIntakeID = 41
 storageIntakeInPower = 0.2
 storageIntakeOutPower = -0.2
-=======
+
 #Digital input IDs
 shooterFeedTriggerPort = 1
 storageIntakeTriggerPort = 3
->>>>>>> c72285e (added sensors for intake)
 
 # RIP rickroll
 # NSP
