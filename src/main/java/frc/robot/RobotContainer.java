@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.AutoTest;
@@ -17,8 +18,12 @@ import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
+import frc.robot.Commands.IntakeRunCommand;
+import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
+import frc.robot.Subsystems.Swerve.IntakeMotor;
+import edu.wpi.first.wpilibj.PneumaticHub;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,7 +33,21 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
  */
 public class RobotContainer {
 
-  // The robot's subsystems
+private static final int PH_CAN_ID = Configrun.get(61, "PH_CAN_ID");
+private PneumaticHub pneumaticHub = new PneumaticHub(PH_CAN_ID);;
+
+private IntakeMotor intakeMotor = new IntakeMotor();
+private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
+
+
+
+ParallelCommandGroup intakeCommandGroup() {
+  return new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor));
+}
+
+
+
+// The robot's subsystems
   private final Drivetrain m_robotDrive;
 
   // The driver's controllers
@@ -78,7 +97,10 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
     new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
+    
+    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
+    //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
 
   }
 

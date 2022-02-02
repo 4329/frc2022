@@ -6,9 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 
@@ -24,18 +29,23 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
+
+  
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
+    SmartDashboard.setDefaultBoolean("Set Solenoid", false);
+    System.out.println("its wokring");
     Configrun.loadconfig();
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
     drivetrain = new Drivetrain();
     m_robotContainer = new RobotContainer(drivetrain);
+    System.out.println("still working");
 
   }
 
@@ -58,6 +68,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    //SmartDashboard.putBoolean("Get Solenoid", m_Solenoid.get());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -108,13 +119,14 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
+      System.out.println("Its working now");
     }
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
+    //m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
   }
 
   @Override
