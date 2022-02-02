@@ -22,7 +22,6 @@ frontRightOffset = 0.7853
 backLeftOffset = -0.0884
 backRightOffset = 2.79
 
-<<<<<<< HEAD
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
 
@@ -34,14 +33,8 @@ BackShooterFeedDown = 0.5
 Intake_ID = 40
 intakeSpeed = 0
 intakeUp = false
-=======
+
 # Storage Intake
 storageIntakeID = 41
-<<<<<<< HEAD
-storageIntakeInPower = 0
-storageIntakeOutPower = 0
->>>>>>> fee0c28 (added storage intake motor control, but missing inputs)
-=======
 storageIntakeInPower = 0.2
 storageIntakeOutPower = -0.2
->>>>>>> 64430e1 (intake (a) & outtake (b) both work)
