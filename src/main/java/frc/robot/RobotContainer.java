@@ -13,10 +13,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Commands.AutoTest;
+import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
+<<<<<<< HEAD
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Constants.*;
+=======
+import frc.robot.Commands.ShooterFeedCommandDown;
+import frc.robot.Commands.ShooterFeedCommandUp;
+import frc.robot.Commands.IntakeRunCommand;
+import frc.robot.Commands.IntakeSolenoidDownCommand;
+import frc.robot.Constants.*;
+import frc.robot.Subsystems.ShooterFeedSubsytem;
+>>>>>>> b647cacb0957dd79bb37b6fff5db9a6eeb5afbb5
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 
@@ -51,7 +62,12 @@ ParallelCommandGroup intakeCommandGroup() {
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
+
   private final DriveByController m_drive;
+
+  private final Command autoTest;
+  private final Command straightLine;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -59,6 +75,8 @@ ParallelCommandGroup intakeCommandGroup() {
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
+    autoTest = new AutoTest(m_robotDrive);
+    straightLine = new StraightLine(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -83,6 +101,11 @@ ParallelCommandGroup intakeCommandGroup() {
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
+<<<<<<< HEAD
+=======
+    new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
+    new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
+>>>>>>> b647cacb0957dd79bb37b6fff5db9a6eeb5afbb5
     
     new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
@@ -91,11 +114,14 @@ ParallelCommandGroup intakeCommandGroup() {
   }
 
 private void configureAutoChooser(){
+  //m_chooser.addOption("AutoTest",autoTest);
+  m_chooser.setDefaultOption("autoTest",autoTest);
+  m_chooser.addOption("StraightLine", straightLine);
   SmartDashboard.putData(m_chooser);
 }
 
-public Command getAuto(){
-  return m_chooser.getSelected();
-}
+  public Command getAuto(){
+    return m_chooser.getSelected();
+  }
 
 }

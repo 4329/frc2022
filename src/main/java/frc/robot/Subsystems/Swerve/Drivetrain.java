@@ -222,4 +222,16 @@ import frc.robot.Constants.*;
   public double getBackRightAngle(){
     return m_backRight.getTurnEncoder();
   }
+  public void brakeMode(){
+    m_frontLeft.brakeModeModule();
+    m_frontRight.brakeModeModule();
+    m_backLeft.brakeModeModule();
+    m_backRight.brakeModeModule();
+  }
+  public void coastMode(){
+    m_frontLeft.coastModeModule();
+    m_frontRight.coastModeModule();
+    m_backLeft.coastModeModule();
+    m_backRight.coastModeModule();
+  }
 }
