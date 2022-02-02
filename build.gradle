@@ -5,6 +5,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
+sourceSets.test.java.srcDirs += 'src/test/java'
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
@@ -43,6 +44,7 @@ def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 wpi.java.debugJni = false
 
 // Set this to true to enable desktop support.
+//def includeDesktopSupport = true
 def includeDesktopSupport = false
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
@@ -66,6 +68,8 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.+'
+//    testCompile "org.mockito:mockito-core:2.+" 
 }
 
 // Simulation configuration (e.g. environment variables).
