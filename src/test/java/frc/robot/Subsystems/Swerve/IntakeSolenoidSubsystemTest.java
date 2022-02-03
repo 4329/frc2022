@@ -25,39 +25,39 @@ public class IntakeSolenoidSubsystemTest {
 
    @Before
    public void setUp() {
-       when(mockPneumaticHub.makeSolenoid(anyInt())).thenReturn(mockSolenoid);
-       this.testObject = new IntakeSolenoidSubsystem(mockPneumaticHub);
-   }
-    
-   @Test
-   public void intakeUp_raisesIntake() {
-       testObject.intakeUp();
-
-       verify(mockSolenoid).set(false);
+      when(mockPneumaticHub.makeSolenoid(0)).thenReturn(mockSolenoid);
+      testObject = new IntakeSolenoidSubsystem(mockPneumaticHub);
    }
 
    @Test
-   public void intakeDown_lowersIntake() {
-       testObject.intakeDown();
+   public void intakeUp_solenoidSet() {
+      testObject.intakeUp();
 
-       verify(mockSolenoid).set(true);
-   }   
-
-   @Test
-   public void keepIntakePosition_solenoidTrue_intakeDownCalled() {
-       when(mockSolenoid.get()).thenReturn(true);
-
-       testObject.keepIntakePosition();
-
-       verify(mockSolenoid).set(true);
+      verify(mockSolenoid).set(false);
    }
 
    @Test
-   public void keepIntakePosition_solenoidFalse_intakeUpCalled() {
-       when(mockSolenoid.get()).thenReturn(false);
+   public void intakeDown() {
+      testObject.intakeDown();
 
-       testObject.keepIntakePosition();
+      verify(mockSolenoid).set(true);
+   }
 
-       verify(mockSolenoid).set(false);
+   @Test
+   public void keepIntakePosition_intakeDownGetsCalled() {
+      when(mockSolenoid.get()).thenReturn(true);
+
+      testObject.keepIntakePosition();
+
+      verify(mockSolenoid).set(true);
+   }
+
+   @Test
+   public void keepIntakePosition_intakeUpGetsCalled() {
+      when(mockSolenoid.get()).thenReturn(false);
+
+      testObject.keepIntakePosition();
+
+      verify(mockSolenoid).set(false);
    }
 }
