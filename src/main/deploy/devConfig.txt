@@ -59,3 +59,5 @@ climberMotor3ID = 11
 
 climbPower = 0.5
 reverseClimbPower = -0.5
+ShooterWheel1ID = 13
+ShooterWheel2ID = 14
