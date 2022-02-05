@@ -29,6 +29,7 @@ import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.IntakeSensors;
+import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -140,6 +141,15 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
+    //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
+    new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
+    new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).whileHeld(new StartEndCommand(climber::climb, climber::stopClimb));
+
+
   }
 
   private void configureAutoChooser() {

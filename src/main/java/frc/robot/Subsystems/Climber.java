@@ -14,6 +14,7 @@ public class Climber {
     private CANSparkMax climberNeoMotor1;
     private CANSparkMax climberNeoMotor2;
     private CANSparkMax climberNeoMotor3;
+    private boolean pivoted = false;
 
 
     public Climber (PneumaticHub hubbie) {
@@ -28,23 +29,22 @@ public class Climber {
 
     }
 
-    public void rotateClimber() {
+    public void pivotClimber() {
         pivotSolenoid.set(true); 
     }
-    public void reverseRotateClimber(){
+    public void reversePivotClimber(){
         pivotSolenoid.set(false);
     }
-    public void shiftClimber() {
-        shiftSolenoid.set(true);
-    }
-    public void reverseShiftClimber() {
-        shiftSolenoid.set(false);
-    }
+    
     public void extend() {
         extendSolenoid.set(true);
+        shiftSolenoid.set(true);
+
     }
     public void retract() {
         extendSolenoid.set(false);
+        shiftSolenoid.set(false);
+
     }
     public void climb() {
         climberNeoMotor1.set(Configrun.get(0.5, "climbPower"));
@@ -56,5 +56,27 @@ public class Climber {
         climberNeoMotor1.set(Configrun.get(-0.5, "reverseClimbPower"));
     }
 
+    public void togglePivot() {
+        if(pivoted) {
+            reversePivotClimber();
+            pivoted = false;
+        }
+        else {
+            pivotClimber();
+            pivoted = true;
+        }       
+    }
 
+
+
+
+
+
+    
+    // extend - 
+    // pivotcommand -- toggle
+    // shift + extend  
+    // unshift + retract
+
+    // climb == while held
 }
