@@ -21,11 +21,13 @@ import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
+import frc.robot.Commands.IntakeSensorsLogic;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Constants.*;
+import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -56,6 +58,8 @@ ParallelCommandGroup intakeCommandGroup() {
 // The robot's subsystems
   private final Drivetrain m_robotDrive;
   private final StorageIntake storageIntake;
+  private final IntakeSensors intakeSensors;
+  private final ShooterFeedSubsytem shooterFeed;
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -83,6 +87,8 @@ ParallelCommandGroup intakeCommandGroup() {
     //exampleAuto = new ExampleAuto(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     storageIntake = new StorageIntake();
+    intakeSensors = new IntakeSensors();
+    shooterFeed = new ShooterFeedSubsytem();
 
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -115,6 +121,8 @@ ParallelCommandGroup intakeCommandGroup() {
     //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
+
+    new JoystickButton(m_operatorController, Button.kB.value).whileHeld(new IntakeSensorsLogic(intakeSensors, shooterFeed, storageIntake));
   }
 
 private void configureAutoChooser(){
