@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 import frc.robot.Constants.*;
 import frc.robot.Utilities.*;
@@ -15,14 +17,52 @@ import frc.robot.Utilities.*;
   public class Turret extends PIDSubsystem {
 
   //Creates the TalonSRX for the feederMotor on the specified CAN ID
-  private static TalonSRX m_turretMotor = new TalonSRX(TurretConstants.kTurretPort);
+  private final TalonSRX m_turretMotor = new TalonSRX(TurretConstants.kTurretPort);
+  private final AS5600EncoderPwm turretEncoder = new AS5600EncoderPwm(m_turretMotor.getSensorCollection());
   //Creates the potentiometer for the absolute encoder for the turret and converts the voltage to radians and sets the tuned offset angle
-  private static AnalogPotentiometer m_turretPotentiometer = new AnalogPotentiometer(TurretConstants.kTurretPotentiometerPort,
-      2.0 * Math.PI, -2.80);
-
+  //private static AnalogPotentiometer m_turretPotentiometer = new AnalogPotentiometer(TurretConstants.kTurretPotentiometerPort,
+  //    2.0 * Math.PI, -2.80);
   private boolean searchClockwise = true; //creates boolean to indicate if the turret is searching clockwise for a target 
   private boolean trackTarget = false;    //creates boolean to indicate if the turret is in trackTarget mode
   private boolean visionSolution = false;
+  public double turretEncoderValues = turretEncoder.getPwmPosition();
+  public double maxTurretEncoderValue = turretEncoder.getPwmPosition();
+  public double minTurretEncoderValue = turretEncoder.getPwmPosition();
+  public double turretEncoderRadians =  turretEncoder.getPwmPosition() / 3600 * 2 * Math.PI;
+
+  //max 3964
+  //min -127
+  //forward -125
+  //back  1913
+
+  NetworkTableEntry turretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location in Pulses", turretEncoderValues).withPosition(8,0).getEntry();
+  //NetworkTableEntry maxTurretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location Max in Pulses", maxTurretEncoderValue).withPosition(7,0).getEntry();
+  //NetworkTableEntry minTurretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location Min in Pulses", minTurretEncoderValue).withPosition(6,0).getEntry();
+  //NetworkTableEntry encoderPulses = Shuffleboard.getTab("RobotData").add("Encoder Pulses", turretEncoderPulses).getEntry();
+
+
+  
+  public void displayTurretEncoderPulses() {
+    turretEncoderValues = turretEncoder.getPwmPosition();
+    System.out.println("encoder pulses called " + turretEncoder.getPwmPosition());
+    turretEncoderPulses.setDouble(turretEncoder.getPwmPosition());
+}
+/*
+public  void displayMaxTurretEncoderPulses(){
+  if(maxTurretEncoderValue < turretEncoder.getPwmPosition()){
+    maxTurretEncoderValue = turretEncoder.getPwmPosition();
+  }
+  else{}
+}
+
+public  void displayMinTurretEncoderPulses(){
+  if(minTurretEncoderValue > turretEncoder.getPwmPosition()){
+    minTurretEncoderValue = turretEncoder.getPwmPosition();
+  }
+  else{}
+}*/
+
+
   /**
    * Creates a Turret PIDSubsystem and sets the appropirate values for the motor controllers, analog encoder, and PIDController.
    * Because there will only ever be 1 turret on the robot the appropriate values will be pulled in from the 
@@ -153,12 +193,12 @@ import frc.robot.Utilities.*;
    * Obtains the potentiometer reading, this "if-else if-else" may be a remnant of buggy code and is proabbly unecessary now 
    */
    private double getPotentionmeter() {
-    if (m_turretPotentiometer.get() > 2 * Math.PI) {
-      return m_turretPotentiometer.get() - 2 * Math.PI;
-    } else if (m_turretPotentiometer.get() < 0.0) {
-      return m_turretPotentiometer.get() + 2 * Math.PI;
+    if (turretEncoderRadians > 2 * Math.PI) {
+      return turretEncoderRadians - 2 * Math.PI;
+    } else if (turretEncoderRadians < 0.0) {
+      return turretEncoderRadians + 2 * Math.PI;
     } else {
-      return m_turretPotentiometer.get();
+      return turretEncoderRadians;
     }
   }
 

@@ -1,6 +1,6 @@
 package frc.robot;
 
-import frc.robot.Subsystems.EncoderTestSubsystem;
+//import frc.robot.Subsystems.EncoderTestSubsystem;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
-import frc.robot.Commands.EncoderTestMotorBack;
-import frc.robot.Commands.EncoderTestMotorForward;
+//import frc.robot.Commands.EncoderTestMotorBack;
+//import frc.robot.Commands.EncoderTestMotorForward;
 import frc.robot.Constants.*;
 
 /*
@@ -27,7 +27,7 @@ import frc.robot.Constants.*;
 public class RobotContainer {
 
   // The robot's subsystems
-  public final static EncoderTestSubsystem encoderTestSubsystem = new EncoderTestSubsystem();
+  //public final static EncoderTestSubsystem encoderTestSubsystem = new EncoderTestSubsystem();
   private final Drivetrain m_robotDrive;
 
   // The driver's controllers
@@ -68,8 +68,8 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
-    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new EncoderTestMotorForward(encoderTestSubsystem));
-    new JoystickButton(m_operatorController, Button.kB.value).whileHeld(new EncoderTestMotorBack(encoderTestSubsystem));
+    //new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new EncoderTestMotorForward(encoderTestSubsystem));
+    //new JoystickButton(m_operatorController, Button.kB.value).whileHeld(new EncoderTestMotorBack(encoderTestSubsystem));
 
 
 

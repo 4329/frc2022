@@ -7,9 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Subsystems.EncoderTestSubsystem;
+//import frc.robot.Subsystems.EncoderTestSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
+import frc.robot.Subsystems.Turret;
 
 
 
@@ -25,7 +26,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
-  private EncoderTestSubsystem encoderTestSubsystem;
+  //private EncoderTestSubsystem encoderTestSubsystem;
+  private Turret turret;
   
   /**
    * This function is run when the robot is first started up and should be used
@@ -117,7 +119,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-  encoderTestSubsystem.getEncoderPulses();
+  //encoderTestSubsystem.getEncoderPulses();
+  turret.displayTurretEncoderPulses();
+
   }
 
   @Override
@@ -130,16 +134,19 @@ public class Robot extends TimedRobot {
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
-    if(encoderTestSubsystem == null){//This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
-      encoderTestSubsystem = new EncoderTestSubsystem();
-      encoderTestSubsystem.getEncoderPulses();
+    //if(encoderTestSubsystem == null){
+    //  encoderTestSubsystem = new EncoderTestSubsystem();
+    //}
+    if(turret == null){
+      turret = new Turret();}
     }
-  }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
-    encoderTestSubsystem.getEncoderPulses();
+    //encoderTestSubsystem.getEncoderPulses();
+    turret.displayTurretEncoderPulses();
+
   }
 }
