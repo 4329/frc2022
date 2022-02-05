@@ -4,11 +4,11 @@ import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -21,8 +21,12 @@ import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
+<<<<<<< HEAD
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
+=======
+import frc.robot.Commands.MoveOneMeterAuto;
+>>>>>>> 1e68038 (added MoveOneMeter)
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -65,15 +69,17 @@ ParallelCommandGroup intakeCommandGroup() {
 
   private final Command autoTest;
   private final Command straightLine;
+  private final Command moveOneMeter;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
- * @param drivetrain
+   * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
     autoTest = new AutoTest(m_robotDrive);
     straightLine = new StraightLine(m_robotDrive);
+    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     storageIntake = new StorageIntake();
 
@@ -112,9 +118,10 @@ ParallelCommandGroup intakeCommandGroup() {
 
 private void configureAutoChooser(){
   //m_chooser.addOption("AutoTest",autoTest);
-  m_chooser.setDefaultOption("autoTest",autoTest);
+  m_chooser.setDefaultOption("autoTest", autoTest);
   m_chooser.addOption("StraightLine", straightLine);
-  SmartDashboard.putData(m_chooser);
+  m_chooser.addOption("MoveOneMeter", moveOneMeter);
+  Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser);
 }
 
   public Command getAuto(){

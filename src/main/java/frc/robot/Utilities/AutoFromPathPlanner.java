@@ -17,6 +17,13 @@ import frc.robot.Utilities.PathPlanner.PathPlannerTrajectory;
 public class AutoFromPathPlanner extends SequentialCommandGroup {
   private PathPlannerTrajectory m_trajectory;
 
+  /**
+   * Runs the selected path
+   * 
+   * @param drive
+   * @param pathName
+   * @param maxSpeed
+   */
   public AutoFromPathPlanner(Drivetrain drive, String pathName, double maxSpeed) {
     m_trajectory = PathPlanner.loadPath(pathName, maxSpeed, AutoConstants.kMaxAcceleration);
 
@@ -38,6 +45,9 @@ public class AutoFromPathPlanner extends SequentialCommandGroup {
 
   }
 
+  /**
+   * Gets robot pose at the path's first point
+   */
   public Pose2d getInitialPose(){
     return new Pose2d(m_trajectory.getInitialState().poseMeters.getX(),
     m_trajectory.getInitialState().poseMeters.getY(),
