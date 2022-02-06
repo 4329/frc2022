@@ -9,7 +9,7 @@ import frc.robot.Subsystems.Swerve.IntakeMotor;
 public class IntakeRunCommand extends StartEndCommand{
     public IntakeRunCommand(IntakeMotor intakeMotor) {
       super (intakeMotor::runIntakeIn, intakeMotor::stopIntakeIn);
-        
-    
-    }     
+
+
+    }
 }

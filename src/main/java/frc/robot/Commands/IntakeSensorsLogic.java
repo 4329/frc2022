@@ -14,10 +14,12 @@ public class IntakeSensorsLogic extends CommandBase {
     private IntakeMotor intakeMotor;
     private IntakeSolenoidSubsystem intakeSolenoid;
 
-    public IntakeSensorsLogic(IntakeSensors intakeSensors, ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake) {
+    public IntakeSensorsLogic(IntakeSensors intakeSensors, ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor, IntakeSolenoidSubsystem intakeSolenoid) {
         this.intakeSensors = intakeSensors;
         this.shooterFeed = shooterFeed;
         this.storageIntake = storageIntake;
+        this.intakeMotor = intakeMotor;
+        this.intakeSolenoid = intakeSolenoid;
     }
 
     public void initialize() {
@@ -28,20 +30,26 @@ public class IntakeSensorsLogic extends CommandBase {
     }
 
     public void execute() {
-        if (intakeSensors.topTrigger()) {
-            System.out.println("top deactivated");
+        if (!intakeSensors.topTrigger()) {
             shooterFeed.shooterFeedStop();
 
-            if (intakeSensors.bottomTrigger()) {
-                System.out.println("bottom deactivated");
+            if (!intakeSensors.bottomTrigger()) {
                 storageIntake.storageIntakeStop();
                 intakeMotor.stopIntakeIn();
-                intakeSolenoid.intakeUp();
+                shooterFeed.shooterFeedStop();
             }
         }
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        storageIntake.storageIntakeStop();
+        intakeMotor.stopIntakeIn();
+        intakeSolenoid.intakeUp();
+        shooterFeed.shooterFeedStop();
+    }
+
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

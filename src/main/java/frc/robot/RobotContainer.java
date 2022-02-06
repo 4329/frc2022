@@ -54,11 +54,11 @@ ParallelCommandGroup intakeCommandGroup() {
 
 
 
-// The robot's subsystems
+  // The robot's subsystems
   private final Drivetrain m_robotDrive;
-  private final StorageIntake storageIntake;
-  private final IntakeSensors intakeSensors;
-  private final ShooterFeedSubsytem shooterFeed;
+  private final StorageIntake storageIntake = new StorageIntake();
+  private final IntakeSensors intakeSensors = new IntakeSensors();
+  private final ShooterFeedSubsytem shooterFeed = new ShooterFeedSubsytem();
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -85,9 +85,6 @@ ParallelCommandGroup intakeCommandGroup() {
     intakeRun = new IntakeRunAuto(m_robotDrive);
     //exampleAuto = new ExampleAuto(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
-    storageIntake = new StorageIntake();
-    intakeSensors = new IntakeSensors();
-    shooterFeed = new ShooterFeedSubsytem();
 
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -121,7 +118,7 @@ ParallelCommandGroup intakeCommandGroup() {
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
 
-    new JoystickButton(m_operatorController, Button.kB.value).whileHeld(new IntakeSensorsLogic(intakeSensors, shooterFeed, storageIntake));
+    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeSensorsLogic(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
   }
 
 private void configureAutoChooser(){

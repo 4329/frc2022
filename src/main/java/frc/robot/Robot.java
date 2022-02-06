@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain;
 
   private double coastWait;
-  
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    
+
     m_autonomousCommand = m_robotContainer.getAuto();
 
     /*
@@ -125,6 +125,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    CommandScheduler.getInstance().cancelAll();
     drivetrain.brakeMode();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
