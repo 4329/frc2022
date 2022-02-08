@@ -27,24 +27,20 @@ intakeSpeed = 0.2
 intakeUp = false
 
 PH_CAN_ID = 61
+
 # Storage Intake
 storageIntakeID = 41
-storageIntakeInPower = 0.2
-storageIntakeOutPower = -0.2
+storageIntakePower = 0.5
+
+#Digital input IDs
+topTriggerPort = 1
+bottomTriggerPort = 3
 
 # RIP rickroll
 # NSP
 
+#Shooter Feed
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
 
-FrontShooterFeedUp = 0.5
-BackShooterFeedUp = 0.5
-FrontShooterFeedDown = 0.5
-BackShooterFeedDown = 0.5
-FrontShooterFeedStop = 0
-BackShooterFeedStop = 0
-
-Intake_ID = 40
-intakeSpeed = 0.2
-intakeUp = false
+ShooterFeedPower = 0.5

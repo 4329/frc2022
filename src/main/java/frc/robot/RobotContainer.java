@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 //import frc.robot.Commands.Autos.ExampleAuto;
@@ -21,12 +20,15 @@ import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
+import frc.robot.Commands.IntakeSensorsCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Constants.*;
+import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
+import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 
@@ -52,9 +54,11 @@ ParallelCommandGroup intakeCommandGroup() {
 
 
 
-// The robot's subsystems
+  // The robot's subsystems
   private final Drivetrain m_robotDrive;
-  private final StorageIntake storageIntake;
+  private final StorageIntake storageIntake = new StorageIntake();
+  private final IntakeSensors intakeSensors = new IntakeSensors();
+  private final ShooterFeedSubsytem shooterFeed = new ShooterFeedSubsytem();
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -81,7 +85,6 @@ ParallelCommandGroup intakeCommandGroup() {
     intakeRun = new IntakeRunAuto(m_robotDrive);
     //exampleAuto = new ExampleAuto(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
-    storageIntake = new StorageIntake();
 
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -114,6 +117,8 @@ ParallelCommandGroup intakeCommandGroup() {
     //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
+
+    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
   }
 
 private void configureAutoChooser(){
@@ -129,4 +134,8 @@ private void configureAutoChooser(){
     return m_chooser.getSelected();
   }
 
+  public void disableRobot() {
+    shooterFeedSubsytem.coastShooterFeed();
+    storageIntake.storageIntakeCoast();
+  }
 }

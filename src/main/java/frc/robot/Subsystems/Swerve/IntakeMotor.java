@@ -10,7 +10,7 @@ public class IntakeMotor {
     private TalonSRX intakeMotor = new TalonSRX(Configrun.get(40, "Intake_ID"));
     double intakeSpeed = Configrun.get(0.2,"intakeSpeed");
 
-    public void runIntakeIn() 
+    public void runIntakeIn()
     {
         intakeMotor.set(ControlMode.PercentOutput, -intakeSpeed);
     }
@@ -26,5 +26,5 @@ public class IntakeMotor {
     public boolean isFinished() {
         return false;
     }
-    
+
 }
