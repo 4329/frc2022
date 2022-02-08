@@ -15,6 +15,7 @@ public class Climber {
     private CANSparkMax climberNeoMotor2;
     private CANSparkMax climberNeoMotor3;
     private boolean pivoted = false;
+    private boolean shifted = false;
 
 
     public Climber (PneumaticHub hubbie) {
@@ -34,6 +35,15 @@ public class Climber {
     }
     public void reversePivotClimber(){
         pivotSolenoid.set(false);
+    }
+
+    public void shift() {
+        shiftSolenoid.set(true);
+        shifted = true;
+    }
+    public void unShift() {
+        shiftSolenoid.set(false);
+        shifted = false;
     }
     
     public void extend() {
@@ -65,6 +75,15 @@ public class Climber {
             pivotClimber();
             pivoted = true;
         }       
+    }
+
+    public void toggleShift() {
+        if(shifted) {
+            unShift();
+        }
+        else {
+            shift();
+        }
     }
 
 

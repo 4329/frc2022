@@ -148,6 +148,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whileHeld(new StartEndCommand(climber::climb, climber::stopClimb));
+    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
+
 
 
   }
