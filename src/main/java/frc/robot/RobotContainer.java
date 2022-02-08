@@ -1,21 +1,22 @@
 package frc.robot;
 
 import frc.robot.Subsystems.Swerve.*;
-import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Commands.AutoTest;
-import frc.robot.Commands.StraightLine;
+//import frc.robot.Commands.Autos.ExampleAuto;
+import frc.robot.Commands.Autos.IntakeRunAuto;
+import frc.robot.Commands.Autos.TwoPathsAuto;
+import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
@@ -23,6 +24,7 @@ import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
+import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -63,17 +65,21 @@ ParallelCommandGroup intakeCommandGroup() {
 
   private final DriveByController m_drive;
 
-  private final Command autoTest;
-  private final Command straightLine;
+  private final Command moveOneMeter;
+  private final Command twoPaths;
+  private final Command intakeRun;
+  //private final Command exampleAuto;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
- * @param drivetrain
+   * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
-    autoTest = new AutoTest(m_robotDrive);
-    straightLine = new StraightLine(m_robotDrive);
+    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+    twoPaths = new TwoPathsAuto(m_robotDrive);
+    intakeRun = new IntakeRunAuto(m_robotDrive);
+    //exampleAuto = new ExampleAuto(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     storageIntake = new StorageIntake();
 
@@ -111,10 +117,12 @@ ParallelCommandGroup intakeCommandGroup() {
   }
 
 private void configureAutoChooser(){
-  //m_chooser.addOption("AutoTest",autoTest);
-  m_chooser.setDefaultOption("autoTest",autoTest);
-  m_chooser.addOption("StraightLine", straightLine);
-  SmartDashboard.putData(m_chooser);
+  m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
+  m_chooser.addOption("TwoPathsAuto", twoPaths);
+  m_chooser.addOption("IntakeRunAuto", intakeRun);
+  //m_chooser.addOption("ExampleAuto", exampleAuto);
+  Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
+  Shuffleboard.getTab("Autonomous").add("Documentation", "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29").withPosition(2, 2).withSize(4, 1);
 }
 
   public Command getAuto(){

@@ -19,7 +19,7 @@ public class PathPlanner {
      * @param name The name of the path to load
      * @param maxVel Max velocity of the path
      * @param maxAccel Max velocity of the path
-     * @param reversed Should the robot follow the path reversed
+     * @param reversed whether the robot should follow this path while reversed
      * @return The generated path
      */
     public static PathPlannerTrajectory loadPath(String name, double maxVel, double maxAccel, boolean reversed) {
