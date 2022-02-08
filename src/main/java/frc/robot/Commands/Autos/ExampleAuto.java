@@ -9,7 +9,7 @@ import frc.robot.Utilities.AutoFromPathPlanner;
 public class ExampleAuto extends SequentialCommandGroup{
 
     /**
-     * Moves the robot one meter forward
+     * An example auto that doesn't work
      * 
      * @param drive
      */

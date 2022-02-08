@@ -13,10 +13,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Commands.Autos.AutoTest;
 //import frc.robot.Commands.Autos.ExampleAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
-import frc.robot.Commands.Autos.StraightLineAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.DriveByController;
@@ -67,8 +65,6 @@ ParallelCommandGroup intakeCommandGroup() {
 
   private final DriveByController m_drive;
 
-  private final Command autoTest;
-  private final Command straightLine;
   private final Command moveOneMeter;
   private final Command twoPaths;
   private final Command intakeRun;
@@ -80,8 +76,6 @@ ParallelCommandGroup intakeCommandGroup() {
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
-    autoTest = new AutoTest(m_robotDrive);
-    straightLine = new StraightLineAuto(m_robotDrive);
     moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
     twoPaths = new TwoPathsAuto(m_robotDrive);
     intakeRun = new IntakeRunAuto(m_robotDrive);
@@ -123,8 +117,6 @@ ParallelCommandGroup intakeCommandGroup() {
   }
 
 private void configureAutoChooser(){
-  m_chooser.setDefaultOption("autoTest", autoTest);
-  m_chooser.addOption("StraightLineAuto", straightLine);
   m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
   m_chooser.addOption("TwoPathsAuto", twoPaths);
   m_chooser.addOption("IntakeRunAuto", intakeRun);

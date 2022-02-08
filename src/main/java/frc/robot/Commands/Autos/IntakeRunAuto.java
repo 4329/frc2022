@@ -22,7 +22,6 @@ public class IntakeRunAuto extends SequentialCommandGroup{
      */
     public IntakeRunAuto(Drivetrain drive) {
         
-        // this is necessary I promise
         final AutoFromPathPlanner moveOneMeter = new AutoFromPathPlanner(drive, "distancepath", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner moveOneMeter2 = new AutoFromPathPlanner(drive, "distancepath2", Constants.AutoConstants.kMaxSpeed);
 
