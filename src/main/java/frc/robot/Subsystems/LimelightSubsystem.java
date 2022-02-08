@@ -7,6 +7,9 @@ import frc.robot.RobotContainer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+
+import javax.management.ListenerNotFoundException;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
@@ -31,6 +34,11 @@ public class LimelightSubsystem extends SubsystemBase {
     NetworkTableEntry targetStatus;
     double taTolerance;
     public double currentDistance = 120;
+
+    private NetworkTableEntry checkTXDisplay;
+    private NetworkTableEntry checkTYDisplay;
+    private NetworkTableEntry checkTADisplay;
+    private NetworkTableEntry putDistanceDisplay;
 
     public LimelightSubsystem() {
         limeLightPid = new PIDController(limelightP, limelightI, limelightD);
@@ -91,7 +99,7 @@ public class LimelightSubsystem extends SubsystemBase {
         // runing this math equation d = (h2-h1) / tan(a1+a2)
         // a2 = Ty
         // Ty = vertical offset
-        SmartDashboard.putNumber("Limelight Distance", limeLightDistance);
+        Shuffleboard.putNumber("Limelight Distance", limeLightDistance);
         //puts the distance from the limelight on smartdashboard
     }
 
@@ -110,6 +118,7 @@ public class LimelightSubsystem extends SubsystemBase {
         NetworkTableEntry ta = table.getEntry("ta");
         NetworkTableEntry limeLightDistance = table.getEntry("LimeDis");
         // NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");
+        Shuffleboard     
 
 
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").getDouble(0);
@@ -132,7 +141,6 @@ public class LimelightSubsystem extends SubsystemBase {
         // post the value of y to smart dashboard periodically
         SmartDashboard.putNumber("LimelightArea", area);
         // post the value of area to smart dashboard periodically
-
     }
 
     public void limeLightStop() {
