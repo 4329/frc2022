@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.Subsystems.Turret;
 //import frc.robot.Subsystems.EncoderTestSubsystem;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.JoystickAnalogButton;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.GoalShoot;
 //import frc.robot.Commands.EncoderTestMotorBack;
 //import frc.robot.Commands.EncoderTestMotorForward;
 import frc.robot.Constants.*;
@@ -26,9 +28,11 @@ import frc.robot.Constants.*;
  */
 public class RobotContainer {
 
+  private final Turret m_turret = new Turret();
   // The robot's subsystems
   //public final static EncoderTestSubsystem encoderTestSubsystem = new EncoderTestSubsystem();
-  private final Drivetrain m_robotDrive;
+  private final Drivetrain m_robotDrive = new Drivetrain();
+  private final GoalShoot m_goalShoot = new GoalShoot(m_turret); 
 
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -43,7 +47,6 @@ public class RobotContainer {
  * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
-    m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -67,6 +70,10 @@ public class RobotContainer {
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
+
+    new JoystickButton(m_driverController, Button.kA.value).whenPressed(m_goalShoot);
+    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_goalShoot.cancel());
+
 
     //new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new EncoderTestMotorForward(encoderTestSubsystem));
     //new JoystickButton(m_operatorController, Button.kB.value).whileHeld(new EncoderTestMotorBack(encoderTestSubsystem));

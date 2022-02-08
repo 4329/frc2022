@@ -28,40 +28,20 @@ import frc.robot.Utilities.*;
   public double turretEncoderValues = turretEncoder.getPwmPosition();
   public double maxTurretEncoderValue = turretEncoder.getPwmPosition();
   public double minTurretEncoderValue = turretEncoder.getPwmPosition();
-  public double turretEncoderRadians =  turretEncoder.getPwmPosition() / 3600 * 2 * Math.PI;
+  public double turretEncoderRadians =  (turretEncoder.getPwmPosition() / 4029 )* 2 * Math.PI;
 
-  //max 3964
-  //min -127
-  //forward -125
-  //back  1913
+  //max 3964      :one tick is 0.0893521966 degrees
+  //min -127      :total is 4029
+  //forward -125  :one tick is 0.000496401092 pi radians
+  //back  1913    :one radian is 
 
   NetworkTableEntry turretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location in Pulses", turretEncoderValues).withPosition(8,0).getEntry();
-  //NetworkTableEntry maxTurretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location Max in Pulses", maxTurretEncoderValue).withPosition(7,0).getEntry();
-  //NetworkTableEntry minTurretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location Min in Pulses", minTurretEncoderValue).withPosition(6,0).getEntry();
-  //NetworkTableEntry encoderPulses = Shuffleboard.getTab("RobotData").add("Encoder Pulses", turretEncoderPulses).getEntry();
-
-
   
   public void displayTurretEncoderPulses() {
     turretEncoderValues = turretEncoder.getPwmPosition();
     System.out.println("encoder pulses called " + turretEncoder.getPwmPosition());
     turretEncoderPulses.setDouble(turretEncoder.getPwmPosition());
 }
-/*
-public  void displayMaxTurretEncoderPulses(){
-  if(maxTurretEncoderValue < turretEncoder.getPwmPosition()){
-    maxTurretEncoderValue = turretEncoder.getPwmPosition();
-  }
-  else{}
-}
-
-public  void displayMinTurretEncoderPulses(){
-  if(minTurretEncoderValue > turretEncoder.getPwmPosition()){
-    minTurretEncoderValue = turretEncoder.getPwmPosition();
-  }
-  else{}
-}*/
-
 
   /**
    * Creates a Turret PIDSubsystem and sets the appropirate values for the motor controllers, analog encoder, and PIDController.
