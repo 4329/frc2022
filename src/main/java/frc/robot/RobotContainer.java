@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.Autos.AutoTest;
-import frc.robot.Commands.Autos.ExampleAuto;
+//import frc.robot.Commands.Autos.ExampleAuto;
+import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.StraightLineAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
@@ -70,6 +71,7 @@ ParallelCommandGroup intakeCommandGroup() {
   private final Command straightLine;
   private final Command moveOneMeter;
   private final Command twoPaths;
+  private final Command intakeRun;
   //private final Command exampleAuto;
 
   /**
@@ -82,6 +84,7 @@ ParallelCommandGroup intakeCommandGroup() {
     straightLine = new StraightLineAuto(m_robotDrive);
     moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
     twoPaths = new TwoPathsAuto(m_robotDrive);
+    intakeRun = new IntakeRunAuto(m_robotDrive);
     //exampleAuto = new ExampleAuto(m_robotDrive);
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     storageIntake = new StorageIntake();
@@ -124,9 +127,10 @@ private void configureAutoChooser(){
   m_chooser.addOption("StraightLineAuto", straightLine);
   m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
   m_chooser.addOption("TwoPathsAuto", twoPaths);
+  m_chooser.addOption("IntakeRunAuto", intakeRun);
   //m_chooser.addOption("ExampleAuto", exampleAuto);
-  Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(1, 3);
-  Shuffleboard.getTab("Autonomous").add("Documentation", "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29").withPosition(2, 3).withSize(4, 1);
+  Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
+  Shuffleboard.getTab("Autonomous").add("Documentation", "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29").withPosition(2, 2).withSize(4, 1);
 }
 
   public Command getAuto(){
