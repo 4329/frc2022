@@ -133,4 +133,9 @@ private void configureAutoChooser(){
   public Command getAuto(){
     return m_chooser.getSelected();
   }
+
+  public void disableRobot() {
+    shooterFeedSubsytem.coastShooterFeed();
+    storageIntake.storageIntakeCoast();
+  }
 }
