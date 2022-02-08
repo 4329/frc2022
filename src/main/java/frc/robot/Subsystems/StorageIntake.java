@@ -8,12 +8,12 @@ public class StorageIntake extends SubsystemBase {
     private TalonSRX intakeMotor = new TalonSRX(Configrun.get(41,"storageIntakeID"));
 
     public void storageIntakeIn() {
-        intakeMotor.set(ControlMode.PercentOutput,Configrun.get(0.2,"storageIntakeInPower"));
+        intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5,"storageIntakePower"));
     }
     public void storageIntakeOut() {
-        intakeMotor.set(ControlMode.PercentOutput,Configrun.get(-0.2,"storageIntakeOutPower"));
+        intakeMotor.set(ControlMode.PercentOutput, - Configrun.get(0.5,"storageIntakePower"));
     }
     public void storageIntakeStop() {
-        intakeMotor.set(ControlMode.PercentOutput,0);
+        intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 }

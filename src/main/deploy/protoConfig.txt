@@ -30,12 +30,11 @@ PH_CAN_ID = 61
 
 # Storage Intake
 storageIntakeID = 41
-storageIntakeInPower = 0.2
-storageIntakeOutPower = -0.2
+storageIntakePower = 0.5
 
 #Digital input IDs
-shooterFeedTriggerPort = 1
-storageIntakeTriggerPort = 3
+topTriggerPort = 1
+bottomTriggerPort = 3
 
 # RIP rickroll
 # NSP

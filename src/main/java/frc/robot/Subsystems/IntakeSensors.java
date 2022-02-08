@@ -10,8 +10,8 @@ public class IntakeSensors {
     private NetworkTableEntry topTriggerStatus;
     private NetworkTableEntry bottomTriggerStatus;
 
-    DigitalInput topTrigger = new DigitalInput(Configrun.get(1,"shooterFeedTriggerPort"));
-    DigitalInput bottomTrigger = new DigitalInput(Configrun.get(3,"storageIntakeTriggerPort"));
+    DigitalInput topTrigger = new DigitalInput(Configrun.get(1,"topTriggerPort"));
+    DigitalInput bottomTrigger = new DigitalInput(Configrun.get(3,"bottomTriggerPort"));
 
     public IntakeSensors() {
         topTriggerStatus = Shuffleboard.getTab("Competition Info").add("Top Trigger",topTrigger()).withWidget(BuiltInWidgets.kBooleanBox).getEntry();

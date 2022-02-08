@@ -20,7 +20,7 @@ import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
-import frc.robot.Commands.IntakeSensorsLogic;
+import frc.robot.Commands.IntakeSensorsCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
@@ -118,7 +118,7 @@ ParallelCommandGroup intakeCommandGroup() {
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
 
-    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeSensorsLogic(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
+    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
   }
 
 private void configureAutoChooser(){
@@ -133,5 +133,4 @@ private void configureAutoChooser(){
   public Command getAuto(){
     return m_chooser.getSelected();
   }
-
 }
