@@ -15,10 +15,10 @@ public class IntakeMotor {
         intakeMotor.set(ControlMode.PercentOutput, -intakeSpeed);
     }
 
-    /*public void outtake() {
+    public void runIntakeOut() {
         intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
     }
-*/
+
     public void stopIntakeIn() {
         intakeMotor.set(ControlMode.PercentOutput, 0);
     }
