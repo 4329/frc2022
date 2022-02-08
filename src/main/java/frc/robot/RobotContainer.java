@@ -24,7 +24,7 @@ import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
-import frc.robot.Commands.MoveOneMeterAuto;
+import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
