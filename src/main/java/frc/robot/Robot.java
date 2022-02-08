@@ -8,10 +8,16 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Commands.BrakeMode;
+import frc.robot.Commands.CoastMode;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
+
+import com.kauailabs.navx.frc.Tracer;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -30,6 +36,7 @@ public class Robot extends TimedRobot {
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
 
+  private double coastWait;
   
   /**
    * This function is run when the robot is first started up and should be used
@@ -51,7 +58,7 @@ public class Robot extends TimedRobot {
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for
-   * items like diagnostics that you want ran during disabled, autonomous,
+   * items like diagnostics that you want run during disabled, autonomous,
    * teleoperated and test.
    *
    * <p>
@@ -74,12 +81,20 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    drivetrain.coastMode();
+    drivetrain.brakeMode();
+    coastWait = RobotController.getFPGATime();
   }
 
   @Override
   public void disabledPeriodic() {
+    if (RobotController.getFPGATime() >= coastWait + 1000000) {
+      drivetrain.coastMode();
+    }
+  }
 
+  @Override
+  public void disabledExit() {
+    drivetrain.brakeMode();
   }
 
   /**
@@ -88,8 +103,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    drivetrain.brakeMode();
-
+    
     m_autonomousCommand = m_robotContainer.getAuto();
 
     /*
@@ -110,6 +124,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
   }
 
+
   @Override
   public void teleopInit() {
     drivetrain.brakeMode();
@@ -128,6 +143,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
   }
+
 
   @Override
   public void testInit() {
