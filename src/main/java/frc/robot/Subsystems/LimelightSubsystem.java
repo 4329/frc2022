@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 import frc.robot.RobotContainer;
+import frc.robot.Commands.LimelightCommands;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import javax.management.ListenerNotFoundException;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -31,7 +31,6 @@ public class LimelightSubsystem extends SubsystemBase {
     double limelightI = Configrun.get(0, "limelightI");
     double limelightD = Configrun.get(0.125, "limelightD");
     double staticFeedforward = Configrun.get(0.103, "turnStaticFeedforward");
-    NetworkTableEntry targetStatus;
     double taTolerance;
     public double currentDistance = 120;
 
@@ -39,12 +38,16 @@ public class LimelightSubsystem extends SubsystemBase {
     private NetworkTableEntry checkTYDisplay;
     private NetworkTableEntry checkTADisplay;
     private NetworkTableEntry putDistanceDisplay;
+    private NetworkTableEntry targetStatus;
 
     public LimelightSubsystem() {
         limeLightPid = new PIDController(limelightP, limelightI, limelightD);
         limeLightPid.setTolerance(limeLightTolerance);
-        targetStatus = Shuffleboard.getTab("TestValues").add("Target Acquired", false).getEntry();
+        targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
         taTolerance = Configrun.get(0.3, "taTolerance");
+        checkTYDisplay = Shuffleboard.getTab("limlight").add("TY", false).withPosition(3,0).getEntry();
+        checkTADisplay = Shuffleboard.getTab("limlight").add("TA", false).withPosition(3,0).getEntry();
+        putDistanceDisplay = Shuffleboard.getTab("limlight").add("Distance", false).withPosition(3,0).getEntry();
     }
 
     public void setDistance() {
@@ -56,6 +59,7 @@ public class LimelightSubsystem extends SubsystemBase {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         double x = tx.getDouble(0.0);
+        checkTXDisplay = Shuffleboard.getTab("limlight").add("TXtest", tx).withPosition(3,0).getEntry();
         return x;
     }
     // check Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
@@ -99,7 +103,7 @@ public class LimelightSubsystem extends SubsystemBase {
         // runing this math equation d = (h2-h1) / tan(a1+a2)
         // a2 = Ty
         // Ty = vertical offset
-        Shuffleboard.putNumber("Limelight Distance", limeLightDistance);
+        SmartDashboard.putNumber("Limelight Distance", limeLightDistance);
         //puts the distance from the limelight on smartdashboard
     }
 
@@ -117,8 +121,7 @@ public class LimelightSubsystem extends SubsystemBase {
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
         NetworkTableEntry limeLightDistance = table.getEntry("LimeDis");
-        // NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");
-        Shuffleboard     
+        NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");  
 
 
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").getDouble(0);
@@ -128,18 +131,18 @@ public class LimelightSubsystem extends SubsystemBase {
 
         double x = tx.getDouble(0.0);
         // read values of tx to convert to x periodically
-        double y = ty.getDouble(0.0);
+        //double y = ty.getDouble(0.0);
         // read values of ty to convert to y periodically
-        double area = ta.getDouble(0.0);
+        //double area = ta.getDouble(0.0);
         // read values of ta to convert to area periodically
-        double distance = limeLightDistance.getDouble(0.0);
+        //double distance = limeLightDistance.getDouble(0.0);
         // read values of ta to convert to area periodically
         
         SmartDashboard.putNumber("LimelightX", x);
         // post the value of x to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightY", y);
+        //SmartDashboard.putNumber("LimelightY", y);
         // post the value of y to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightArea", area);
+        //SmartDashboard.putNumber("LimelightArea", area);
         // post the value of area to smart dashboard periodically
     }
 
@@ -152,8 +155,10 @@ public class LimelightSubsystem extends SubsystemBase {
         //true or false value
         if (checkTa() >= taTolerance) {
             status = true;
+            //System.out.println("limelighttrue");
         } else {
             status = false;
+            //System.out.println("limelightfalse");
         }
         targetStatus.setBoolean(status);
     }

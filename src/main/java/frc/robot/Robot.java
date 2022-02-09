@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     //SmartDashboard.putBoolean("Get Solenoid", m_Solenoid.get());
+    RobotContainer.limelightSubsystem.putTargetAcquired();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
