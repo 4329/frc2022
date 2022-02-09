@@ -100,17 +100,14 @@ public class RobotContainer {
     CameraServer.startAutomaticCapture();
     VideoSource[] enumerateSources = VideoSource.enumerateSources();
 
-    System.out.println("            Number of Sources:" + enumerateSources.length);
-    System.out.println("            Name of Source" + enumerateSources[0].getName());
-
     if (enumerateSources.length > 0 && enumerateSources[0].getName().contains("USB")) {
-      Shuffleboard.getTab("Camera Test Tab").add("Camera 1", enumerateSources[0]).withPosition(0, 0).withSize(4, 4)
+      Shuffleboard.getTab("RobotData").add("Camera 1", enumerateSources[0]).withPosition(5, 0).withSize(4, 4)
           .withWidget(BuiltInWidgets.kCameraStream);
     }
     HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
     CameraServer.startAutomaticCapture(limelight);
 
-    Shuffleboard.getTab("Camera Test Tab").add("Limelight Baby", limelight).withPosition(4, 0).withSize(2, 2)
+    Shuffleboard.getTab("RobotData").add("Limelight Baby", limelight).withPosition(2, 0).withSize(2, 2)
         .withWidget(BuiltInWidgets.kCameraStream);
   }
 
