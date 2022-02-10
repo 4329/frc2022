@@ -21,6 +21,7 @@ import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
@@ -128,8 +129,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
     new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
-    new JoystickButton(m_operatorController, Button.kX.value)
-        .whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
+
+    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 

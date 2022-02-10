@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     SmartDashboard.setDefaultBoolean("Set Solenoid", false);
-    System.out.println("its wokring");
+    System.out.println("its working");
     Configrun.loadconfig();
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
