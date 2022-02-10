@@ -129,12 +129,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
     new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
-<<<<<<< HEAD
-    new JoystickButton(m_operatorController, Button.kX.value)
-        .whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
-=======
-    new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
->>>>>>> fa23e2b (Made IntakeBackwardsCommand)
+
+    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
