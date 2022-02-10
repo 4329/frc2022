@@ -16,13 +16,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-//import frc.robot.Commands.Autos.ExampleAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeBackwardsCommand;
-import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSensorsCommand;
@@ -47,32 +45,25 @@ public class RobotContainer {
   private static final int PH_CAN_ID = Configrun.get(61, "PH_CAN_ID");
   private PneumaticHub pneumaticHub = new PneumaticHub(PH_CAN_ID);;
 
-  private IntakeMotor intakeMotor = new IntakeMotor();
-  private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
-
-  ParallelCommandGroup intakeCommandGroup() {
-    return new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor));
-  }
-
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
   private final StorageIntake storageIntake = new StorageIntake();
   private final IntakeSensors intakeSensors = new IntakeSensors();
   private final ShooterFeedSubsytem shooterFeed = new ShooterFeedSubsytem();
+  private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
+  private IntakeMotor intakeMotor = new IntakeMotor();
+  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
-
   private final DriveByController m_drive;
 
   private final Command moveOneMeter;
   private final Command twoPaths;
   private final Command intakeRun;
-  // private final Command exampleAuto;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,10 +72,11 @@ public class RobotContainer {
    */
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
+
     moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
     twoPaths = new TwoPathsAuto(m_robotDrive);
     intakeRun = new IntakeRunAuto(m_robotDrive);
-    // exampleAuto = new ExampleAuto(m_robotDrive);
+
     m_drive = new DriveByController(m_robotDrive, m_driverController);
 
     initializeCamera();
@@ -93,7 +85,11 @@ public class RobotContainer {
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
                                // function
     // Configure default commands
-    m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
+    //m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
+  }
+
+  ParallelCommandGroup intakeCommandGroup() {
+    return new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor));
   }
 
   // Creates and establishes camera streams for the shuffleboard ~Ben
@@ -130,7 +126,8 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
 
-    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
+    new JoystickButton(m_operatorController, Button.kX.value)
+        .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
@@ -149,7 +146,6 @@ public class RobotContainer {
     m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
     m_chooser.addOption("TwoPathsAuto", twoPaths);
     m_chooser.addOption("IntakeRunAuto", intakeRun);
-    // m_chooser.addOption("ExampleAuto", exampleAuto);
     Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
     Shuffleboard.getTab("Autonomous").add("Documentation",
         "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29")
