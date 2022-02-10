@@ -14,8 +14,8 @@ public class IntakeSensors {
     DigitalInput bottomTrigger = new DigitalInput(Configrun.get(3,"bottomTriggerPort"));
 
     public IntakeSensors() {
-        topTriggerStatus = Shuffleboard.getTab("Competition Info").add("Top Trigger",topTrigger()).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-        bottomTriggerStatus = Shuffleboard.getTab("Competition Info").add("Bottom Trigger",bottomTrigger()).withPosition(0,1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        topTriggerStatus = Shuffleboard.getTab("Competition Info").add("Top Trigger", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        bottomTriggerStatus = Shuffleboard.getTab("Competition Info").add("Bottom Trigger", false).withPosition(0,1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
     }
 
     public boolean topTrigger() {
