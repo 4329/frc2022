@@ -1,20 +1,20 @@
 # Translation Motor IDs -DO NOT CHANGE-
-frontLeftDriveMotorPort = 7
-frontRightDriveMotorPort = 5
-backLeftDriveMotorPort = 1
-backRightDriveMotorPort = 3
+frontLeftDriveMotorPort = 3
+frontRightDriveMotorPort = 1
+backLeftDriveMotorPort = 5
+backRightDriveMotorPort = 7
 
 # Rotation Motor IDs -DO NOT CHANGE-
-frontLeftTurningMotorPort = 8
-frontRightTurningMotorPort = 6
-backLeftTurningMotorPort = 2
-backRightTurningMotorPort = 4
+frontLeftTurningMotorPort = 4
+frontRightTurningMotorPort = 2
+backLeftTurningMotorPort = 6
+backRightTurningMotorPort = 8
 
 # Encoder IDs -DO NOT CHANGE-
-frontLeftTurningEncoderPort = 3
-frontRightTurningEncoderPort = 2
-backLeftTurningEncoderPort = 0
-backRightTurningEncoderPort = 1
+frontLeftTurningEncoderPort = 1
+frontRightTurningEncoderPort = 0
+backLeftTurningEncoderPort = 3
+backRightTurningEncoderPort = 2
 
 # Motor Offsets in Radians
 frontLeftOffset = 0.0
@@ -22,20 +22,23 @@ frontRightOffset = 0.7853
 backLeftOffset = -0.0884
 backRightOffset = 2.79
 
-# Shooter Feed
-FrontShooterFeed_ID = 42
-BackShooterFeed_ID = 43
-
-ShooterFeedPower = 0.5
 
 Intake_ID = 40
-intakeSpeed = 0
+intakeSpeed = 0.7
 intakeUp = false
+
+PH_CAN_ID = 61
 
 # Storage Intake
 storageIntakeID = 41
 storageIntakePower = 0.5
 
 #Digital input IDs
-topTriggerPort = 1
+topTriggerPort = 4
 bottomTriggerPort = 3
+
+#Shooter Feed
+FrontShooterFeed_ID = 42
+BackShooterFeed_ID = 43
+
+ShooterFeedPower = 0.5

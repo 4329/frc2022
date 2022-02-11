@@ -12,11 +12,11 @@ public class IntakeMotor {
 
     public void runIntakeIn()
     {
-        intakeMotor.set(ControlMode.PercentOutput, -intakeSpeed);
+        intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
     }
 
     public void runIntakeOut() {
-        intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+        intakeMotor.set(ControlMode.PercentOutput, -intakeSpeed);
     }
 
     public void stopIntakeIn() {

@@ -13,11 +13,11 @@ public class StorageIntake extends SubsystemBase {
     }
 
     public void storageIntakeIn() {
-        intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5,"storageIntakePower"));
+        intakeMotor.set(ControlMode.PercentOutput, - Configrun.get(0.5,"storageIntakePower"));
     }
 
     public void storageIntakeOut() {
-        intakeMotor.set(ControlMode.PercentOutput, - Configrun.get(0.5,"storageIntakePower"));
+        intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5,"storageIntakePower"));
     }
 
     public void storageIntakeStop() {
