@@ -31,7 +31,7 @@ public class RobotContainer {
   private final Turret m_turret = new Turret();
   // The robot's subsystems
   //public final static EncoderTestSubsystem encoderTestSubsystem = new EncoderTestSubsystem();
-  private final Drivetrain m_robotDrive = new Drivetrain();
+  private final Drivetrain m_robotDrive;
   private final GoalShoot m_goalShoot = new GoalShoot(m_turret); 
 
   // The driver's controllers
@@ -47,6 +47,7 @@ public class RobotContainer {
  * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
+    m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
@@ -60,7 +61,7 @@ public class RobotContainer {
    * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of
    * its subclasses ({@link edu.wpi.first.wpilibj.Joystick} or
    * {@link XboxController}), and then calling passing it to a
-   * {@link JoystickButton}.
+   * {@link JoystickButton}.  
    */
   private void configureButtonBindings() {
     // Reset drivetrain when down/up on the DPad is pressed

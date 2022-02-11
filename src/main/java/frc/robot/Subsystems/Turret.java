@@ -29,6 +29,7 @@ import frc.robot.Utilities.*;
   public double maxTurretEncoderValue = turretEncoder.getPwmPosition();
   public double minTurretEncoderValue = turretEncoder.getPwmPosition();
   public double turretEncoderRadians =  (turretEncoder.getPwmPosition() / 4029 )* 2 * Math.PI;
+  public double limeLightTxValReplacement = 20; //-27 to 27, in degrees
 
   //max 3964      :one tick is 0.0893521966 degrees
   //min -127      :total is 4029
@@ -139,7 +140,7 @@ import frc.robot.Utilities.*;
     //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
     else if (trackTarget && visionSolution) {
-      angle = getPotentionmeter() + Limelight.tx();
+      angle = getPotentionmeter() + limeLightTxValReplacement; //Limelight.tx()
     }
     //if the angle setpoint is lower than the minimum allowed position, set the setpoint to the minimum allowed position
     //and set the turret to search clockwise 
@@ -189,10 +190,10 @@ import frc.robot.Utilities.*;
    * tolerance
    */
   public boolean visionAligned() {
-    if (Limelight.valid() && Math.abs(Limelight.tx()) < VisionConstants.kTrackTolerance) {
+    if (Limelight.valid() && Math.abs(limeLightTxValReplacement) < VisionConstants.kTrackTolerance) {
       return true;
     } else {
       return false;
     }
   }
-}
+}//Limelight.tx()
