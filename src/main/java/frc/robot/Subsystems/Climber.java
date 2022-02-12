@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
@@ -82,9 +83,10 @@ public class Climber {
 
 
     }
-    public void climb() {
-        climberNeoMotor1.set(Configrun.get(0.5, "climbPower"));
+    public void climb(double climbPower) {
+        climberNeoMotor1.set (climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
+        System.out.println("Climb Power Is" +climbPower);
     }
     public void stopClimb() {
         climberNeoMotor1.set(0);
