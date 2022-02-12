@@ -37,7 +37,6 @@ public class ShooterCommand extends CommandBase {
             }
         }
 
-        
     }
 
     @Override
