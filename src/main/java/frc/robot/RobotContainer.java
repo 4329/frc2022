@@ -62,8 +62,6 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
-  public static final LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
-
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   private final DriveByController m_drive;
