@@ -73,19 +73,19 @@ public class RobotContainer {
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
 
+    //Add autos to the chooser
     moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
     twoPaths = new TwoPathsAuto(m_robotDrive);
     intakeRun = new IntakeRunAuto(m_robotDrive);
 
-    m_drive = new DriveByController(m_robotDrive, m_driverController);
 
     initializeCamera();
 
     configureAutoChooser();
-    configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
-                               // function
-    // Configure default commands
-    //m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
+    configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
+                                function */
+    m_drive = new DriveByController(m_robotDrive, m_driverController);
+    m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
   }
 
   ParallelCommandGroup intakeCommandGroup() {
@@ -143,7 +143,7 @@ public class RobotContainer {
   }
 
   private void configureAutoChooser() {
-    m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
+    m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     m_chooser.addOption("TwoPathsAuto", twoPaths);
     m_chooser.addOption("IntakeRunAuto", intakeRun);
     Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);

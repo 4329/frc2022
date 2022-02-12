@@ -57,8 +57,7 @@ public class SwerveModule {
       ModuleConstants.kTurnPID[1], ModuleConstants.kTurnPID[2]);
 
   /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
-   * and turning encoder.
+   * Constructs a SwerveModule with a drive motor, turning motor, and turning encoder.
    *
    * @param driveMotorChannel     CAN ID for the drive motor.
    * @param turningMotorChannel   CAN ID for the turning motor.

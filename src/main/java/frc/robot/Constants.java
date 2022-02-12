@@ -13,37 +13,31 @@ public final class Constants {
    * Static method containing all Drivetrain constants
    */
   public static final class DriveConstants {
-    public static final int kFrontLeftDriveMotorPort = (Configrun.get(7, "frontLeftDriveMotorPort"));   //CANID of the Translation SparkMAX
-    public static final int kFrontRightDriveMotorPort = (Configrun.get(5, "frontRightDriveMotorPort"));  //CANID of the Translation SparkMAX
-    public static final int kBackLeftDriveMotorPort = (Configrun.get(1, "backLeftDriveMotorPort"));    //CANID of the Translation SparkMAX
-    public static final int kBackRightDriveMotorPort = (Configrun.get(3, "backRightDriveMotorPort"));   //CANID of the Translation SparkMAX
+    public static final int kFrontLeftDriveMotorPort = (Configrun.get(3, "frontLeftDriveMotorPort"));   //CANID of the Translation SparkMAX
+    public static final int kFrontRightDriveMotorPort = (Configrun.get(1, "frontRightDriveMotorPort"));  //CANID of the Translation SparkMAX
+    public static final int kBackLeftDriveMotorPort = (Configrun.get(5, "backLeftDriveMotorPort"));    //CANID of the Translation SparkMAX
+    public static final int kBackRightDriveMotorPort = (Configrun.get(7, "backRightDriveMotorPort"));   //CANID of the Translation SparkMAX
 
-    public static final int kFrontLeftTurningMotorPort = (Configrun.get(8, "frontLeftTurningMotorPort"));   //CANID of the Rotation SparkMAX
-    public static final int kFrontRightTurningMotorPort = (Configrun.get(6, "frontRightTurningMotorPort"));  //CANID of the Rotation SparkMAX
-    public static final int kBackLeftTurningMotorPort = (Configrun.get(2, "backLeftTurningMotorPort"));    //CANID of the Rotation SparkMAX
-    public static final int kBackRightTurningMotorPort = (Configrun.get(4, "backRightTurningMotorPort"));   //CANID of the Rotation SparkMAX
+    public static final int kFrontLeftTurningMotorPort = (Configrun.get(4, "frontLeftTurningMotorPort"));   //CANID of the Rotation SparkMAX
+    public static final int kFrontRightTurningMotorPort = (Configrun.get(2, "frontRightTurningMotorPort"));  //CANID of the Rotation SparkMAX
+    public static final int kBackLeftTurningMotorPort = (Configrun.get(6, "backLeftTurningMotorPort"));    //CANID of the Rotation SparkMAX
+    public static final int kBackRightTurningMotorPort = (Configrun.get(8, "backRightTurningMotorPort"));   //CANID of the Rotation SparkMAX
 
-    public static final int kFrontLeftTurningEncoderPort = (Configrun.get(3, "frontLeftTurningEncoderPort"));   //Analog Port of the Module Absolute Encoder
-    public static final int kFrontRightTurningEncoderPort = (Configrun.get(2, "frontRightTurningEncoderPort"));  //Analog Port of the Module Absolute Encoder
-    public static final int kBackLeftTurningEncoderPort = (Configrun.get(0, "backLeftTurningEncoderPort"));    //Analog Port of the Module Absolute Encoder
-    public static final int kBackRightTurningEncoderPort = (Configrun.get(1, "backRightTurningEncoderPort"));   //Analog Port of the Module Absolute Encoder
+    public static final int kFrontLeftTurningEncoderPort = (Configrun.get(1, "frontLeftTurningEncoderPort"));   //Analog Port of the Module Absolute Encoder
+    public static final int kFrontRightTurningEncoderPort = (Configrun.get(0, "frontRightTurningEncoderPort"));  //Analog Port of the Module Absolute Encoder
+    public static final int kBackLeftTurningEncoderPort = (Configrun.get(3, "backLeftTurningEncoderPort"));    //Analog Port of the Module Absolute Encoder
+    public static final int kBackRightTurningEncoderPort = (Configrun.get(2, "backRightTurningEncoderPort"));   //Analog Port of the Module Absolute Encoder
 
     public static final double kFrontLeftOffset = (Configrun.get(0.0, "frontLeftOffset"));  //Encoder Offset in Radians
     public static final double kFrontRightOffset = (Configrun.get(0.7853, "frontRightOffset"));  //Encoder Offset in Radians
     public static final double kBackLeftOffset = (Configrun.get(-0.0884, "backLeftOffset"));   //Encoder Offset in Radians
     public static final double kBackRightOffset = (Configrun.get(2.79, "backRightOffset"));  //Encoder Offset in Radians
 
-    //Drive motor PID is best done on the roboRIO currently as the SparkMAX does not allow for static gain values on the PID controller,
-    //    these are necessary to have high accuracy when moving at extremely low RPMs
-    //public static final double[] kFrontLeftTuningVals   =   {0.0120,0.2892,0.25,0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    //public static final double[] kFrontRightTuningVals  =   {0.0092,0.2835,0.25,1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    //public static final double[] kBackLeftTuningVals    =   {0.0142,0.2901,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    //public static final double[] kBackRightTuningVals   =   {0.0108,0.2828,0.25,3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-
-    public static final double[] kFrontLeftTuningVals   =   {0.0150,0.2850,0.25,0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kFrontRightTuningVals  =   {0.0150,0.2850,0.25,1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackLeftTuningVals    =   {0.0150,0.2850,0.25,2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackRightTuningVals   =   {0.0150,0.2850,0.25,3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    
+    public static final double[] kFrontLeftTuningVals   =   {0, 0, 0, 0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kFrontRightTuningVals  =   {0, 0, 0, 1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackLeftTuningVals    =   {0, 0, 0, 2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackRightTuningVals   =   {0, 0, 0, 3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
 
 
     //NOTE: 2910 Swerve the wheels are not directly under the center of rotation (Take into consideration when measuring)
@@ -102,48 +96,7 @@ public final class Constants {
   public static final class GlobalConstants {
     public static final double kVoltCompensation = 12.0;        //Sets a voltage compensation value ideally 12.0V
   }
-  /**
-   * Static method containing all Vision/Limelight constants
-   */
-  public static final class VisionConstants {
-    public static final double kElevationOffset = 15.0;              // Degree offset of lens from horizontal due to camera mount
-    public static final double kAzimuthalAngle = -0.50;                // Degree azimuthal offset of limelight
-    public static final double kTargetCenterHeightFromLens = 63.25;  // Center Height of the Target in inches above the lens
-    public static final double kTrackTolerance = 0.0200;             // Allowable Limelight angle error in radians
-  }
-  /**
-   * Static method containing all Intake constants
-   */
-  public static final class IntakeConstants {
-    public static final int kMotorPort = 11;
-    public static final int[] kSolenoidPorts = {5,1};
-    public static final double[] kPID = { 0.000025, 0, 0 };
-    public static final double kIntakeFF = 0.0000909*0.97;     //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
-    public static final double kTolerance = 100.0;
-    public static final int kCurrentLimit = 20;
-  }
-  /**
-   * Static method containing all Shooter constants
-   */
-  public static final class ShooterConstants {
-    public static final int kFeederPort = 2;              //CANID of the Motor Controller for the Feeder Motor
-    public static final double kFeederSpeed = -1.0;       //Motor % to command when feeding balls into the shooter
-    public static final double kFeederReverseSpeed = 0.5; //Motor % to command when reverse the balls to "unjam"
-    public static final double kThroatSpeed = -0.65;      //Motor % to command when preloading a ball into the throat
 
-    public static final int kMotorPorts[] = { 9, 10 };            //CANID of the SparkMAXs for the shooter motors
-    public static final int kShooterCurrentLimit = 50;            //Limits max current draw of each shooter motor (Lower numbers will increase recovery time and spin-up time)
-    public static final double kShotRPMTolerance = 100.0;          //RPMs of error allowed before a ball can be fed into t he shooter
-    public static final double[] kPID = { 0.0002, 0, 0 };        //Defines PID values for the shooter 0.00045
-    public static final double kShooterFF = 0.0001715;            //Defines shooter FeedForward Value, should be roughly equal to 1/MaxMotorRPM * MaxRPMVoltage / Compensation Voltage
-    public static final double kStaticGain = 0.01;
-
-    public static final int kFlapSolenoids[] = { 0, 4 };          //Solenoid ports of the Flap cylinder, forward and retract
-    public static final int[] kLimitSwitchPorts = { 8, 9 };       //Limit Switch DIO ports for the feed throat functionality
-
-    public static final double kFlapDownDist = 250.0;           //Distance the robot must move away from the target before the flap will lower
-    public static final double kFlapUpDist = 230.0;             //Distance the robot must move toward from the target before the flap will raise
-  }
   /**
    * Static method containing all Turret constants
    */
