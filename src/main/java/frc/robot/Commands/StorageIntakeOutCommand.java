@@ -5,6 +5,7 @@ import frc.robot.Subsystems.StorageIntake;
 
 public class StorageIntakeOutCommand extends StartEndCommand {
     public StorageIntakeOutCommand(StorageIntake subsystem) {
+        
         super(subsystem::storageIntakeOut, subsystem::storageIntakeStop);
     }
 }

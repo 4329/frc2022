@@ -33,9 +33,11 @@ import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
+import frc.robot.Commands.TowerCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.Climber;
+import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -63,6 +65,7 @@ public class RobotContainer {
   private IntakeMotor intakeMotor = new IntakeMotor();
   private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
   private final SensorOutputCommand sensorOutputCommand = new SensorOutputCommand(intakeSensors);
+  private final Shooter shooter = new Shooter();
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -150,7 +153,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
         .whenHeld(new StorageIntakeInCommand(storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
-        .whenHeld(new StorageIntakeOutCommand(storageIntake));
+        .whenHeld(new TowerCommand(storageIntake, shooterFeed, intakeSensors, shooter));
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));

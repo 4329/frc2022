@@ -1,22 +1,26 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Subsystems.IntakeSensors;
+import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 
-public class ShooterCommand extends CommandBase {
+public class TowerCommand extends CommandBase {
     
-    ShooterFeedSubsytem shooterFeedSubsystem;
     StorageIntake storageIntake;
     ShooterFeedSubsytem shooterFeed;
     IntakeSensors intakeSensors;
+    Shooter shooter;
 
-    public ShooterCommand(ShooterFeedSubsytem shooterFeed, IntakeSensors intakeSensors) {
+    double setpoint;
 
-        this.shooterFeed = shooterFeedSubsystem;
+    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, IntakeSensors intakeSensors, Shooter shooter) {
+
+        this.storageIntake = storageIntake;
+        this.shooterFeed = shooterFeed;
         this.intakeSensors = intakeSensors;
+        this.shooter = shooter;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class ShooterCommand extends CommandBase {
 
     @Override
     public void execute() {
+
         if (!intakeSensors.topTrigger()) {
             shooterFeed.shooterFeedStop();
 
@@ -37,12 +42,21 @@ public class ShooterCommand extends CommandBase {
             }
         }
 
+        setpoint = 1;
+        shooter.shoot(setpoint);
+
+    }
+
+    @Override
+    public void end(boolean interrupt) {
+
+        storageIntake.storageIntakeStop();
+        shooterFeed.shooterFeedStop();
+        shooter.holdFire();
     }
 
     @Override
     public boolean isFinished() {
-
         return false;
     }
-
 }
