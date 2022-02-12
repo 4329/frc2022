@@ -42,7 +42,7 @@ public class TowerCommand extends CommandBase {
             }
         }
 
-        setpoint = 1;
+        setpoint = 3000;
         shooter.shoot(setpoint);
 
     }
