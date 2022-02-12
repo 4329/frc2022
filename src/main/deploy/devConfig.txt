@@ -13,8 +13,8 @@ backRightTurningMotorPort = 8
 # Encoder IDs -DO NOT CHANGE-
 frontLeftTurningEncoderPort = 1
 frontRightTurningEncoderPort = 0
-backLeftTurningEncoderPort = 3
-backRightTurningEncoderPort = 2
+backLeftTurningEncoderPort = 2
+backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
 frontLeftOffset = 0.0
