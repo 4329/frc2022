@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.Autos.IntakeRunAuto;
@@ -29,6 +30,7 @@ import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.IntakeSensors;
+import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
@@ -64,6 +66,7 @@ public class RobotContainer {
   private final Command moveOneMeter;
   private final Command twoPaths;
   private final Command intakeRun;
+  private Climber climber;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -71,6 +74,7 @@ public class RobotContainer {
    * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
+    climber = new Climber(pneumaticHub);
     m_robotDrive = drivetrain;
 
     moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
@@ -140,6 +144,17 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
+    //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
+    new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
+    new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
+    new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).whileHeld(new StartEndCommand(climber::climb, climber::stopClimb));
+    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
+
+
+
   }
 
   private void configureAutoChooser() {

@@ -43,4 +43,22 @@ bottomTriggerPort = 3
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
 
+<<<<<<< HEAD
 ShooterFeedPower = 0.5
+=======
+FrontShooterFeedUp = 0.5
+BackShooterFeedUp = 0.5
+FrontShooterFeedDown = 0.5
+BackShooterFeedDown = 0.5
+
+pivotSolenoidID = 1
+shiftSolenoidID = 2
+extendSolenoidID = 3
+
+climberMotor1ID = 9
+climberMotor2ID = 10
+climberMotor3ID = 11
+
+climbPower = 0.5
+reverseClimbPower = -0.5
+>>>>>>> 150820b (i new climing subsystem)
