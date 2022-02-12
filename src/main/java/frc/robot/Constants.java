@@ -34,10 +34,10 @@ public final class Constants {
     public static final double kBackRightOffset = (Configrun.get(2.79, "backRightOffset"));  //Encoder Offset in Radians
 
     
-    public static final double[] kFrontLeftTuningVals   =   {0, 0, 0, 0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kFrontRightTuningVals  =   {0, 0, 0, 1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackLeftTuningVals    =   {0, 0, 0, 2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
-    public static final double[] kBackRightTuningVals   =   {0, 0, 0, 3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kFrontLeftTuningVals   =   {0.0150, 0.2850, 0.25, 0};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kFrontRightTuningVals  =   {0.0150, 0.2850, 0.25, 1};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackLeftTuningVals    =   {0.0150, 0.2850, 0.25, 2};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
+    public static final double[] kBackRightTuningVals   =   {0.0150, 0.2850, 0.25, 3};   //{Static Gain, FeedForward, Proportional Gain, ModuleID for Tuning}
 
 
     //NOTE: 2910 Swerve the wheels are not directly under the center of rotation (Take into consideration when measuring)
