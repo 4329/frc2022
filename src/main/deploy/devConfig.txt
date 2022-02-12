@@ -29,7 +29,7 @@ BackShooterFeed_ID = 43
 ShooterFeedPower = 0.5
 
 Intake_ID = 40
-intakeSpeed = 0
+intakeSpeed = 0.5
 intakeUp = false
 
 # Storage Intake

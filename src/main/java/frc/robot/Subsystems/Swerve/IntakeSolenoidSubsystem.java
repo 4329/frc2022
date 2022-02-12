@@ -19,30 +19,39 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
     
     private Solenoid m_Solenoid = null;
     
-    boolean intakeUp;
 
+    /**
+     * Creates an IntakeSolenoidSubsystem
+     * 
+     * @param pneumaticHub
+     */
     public IntakeSolenoidSubsystem(PneumaticHub pneumaticHub) {
-        intakeUp = Configrun.get(false, "intakeUp");
-        System.out.println("going to make new solenoid");
+
         m_Solenoid = pneumaticHub.makeSolenoid(SOLENOID_CHANNEL);
-        System.out.println("i made it");
+        m_Solenoid.set(Configrun.get(true, "intakeUp"));
     }
 
     public void intakeUp() {
-        m_Solenoid.set(intakeUp);
+
+        m_Solenoid.set(false);
         System.out.println("intakeup");
     }
 
     public void intakeDown() {
-        m_Solenoid.set(!intakeUp);
+   
+        m_Solenoid.set(true);
         System.out.println("intakedown");
     }
 //"hello world"
     public void keepIntakePosition() {
-        if (m_Solenoid.get() == !intakeUp) {
+
+        if (m_Solenoid.get()) {
+
             intakeDown();
         } else {
+
             intakeUp();
         }
     }
+
 }
