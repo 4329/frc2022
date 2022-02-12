@@ -43,11 +43,12 @@ public class Shooter
     double maxPowerCtre = (6380/600) * (2048/1);
     double percent = pidCalculated / maxPowerCtre;   
     shooterwheel1.set(ControlMode.PercentOutput, percent);
+    System.out.println("some text " + percent);
   }
 
   public void holdFire() {
 
     shooterwheel1.set(ControlMode.PercentOutput, 0);
   }
-    
+ 
 }
