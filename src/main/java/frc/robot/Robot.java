@@ -90,10 +90,6 @@ public class Robot extends TimedRobot {
     }
   }
 
-  @Override
-  public void disabledExit() {
-    drivetrain.brakeMode();
-  }
 
   /**
    * This autonomous runs the autonomous command selected by your

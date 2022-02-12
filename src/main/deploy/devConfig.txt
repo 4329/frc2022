@@ -17,10 +17,10 @@ backLeftTurningEncoderPort = 0
 backRightTurningEncoderPort = 1
 
 # Motor Offsets in Radians
-frontLeftOffset = 0.0
-frontRightOffset = 0.7853
-backLeftOffset = -0.0884
-backRightOffset = 2.79
+frontLeftOffset = -8.119823362970632
+frontRightOffset = 2.081633250963729
+backLeftOffset = -1.786444521884194
+backRightOffset = 2.744093467979972
 
 # Shooter Feed
 FrontShooterFeed_ID = 42
