@@ -23,6 +23,7 @@ import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.ClimberButtonCommand;
+import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.ShooterFeedCommandUp;
@@ -160,6 +161,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
     new JoystickAnalogButton(m_operatorController, false).whenHeld(new ClimberButtonCommand(m_operatorController, climber) );
+    new JoystickAnalogButton(m_operatorController, true).whenHeld(new ClimberButtonCommandReverse(m_operatorController, climber) );
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
 
 

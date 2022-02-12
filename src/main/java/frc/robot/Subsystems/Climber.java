@@ -86,16 +86,18 @@ public class Climber {
     public void climb(double climbPower) {
         climberNeoMotor1.set (climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
-        System.out.println("Climb Power Is" +climbPower);
+     
     }
     public void stopClimb() {
         climberNeoMotor1.set(0);
         isMoterActiveShuffleboard.setBoolean(false);
 
     }
-    public void reverseClimb() {
-        climberNeoMotor1.set(Configrun.get(-0.5, "reverseClimbPower"));
+    public void reverseClimb(double climbPower) {
+        climberNeoMotor1.set (climbPower * -1);
         isMoterActiveShuffleboard.setBoolean(true);
+     
+        
 
     }
 
