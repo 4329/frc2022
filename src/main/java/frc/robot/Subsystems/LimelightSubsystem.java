@@ -110,7 +110,6 @@ public class LimelightSubsystem extends SubsystemBase {
         // runing this math equation d = (h2-h1) / tan(a1+a2)
         // a2 = Ty
         // Ty = vertical offset
-        //SmartDashboard.putNumber("Limelight Distance", limeLightDistance);
         //puts the distance from the limelight on smartdashboard
     }
 
@@ -128,7 +127,7 @@ public class LimelightSubsystem extends SubsystemBase {
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
         NetworkTableEntry limeLightDistance = table.getEntry("LimeDis");
-        NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");  
+        //NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");  
 
 
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").getDouble(0);
@@ -144,7 +143,6 @@ public class LimelightSubsystem extends SubsystemBase {
         // read values of ta to convert to area periodically
         double distance = limeLightDistance.getDouble(0.0);
         // read values of ta to convert to area periodically
-        
         
         //SmartDashboard.putNumber("LimelightX", x);
         // post the value of x to smart dashboard periodically
