@@ -3,14 +3,14 @@ package frc.robot.Subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
-import frc.robot.RobotContainer;
+//import frc.robot.RobotContainer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+//import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -20,10 +20,11 @@ public class LimelightSubsystem extends SubsystemBase {
     int defaultvalue = 1;
     PIDController limeLightPid;
     double h1In = Configrun.get(36, "h1In");
-    //height of the limelight off of the ground 36 inches
+    //height of the limelight off of the ground "36 inches" this year
     double h2In = Configrun.get(104, "h2In");
-    //height of the target 8ft 8inches aka 104 inches
+    //height of the target "8ft 8inches" aka 104 inches this year
     double a1Degree = Configrun.get(0.0, "a1Degree");
+    //angle of the front of the limelight in relation to level
     double limeLightDistance;
     int limeLightTolerance = Configrun.get(1, "limeLightTolerance");
     double limelightP = Configrun.get(1.2, "limelightP");
