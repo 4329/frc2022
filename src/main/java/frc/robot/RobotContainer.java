@@ -58,8 +58,8 @@ public class RobotContainer {
 
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
-  private final StorageIntake storageIntake = new StorageIntake();
-  private final IntakeSensors intakeSensors = new IntakeSensors();
+  private StorageIntake storageIntake;
+  private IntakeSensors intakeSensors;
   private final ShooterFeedSubsytem shooterFeed = new ShooterFeedSubsytem();
   private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
   private IntakeMotor intakeMotor = new IntakeMotor();
@@ -95,6 +95,7 @@ public class RobotContainer {
 
 
     initializeCamera();
+    storageIntake = new StorageIntake();
 
     configureAutoChooser();
     configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
