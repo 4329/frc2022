@@ -62,6 +62,7 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   private final DriveByController m_drive;
+  private final IntakeSensors sensorOutput;
 
   private final Command moveOneMeter;
   private final Command twoPaths;
@@ -90,6 +91,9 @@ public class RobotContainer {
                                 function */
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
+
+    sensorOutput = new IntakeSensors();
+    intakeSensors.setDefaultCommand(sensorOutput);
   }
 
   ParallelCommandGroup intakeCommandGroup() {

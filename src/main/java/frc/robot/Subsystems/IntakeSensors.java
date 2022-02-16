@@ -4,9 +4,10 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 
-public class IntakeSensors {
+public class IntakeSensors extends SubsystemBase {
     private NetworkTableEntry topTriggerStatus;
     private NetworkTableEntry bottomTriggerStatus;
 
