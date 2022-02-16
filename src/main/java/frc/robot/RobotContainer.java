@@ -26,6 +26,7 @@ import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSensorsCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
+import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
 import frc.robot.Constants.*;
@@ -55,6 +56,7 @@ public class RobotContainer {
   private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
   private IntakeMotor intakeMotor = new IntakeMotor();
   private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
+  private final SensorOutputCommand sensorOutputCommand = new SensorOutputCommand(intakeSensors);
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -62,7 +64,6 @@ public class RobotContainer {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   private final DriveByController m_drive;
-  private final IntakeSensors sensorOutput;
 
   private final Command moveOneMeter;
   private final Command twoPaths;
@@ -92,8 +93,7 @@ public class RobotContainer {
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 
-    sensorOutput = new IntakeSensors();
-    intakeSensors.setDefaultCommand(sensorOutput);
+    intakeSensors.setDefaultCommand(sensorOutputCommand);//This makes sure that the status of the sensors is constantly being updated.
   }
 
   ParallelCommandGroup intakeCommandGroup() {
