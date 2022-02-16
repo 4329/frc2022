@@ -5,12 +5,12 @@ import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 
-public class shooterAutoFireCommand {
+public class ShooterAutoFireCommand extends CommandBase {
     private ShooterFeedSubsytem shooterFeed;
     private StorageIntake storageIntake;
     private Shooter shooter;
 
-    public shooterAutoFireCommand(ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, Shooter shooter) {
+    public ShooterAutoFireCommand(ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, Shooter shooter) {
         this.shooterFeed = shooterFeed;
         this.storageIntake = storageIntake;
         this.shooter = shooter;
@@ -19,7 +19,7 @@ public class shooterAutoFireCommand {
     public void initialize() {
         shooterFeed.shooterFeedUp();
         storageIntake.storageIntakeIn();
-        shooter.shoot(0.5);//don't know what this will do
+        shooter.shoot(0.5);;//don't know what this will do
     }
 
     public void end() {

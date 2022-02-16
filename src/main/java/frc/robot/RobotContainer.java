@@ -28,13 +28,16 @@ import frc.robot.Commands.IntakeSensorsCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
+import frc.robot.Commands.ShooterAutoFireCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.IntakeSensors;
+import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import edu.wpi.first.wpilibj.PneumaticHub;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -55,6 +58,8 @@ public class RobotContainer {
   private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
   private IntakeMotor intakeMotor = new IntakeMotor();
   private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
+  private final Shooter shooter = new Shooter();
+  private final ShooterAutoFireCommand FireShooter = new ShooterAutoFireCommand(shooterFeed, storageIntake, shooter);
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
