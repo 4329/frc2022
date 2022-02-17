@@ -69,9 +69,10 @@ import frc.robot.Utilities.*;
    * @param setpoint is the PIDSubsystem's current desired setpoint
    */
   @Override
-  public void useOutput(double output, double setpoint) {
+  public void useOutput(double output, double setpoint) { //LOOK AT DIS ASAP SOON AZ POSSIBLE
     final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
     m_turretMotor.set(TalonSRXControlMode.PercentOutput, output+staticGain);
+    System.out.println("mie lief iz pane");
   }
   /** 
    * 
@@ -116,7 +117,7 @@ import frc.robot.Utilities.*;
       Limelight.disable();
     }
 
-    visionSolution = Limelight.valid() && (Math.abs(getPotentionmeter()-angle) < Math.PI/6.0);
+    visionSolution = /*Limelight.valid() && */(Math.abs(getPotentionmeter()-angle) < Math.PI/6.0);
 
     //When the limelight does not have a valid solution, keep the turret facing the alliance wall and search back and
     //forth until a solution is found
@@ -190,7 +191,7 @@ import frc.robot.Utilities.*;
    * tolerance
    */
   public boolean visionAligned() {
-    if (Limelight.valid() && Math.abs(limeLightTxValReplacement) < VisionConstants.kTrackTolerance) {
+    if (/*Limelight.valid() &&*/ Math.abs(limeLightTxValReplacement) < VisionConstants.kTrackTolerance) {
       return true;
     } else {
       return false;

@@ -16,7 +16,9 @@ public class GoalShoot extends CommandBase {
   @Override
   public void initialize() {
     m_turret.enable();
+    m_turret.setAngle(Math.PI / 2);
     m_turret.trackTarget(true);
+    System.out.println("track target yes");
   }
 
   @Override
@@ -27,6 +29,7 @@ public class GoalShoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_turret.trackTarget(false);
+    System.out.println("track target no");
   }
 
 }

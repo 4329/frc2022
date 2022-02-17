@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
   //encoderTestSubsystem.getEncoderPulses();
-  turret.displayTurretEncoderPulses();
+  //turret.displayTurretEncoderPulses();
 
   }
 

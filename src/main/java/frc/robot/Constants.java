@@ -148,7 +148,7 @@ public final class Constants {
    * Static method containing all Turret constants 
    */
   public static final class TurretConstants {
-    public static final int kTurretPort = 44;                    //CANID of the turret motor controller
+    public static final int kTurretPort = 43;                    //CANID of the turret motor controller
     public static final int kTurretPotentiometerPort = 4;       //Analog port of the turret analog potentiometer
     public static final double kTurretTolerance = 0.0139626;    //allowable angle error in radians for the PIDSubsystem to report atSetpoint() to true
     public static final double[] kTurretPID = { 1.6, 0.0, 0 };  //Defines the PID values for rotation of the turret
