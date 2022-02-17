@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.Subsystems.LimelightSubsystem
+;
 
 
 
@@ -36,6 +38,8 @@ public class Robot extends TimedRobot {
 
   private double coastWait;
 
+  private LimelightSubsystem limelightSubsystem;
+  
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -51,7 +55,6 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     m_robotContainer = new RobotContainer(drivetrain);
     System.out.println("still working");
-
   }
 
   /**
@@ -74,6 +77,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     //SmartDashboard.putBoolean("Get Solenoid", m_Solenoid.get());
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -135,6 +139,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
+    //RobotContainer.limelightSubsystem = limeputDistance();
   }
 
 
@@ -148,11 +153,19 @@ public class Robot extends TimedRobot {
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
+
+    if(limelightSubsystem == null){  //This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
+      limelightSubsystem = new LimelightSubsystem();
+    }
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
+    limelightSubsystem.putDistance();
+    limelightSubsystem.putTargetAcquired();
+    limelightSubsystem.putValuesToShuffleboard();
   }
 }

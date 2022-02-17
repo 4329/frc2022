@@ -43,13 +43,12 @@ bottomTriggerPort = 3
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
 
-<<<<<<< HEAD
-ShooterFeedPower = 0.5
-=======
 FrontShooterFeedUp = 0.5
 BackShooterFeedUp = 0.5
 FrontShooterFeedDown = 0.5
 BackShooterFeedDown = 0.5
+
+ShooterFeedPower = 0.5
 
 pivotSolenoidID = 1
 shiftSolenoidID = 2
@@ -61,4 +60,9 @@ climberMotor3ID = 11
 
 climbPower = 0.5
 reverseClimbPower = -0.5
->>>>>>> 150820b (i new climing subsystem)
+
+# Limelight 
+h1In = 36
+h21n = 104
+a1Degree = 11
+taTolerance = 0.3

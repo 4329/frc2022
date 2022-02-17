@@ -60,3 +60,8 @@ climberMotor3ID = 11
 climbPower = 0.5
 reverseClimbPower = -0.5
 
+# Limelight 
+h1In = 36
+h21n = 104
+a1Degree = 11
+taTolerance = 0.3

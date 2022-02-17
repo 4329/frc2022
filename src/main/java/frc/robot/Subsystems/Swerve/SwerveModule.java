@@ -14,8 +14,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.revrobotics.CANEncoder;
+//import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
