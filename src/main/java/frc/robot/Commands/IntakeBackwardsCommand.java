@@ -21,7 +21,8 @@ public class IntakeBackwardsCommand extends CommandBase {
     }
 
     public void initialize() {
-        intakeSolenoid.intakeDown();
+
+       //intakeSolenoid.intakeDown();
         intakeMotor.runIntakeOut();
         storageIntake.storageIntakeOut();
         shooterFeed.shooterFeedDown();
@@ -31,7 +32,7 @@ public class IntakeBackwardsCommand extends CommandBase {
     public void end(boolean interrupted) {
         storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
-        intakeSolenoid.intakeUp();
+        //intakeSolenoid.intakeUp();
         shooterFeed.shooterFeedStop();
     }
 

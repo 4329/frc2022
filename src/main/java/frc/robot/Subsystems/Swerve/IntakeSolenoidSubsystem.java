@@ -29,20 +29,34 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
     }
 
     public void intakeUp() {
-        m_Solenoid.set(intakeUp);
+
+        intakeUp = true;
+        m_Solenoid.set(true);
         System.out.println("intakeup");
     }
 
     public void intakeDown() {
-        m_Solenoid.set(!intakeUp);
+
+        m_Solenoid.set(false);
+        intakeUp = false;
         System.out.println("intakedown");
     }
-//"hello world"
-    public void keepIntakePosition() {
-        if (m_Solenoid.get() == !intakeUp) {
-            intakeDown();
+
+    public void changeIntake() {
+
+        if (intakeUp) {
+
+            m_Solenoid.set(false);
+            intakeUp = false;
         } else {
-            intakeUp();
+
+            m_Solenoid.set(true);
+            intakeUp = true;
         }
+    }
+
+    public void toggleIntake() {
+
+        m_Solenoid.toggle();
     }
 }

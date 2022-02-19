@@ -26,6 +26,7 @@ import frc.robot.Commands.ClimberButtonCommand;
 import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeBackwardsCommand;
+import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSensorsCommand;
@@ -74,9 +75,9 @@ public class RobotContainer {
 
   private final DriveByController m_drive;
 
-  private final Command moveOneMeter;
-  private final Command twoPaths;
-  private final Command intakeRun;
+  private Command moveOneMeter;
+  private Command twoPaths;
+  private Command intakeRun;
   private Climber climber;
 
   /**
@@ -142,7 +143,7 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
-    new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
+    new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
@@ -173,6 +174,9 @@ public class RobotContainer {
   }
 
   private void configureAutoChooser() {
+    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+    twoPaths = new TwoPathsAuto(m_robotDrive);
+    intakeRun = new IntakeRunAuto(m_robotDrive);
     m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     m_chooser.addOption("TwoPathsAuto", twoPaths);
     m_chooser.addOption("IntakeRunAuto", intakeRun);
@@ -182,6 +186,9 @@ public class RobotContainer {
         .withPosition(2, 2).withSize(4, 1);
   }
 
+  /**
+   * @return Selected Auto
+   */
   public Command getAuto() {
     return m_chooser.getSelected();
   }

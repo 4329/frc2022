@@ -22,11 +22,14 @@ public class Shooter
 
   double percent;
   private NetworkTableEntry percentOutput;
+  private NetworkTableEntry pidError;
 
   public Shooter (){
 
     percentOutput = Shuffleboard.getTab("shooteryness").add("percent", percent).withWidget("Graph").getEntry();
+    pidError = Shuffleboard.getTab("shooteryness").add("PID Error", 1).withWidget("Graph").getEntry();
     shooterPID = new PIDController(.5, 0, 0);
+    shooterPID.setTolerance(2000);
     shooterwheel1 = new TalonFX(Configrun.get(13, "ShooterWheel1ID" ));
     shooterwheel2 = new TalonFX(Configrun.get(14, "ShooterWheel2ID" ));
     shooterwheel1.setInverted(true);
@@ -54,7 +57,7 @@ public class Shooter
     percent = percent + (percent * feedForward);
     shooterwheel1.set(ControlMode.PercentOutput, percent);
     System.out.println("some text " + percent);
-    percentOutput.setDouble(shooterPID.getPositionError());
+    percentOutput.setDouble(shooterPID.getSetpoint());
   }
 
   public void holdFire() {
@@ -62,4 +65,13 @@ public class Shooter
     shooterwheel1.set(ControlMode.PercentOutput, 0);
   }
  
+  /**
+   * @return Whether or not shooterPID is within tolerance
+   */
+  public boolean getShooterError() {
+
+    pidError.setDouble(shooterPID.getVelocityError());
+    return shooterPID.atSetpoint();
+  }
+
 }

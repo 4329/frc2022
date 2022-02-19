@@ -33,18 +33,12 @@ public class TowerCommand extends CommandBase {
     @Override
     public void execute() {
 
-        if (!intakeSensors.topTrigger()) {
-            shooterFeed.shooterFeedStop();
-
-            if (!intakeSensors.bottomTrigger()) {
-                storageIntake.storageIntakeStop();
-                shooterFeed.shooterFeedStop();
-            }
+        shooter.getShooterError();
+        setpoint = 4500;
+//TODO gyfhdujsioquhsdyfsioiwfjihiuhwiqoduiuiei
+        if (shooter.getShooterError()) {
+            shooter.shoot(setpoint);
         }
-
-        setpoint = 2000;
-        shooter.shoot(setpoint);
-
     }
 
     @Override

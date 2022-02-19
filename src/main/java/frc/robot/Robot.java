@@ -85,6 +85,8 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     drivetrain.brakeMode();
     coastWait = RobotController.getFPGATime();
+    m_robotContainer.disableRobot();
+    
   }
 
   @Override
