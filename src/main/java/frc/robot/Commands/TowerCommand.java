@@ -24,20 +24,19 @@ public class TowerCommand extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-
-        storageIntake.storageIntakeIn();
-        shooterFeed.shooterFeedUp();
-    }
-
-    @Override
     public void execute() {
 
-        shooter.getShooterError();
         setpoint = 4500;
-//TODO gyfhdujsioquhsdyfsioiwfjihiuhwiqoduiuiei
+        shooter.shoot(setpoint);
+
         if (shooter.getShooterError()) {
-            shooter.shoot(setpoint);
+
+            storageIntake.storageIntakeIn();
+            shooterFeed.shooterFeedUp();
+        } else {
+            
+            storageIntake.storageIntakeStop();
+            shooterFeed.shooterFeedStop();
         }
     }
 
@@ -51,6 +50,8 @@ public class TowerCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        
         return false;
     }
+
 }

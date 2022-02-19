@@ -17,7 +17,7 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
     
     private static final int SOLENOID_CHANNEL = 0;
     
-    private Solenoid m_Solenoid = null;
+    private Solenoid m_Solenoid;
     
     boolean intakeUp;
 

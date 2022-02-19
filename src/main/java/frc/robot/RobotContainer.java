@@ -54,31 +54,28 @@ import frc.robot.Subsystems.LimelightSubsystem;
  */
 public class RobotContainer {
 
-  private static final int PH_CAN_ID = Configrun.get(61, "PH_CAN_ID");
-  private PneumaticHub pneumaticHub = new PneumaticHub(PH_CAN_ID);;
+  private final PneumaticHub pneumaticHub;
 
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
-  private StorageIntake storageIntake;
-  private IntakeSensors intakeSensors;
-  private final ShooterFeedSubsytem shooterFeed = new ShooterFeedSubsytem();
-  private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
-  private IntakeMotor intakeMotor = new IntakeMotor();
-  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
-  private final SensorOutputCommand sensorOutputCommand = new SensorOutputCommand(intakeSensors);
-  private final Shooter shooter = new Shooter();
+  private final StorageIntake storageIntake;
+  private final IntakeSensors intakeSensors;
+  private final ShooterFeedSubsytem shooterFeed;
+  private final IntakeSolenoidSubsystem intakeSolenoid;
+  private final IntakeMotor intakeMotor;
+  private final Shooter shooter;
+  private final Climber climber;
   // The driver's controllers
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  final XboxController m_driverController;
+  final XboxController m_operatorController;
 
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  final SendableChooser<Command> m_chooser;
 
   private final DriveByController m_drive;
 
   private Command moveOneMeter;
   private Command twoPaths;
   private Command intakeRun;
-  private Climber climber;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -86,25 +83,30 @@ public class RobotContainer {
    * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
+
+    pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
+
+    shooter = new Shooter();
+    shooterFeed = new ShooterFeedSubsytem();
+    storageIntake = new StorageIntake();
+    intakeMotor = new IntakeMotor();
+    intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
+    intakeSensors = new IntakeSensors();
     climber = new Climber(pneumaticHub);
-    m_robotDrive = drivetrain;
-
-    //Add autos to the chooser
-    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-    twoPaths = new TwoPathsAuto(m_robotDrive);
-    intakeRun = new IntakeRunAuto(m_robotDrive);
-
 
     initializeCamera();
-    storageIntake = new StorageIntake();
 
-    configureAutoChooser();
-    configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
-                                function */
+    m_chooser = new SendableChooser<>();
+
+    m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+    m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 
-    intakeSensors.setDefaultCommand(sensorOutputCommand);//This makes sure that the status of the sensors is constantly being updated.
+    configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
+                               function */
+    configureAutoChooser();
   }
 
   ParallelCommandGroup intakeCommandGroup() {
@@ -173,18 +175,22 @@ public class RobotContainer {
 
   }
 
-  private void configureAutoChooser() {
-    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-    twoPaths = new TwoPathsAuto(m_robotDrive);
-    intakeRun = new IntakeRunAuto(m_robotDrive);
-    m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
-    m_chooser.addOption("TwoPathsAuto", twoPaths);
-    m_chooser.addOption("IntakeRunAuto", intakeRun);
-    Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
-    Shuffleboard.getTab("Autonomous").add("Documentation",
-        "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29")
-        .withPosition(2, 2).withSize(4, 1);
-  }
+  /**
+   * Pulls autos and configures the chooser
+   */
+  private void configureAutoChooser(){
+
+  moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+  twoPaths = new TwoPathsAuto(m_robotDrive);
+  intakeRun = new IntakeRunAuto(m_robotDrive);
+
+  m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
+  m_chooser.addOption("TwoPathsAuto", twoPaths);
+  m_chooser.addOption("IntakeRunAuto", intakeRun);
+  
+  Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
+  Shuffleboard.getTab("Autonomous").add("Documentation", "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29").withPosition(2, 2).withSize(4, 1);
+}
 
   /**
    * @return Selected Auto
@@ -194,7 +200,7 @@ public class RobotContainer {
   }
 
   public void disableRobot() {
-    shooterFeedSubsytem.coastShooterFeed();
+    shooterFeed.coastShooterFeed();
     storageIntake.storageIntakeCoast();
   }
 }
