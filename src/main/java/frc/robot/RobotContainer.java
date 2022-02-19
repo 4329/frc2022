@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Subsystems.Swerve.*;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.XboxController.*;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,9 +18,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
+import frc.robot.Commands.ClimberButtonCommand;
+import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.ShooterFeedCommandUp;
@@ -35,6 +39,7 @@ import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
+import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import frc.robot.Subsystems.LimelightSubsystem;
 
@@ -155,7 +160,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).whileHeld(new StartEndCommand(climber::climb, climber::stopClimb));
+    new JoystickAnalogButton(m_operatorController, false).whenHeld(new ClimberButtonCommand(m_operatorController, climber) );
+    new JoystickAnalogButton(m_operatorController, true).whenHeld(new ClimberButtonCommandReverse(m_operatorController, climber) );
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
 
 
