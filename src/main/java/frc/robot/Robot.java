@@ -138,7 +138,7 @@ public class Robot extends TimedRobot {
     //  encoderTestSubsystem = new EncoderTestSubsystem();
     //}
     if(turret == null){
-      turret = new Turret();}
+    turret = new Turret();}
     }
 
   /** This function is called periodically during test mode. */

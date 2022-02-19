@@ -28,20 +28,21 @@ import frc.robot.Utilities.*;
   public double turretEncoderValues = turretEncoder.getPwmPosition();
   public double maxTurretEncoderValue = turretEncoder.getPwmPosition();
   public double minTurretEncoderValue = turretEncoder.getPwmPosition();
-  public double turretEncoderRadians =  (turretEncoder.getPwmPosition() / 4029 )* 2 * Math.PI;
-  public double limeLightTxValReplacement = 20; //-27 to 27, in degrees
+  public double limeLightTxValReplacement = 1.0; //-27 to 27, in degrees
 
   //max 3964      :one tick is 0.0893521966 degrees
   //min -127      :total is 4029
   //forward -125  :one tick is 0.000496401092 pi radians
   //back  1913    :one radian is 
 
-  NetworkTableEntry turretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location in Pulses", turretEncoderValues).withPosition(8,0).getEntry();
+  //NetworkTableEntry turretEncoderPulses = Shuffleboard.getTab("Swerve Alignment").add("Turret Location in Pulses", turretEncoderValues).withPosition(8,0).getEntry();
   
+  
+
   public void displayTurretEncoderPulses() {
     turretEncoderValues = turretEncoder.getPwmPosition();
     System.out.println("encoder pulses called " + turretEncoder.getPwmPosition());
-    turretEncoderPulses.setDouble(turretEncoder.getPwmPosition());
+    //turretEncoderPulses.setDouble(turretEncoder.getPwmPosition());
 }
 
   /**
@@ -70,9 +71,15 @@ import frc.robot.Utilities.*;
    */
   @Override
   public void useOutput(double output, double setpoint) { //LOOK AT DIS ASAP SOON AZ POSSIBLE
-    final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
-    m_turretMotor.set(TalonSRXControlMode.PercentOutput, output+staticGain);
-    System.out.println("mie lief iz pane");
+    if (trackTarget){
+      //final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
+      m_turretMotor.set(TalonSRXControlMode.PercentOutput, output);
+      //System.out.println("output" + output);
+      //System.out.println("setpipnt" + setpoint);
+      System.out.println("turretEncoder Possition in radians" + (turretEncoder.getPwmPosition() + 127) / 4029.0 * 2.0 * Math.PI);
+      //System.out.println("turret encoder possitionn raw" + turretEncoder.getPwmPosition());
+      System.out.println("turret possition READ" + getPotentionmeter());
+    }
   }
   /** 
    * 
@@ -102,7 +109,7 @@ import frc.robot.Utilities.*;
    * @param angle is the robot gyro angle in radians
    */
   public void setAngle(double angle) {
-
+    System.out.println("set angle method called, angle at "+ angle);
     //NOTE: due to the sensor oreintation on the turret, the sensor reads positive when the turret turns clockwise,
     //this is opposite of normal and clockwise being positive will be assumed for the following code
     //this will potentially be fixed later on but is low prioirty at this time
@@ -132,9 +139,9 @@ import frc.robot.Utilities.*;
       //when searching clockwise add 0.10 radians to the desired setpoint every isntance of the loop (20ms)
       //vice versa when searching counter clockwise
       if (searchClockwise) {
-        angle = getPotentionmeter() + 0.20;
+        angle = getPotentionmeter() + 0.10;
       } else {
-        angle = getPotentionmeter() - 0.20;
+        angle = getPotentionmeter() - 0.10;
       }
     } 
     
@@ -175,12 +182,12 @@ import frc.robot.Utilities.*;
    * Obtains the potentiometer reading, this "if-else if-else" may be a remnant of buggy code and is proabbly unecessary now 
    */
    private double getPotentionmeter() {
-    if (turretEncoderRadians > 2 * Math.PI) {
-      return turretEncoderRadians - 2 * Math.PI;
-    } else if (turretEncoderRadians < 0.0) {
-      return turretEncoderRadians + 2 * Math.PI;
+    if (((turretEncoder.getPwmPosition() + 127)/ 4029.0 )* 2.0 * Math.PI > 2 * Math.PI) {
+      return ((turretEncoder.getPwmPosition() + 127 )/ 4029.0 )* 2.0 * Math.PI - 2 * Math.PI;
+    } else if (((turretEncoder.getPwmPosition() + 127)/ 4029.0 )* 2.0 * Math.PI < 0.0) {
+      return ((turretEncoder.getPwmPosition() + 127 )/ 4029.0 )* 2.0 * Math.PI + 2 * Math.PI;
     } else {
-      return turretEncoderRadians;
+      return ((turretEncoder.getPwmPosition() +127 )/ 4029.0 )* 2.0 * Math.PI;
     }
   }
 
