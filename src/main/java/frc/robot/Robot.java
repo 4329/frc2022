@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Subsystems.Swerve.Drivetrain;
+import frc.robot.Subsystems.Swerve.IntakeSolenoidSubsystem;
 import frc.robot.Utilities.SwerveAlignment;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
+  private IntakeSolenoidSubsystem intakeSolenoidSubsystem;
 
   
   /**
@@ -74,12 +76,12 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    
     drivetrain.coastMode();
   }
 
   @Override
   public void disabledPeriodic() {
-
   }
 
   /**
