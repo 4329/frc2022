@@ -28,8 +28,8 @@ public class Shooter
 
     percentEntry = Shuffleboard.getTab("shooteryness").add("percent", percent).withWidget("Graph").getEntry();
     pidErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Error", 1).withWidget("Graph").withPosition(3, 0).getEntry();
-    shooterPID = new PIDController(.5, 0, 0);
-    shooterPID.setTolerance(2000);
+    shooterPID = new PIDController(Configrun.get(0.5, "ShooterP"), Configrun.get(0, "ShooterI"), Configrun.get(0, "ShooterD"));
+    shooterPID.setTolerance(Configrun.get(2000, "ShooterTolerance"));
     shooterwheel1 = new TalonFX(Configrun.get(13, "ShooterWheel1ID" ));
     shooterwheel2 = new TalonFX(Configrun.get(14, "ShooterWheel2ID" ));
     shooterwheel1.setInverted(true);

@@ -11,24 +11,25 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
 public class Climber {
-    private Solenoid pivotSolenoid;
-    private Solenoid shiftSolenoid;
-    private Solenoid extendSolenoid;
-    private CANSparkMax climberNeoMotor1;
-    private CANSparkMax climberNeoMotor2;
-    private CANSparkMax climberNeoMotor3;
+    private final Solenoid pivotSolenoid;
+    private final Solenoid shiftSolenoid;
+    private final Solenoid extendSolenoid;
+    private final CANSparkMax climberNeoMotor1;
+    private final CANSparkMax climberNeoMotor2;
+    private final CANSparkMax climberNeoMotor3;
     private boolean pivoted = false;
     private boolean shifted = false;
 
-    private NetworkTableEntry isShiftedShuffleboard;
-    private NetworkTableEntry isPivotedShuffleboard;
-    private NetworkTableEntry isExtendedShuffleboard;
-    private NetworkTableEntry isMoterActiveShuffleboard;
+    private final NetworkTableEntry isShiftedShuffleboard;
+    private final NetworkTableEntry isPivotedShuffleboard;
+    private final NetworkTableEntry isExtendedShuffleboard;
+    private final NetworkTableEntry isMoterActiveShuffleboard;
 
 
 
 
     public Climber (PneumaticHub hubbie) {
+
         pivotSolenoid = hubbie.makeSolenoid(Configrun.get(1, "pivotSolenoidID"));
         shiftSolenoid = hubbie.makeSolenoid(Configrun.get(2, "shiftSolenoidID"));
         extendSolenoid = hubbie.makeSolenoid(Configrun.get(3, "extendSolenoidID"));
@@ -42,11 +43,6 @@ public class Climber {
         isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot Active", false).getEntry();
         isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Extetend Active", false).getEntry();
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Moters Active", false).getEntry();
-
-
-
-
-
     }
 
     public void pivotClimber() {
@@ -60,63 +56,74 @@ public class Climber {
     }
 
     public void shift() {
+
         shiftSolenoid.set(true);
         shifted = true;
         isShiftedShuffleboard.setBoolean(true);
     }
+
     public void unShift() {
+
         shiftSolenoid.set(false);
         shifted = false;
         isShiftedShuffleboard.setBoolean(false);
     }
     
     public void extend() {
+
         extendSolenoid.set(true);
         shift();
         isExtendedShuffleboard.setBoolean(true);
 
+
     }
     public void retract() {
+
         extendSolenoid.set(false);
         unShift();
         isExtendedShuffleboard.setBoolean(false);
-
-
     }
-    public void climb(double climbPower) {
-        climberNeoMotor1.set (climbPower);
+
+    public void climb() {
+
+        climberNeoMotor1.set(Configrun.get(0.5, "climbPower"));
         isMoterActiveShuffleboard.setBoolean(true);
      
     }
+
     public void stopClimb() {
+
         climberNeoMotor1.set(0);
         isMoterActiveShuffleboard.setBoolean(false);
+    }        
 
-    }
-    public void reverseClimb(double climbPower) {
-        climberNeoMotor1.set (climbPower * -1);
+    public void reverseClimb() {
+
+        climberNeoMotor1.set(-Configrun.get(0.5, "climbPower"));
         isMoterActiveShuffleboard.setBoolean(true);
-     
-        
-
     }
 
     public void togglePivot() {
-        if(pivoted) {
+        if (pivoted) {
+
             reversePivotClimber();
             pivoted = false;
         }
         else {
+
             pivotClimber();
             pivoted = true;
         }       
     }
 
     public void toggleShift() {
-        if(shifted) {
+
+        if (shifted) {
+
             unShift();
         }
         else {
+
             shift();
         }
     }

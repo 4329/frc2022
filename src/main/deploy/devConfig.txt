@@ -63,6 +63,11 @@ HoodWheelID = 1
 ShooterWheel1ID = 13
 ShooterWheel2ID = 14
 
+ShooterP = 0.5
+ShooterI = 0
+ShooterD = 0
+ShooterTolerance = 2000
+
 #Digital input IDs
 shooterFeedTriggerPort = 5
 storageIntakeTriggerPort = 3

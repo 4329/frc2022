@@ -109,12 +109,11 @@ public class RobotContainer {
     configureAutoChooser(drivetrain);
   }
 
-  ParallelCommandGroup intakeCommandGroup() {
-    return new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor));
-  }
-
-  // Creates and establishes camera streams for the shuffleboard ~Ben
+  /** 
+   * Creates and establishes camera streams for the shuffleboard ~Ben  
+  */
   private void initializeCamera() {
+
     CameraServer.startAutomaticCapture();
     VideoSource[] enumerateSources = VideoSource.enumerateSources();
 
@@ -137,6 +136,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // Reset drivetrain when down/up on the DPad is pressed
     new POVButton(m_driverController, 180)
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));
@@ -150,7 +150,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
-    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
+    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor)));
 
     // new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new
     // ParallelCommandGroup(intakeStopCommandGroup()));
@@ -202,10 +202,12 @@ public class RobotContainer {
    * @return Selected Auto
    */
   public Command getAuto() {
+
     return m_chooser.getSelected();
   }
 
   public void disableRobot() {
+
     shooterFeed.coastShooterFeed();
     storageIntake.storageIntakeCoast();
   }
