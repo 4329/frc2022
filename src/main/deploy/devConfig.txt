@@ -25,7 +25,7 @@ backRightOffset = 2.79
 
 Intake_ID = 40
 intakeSpeed = 0
-intakeUp = false
+intakeUp = true
 
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43

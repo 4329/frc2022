@@ -24,7 +24,7 @@ backRightOffset = 2.79
 
 Intake_ID = 40
 intakeSpeed = 0.2
-intakeUp = false
+intakeUp = true
 
 PH_CAN_ID = 61
 

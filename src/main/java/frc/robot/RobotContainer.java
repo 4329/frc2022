@@ -16,18 +16,17 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.AutoTest;
 import frc.robot.Commands.StraightLine;
 import frc.robot.Commands.DriveByController;
-<<<<<<< HEAD
+
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Constants.*;
-=======
+
 import frc.robot.Commands.ShooterFeedCommandDown;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
->>>>>>> b647cacb0957dd79bb37b6fff5db9a6eeb5afbb5
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 
@@ -101,12 +100,10 @@ ParallelCommandGroup intakeCommandGroup() {
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
-<<<<<<< HEAD
-=======
+
     new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
     new JoystickButton(m_operatorController, Button.kX.value).whileHeld(new ShooterFeedCommandDown(shooterFeedSubsytem));
->>>>>>> b647cacb0957dd79bb37b6fff5db9a6eeb5afbb5
-    
+
     new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
 
     //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));

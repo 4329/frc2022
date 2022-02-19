@@ -11,18 +11,18 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.RobotContainer;
 
-
 public class IntakeSolenoidSubsystem extends SubsystemBase {
-    
-    
+
     private static final int SOLENOID_CHANNEL = 0;
-    
+
     private Solenoid m_Solenoid = null;
-    
+
     boolean intakeUp;
 
     public IntakeSolenoidSubsystem(PneumaticHub pneumaticHub) {
-        intakeUp = Configrun.get(false, "intakeUp");
+        intakeUp = Configrun.get(true, "intakeUp");
+        // changed from intake = Configrun.get(false, "intakeUp")
+        // also switcehd the hoses or whatever its called on the solenoids
         System.out.println("going to make new solenoid");
         m_Solenoid = pneumaticHub.makeSolenoid(SOLENOID_CHANNEL);
         System.out.println("i made it");
@@ -37,12 +37,16 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
         m_Solenoid.set(!intakeUp);
         System.out.println("intakedown");
     }
-//"hello world"
+
+    // "hello world"
     public void keepIntakePosition() {
         if (m_Solenoid.get() == !intakeUp) {
             intakeDown();
         } else {
             intakeUp();
         }
+    }
+
+    public void disabled() {
     }
 }
