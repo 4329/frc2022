@@ -38,13 +38,13 @@ import frc.robot.Commands.TowerCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.Climber;
-import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import frc.robot.Subsystems.LimelightSubsystem;
+import frc.robot.Subsystems.Shooter;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -95,9 +95,7 @@ public class RobotContainer {
     climber = new Climber(pneumaticHub);
 
     initializeCamera();
-
-    m_chooser = new SendableChooser<>();
-
+    
     m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
     m_robotDrive = drivetrain;
@@ -106,7 +104,9 @@ public class RobotContainer {
 
     configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
                                function */
-    configureAutoChooser();
+
+    m_chooser = new SendableChooser<>();
+    configureAutoChooser(drivetrain);
   }
 
   ParallelCommandGroup intakeCommandGroup() {
@@ -143,7 +143,7 @@ public class RobotContainer {
     new POVButton(m_driverController, 0)
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
+  //new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
     new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));
 
@@ -178,19 +178,25 @@ public class RobotContainer {
   /**
    * Pulls autos and configures the chooser
    */
-  private void configureAutoChooser(){
+  private void configureAutoChooser(Drivetrain drivetrain) {
 
-  moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-  twoPaths = new TwoPathsAuto(m_robotDrive);
-  intakeRun = new IntakeRunAuto(m_robotDrive);
+    //Pulls autos
+    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+    twoPaths = new TwoPathsAuto(m_robotDrive);
+    intakeRun = new IntakeRunAuto(m_robotDrive);
 
-  m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
-  m_chooser.addOption("TwoPathsAuto", twoPaths);
-  m_chooser.addOption("IntakeRunAuto", intakeRun);
-  
-  Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
-  Shuffleboard.getTab("Autonomous").add("Documentation", "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29").withPosition(2, 2).withSize(4, 1);
-}
+    //Adds autos to the chooser
+    m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
+    m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
+    m_chooser.addOption("TwoPathsAuto", twoPaths);
+    m_chooser.addOption("IntakeRunAuto", intakeRun);
+
+    //Puts autos on Shuffleboard
+    Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
+    Shuffleboard.getTab("Autonomous").add("Documentation",
+        "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29")
+        .withPosition(2, 2).withSize(4, 1);
+  }
 
   /**
    * @return Selected Auto
