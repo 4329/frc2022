@@ -39,6 +39,11 @@ public class SwerveAlignment {
     private NetworkTableEntry backRightAlignmentDisplayRad;
     private double backRightInitialAngle;
 
+    /**
+     * Creates a SwerveAlignment on Shuffleboard
+     * 
+     * @param drivetrain
+     */
 	public SwerveAlignment(Drivetrain drivetrain) {
         m_dDrivetrain = drivetrain;
 	}

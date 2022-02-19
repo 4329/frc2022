@@ -33,8 +33,8 @@ storageIntakeID = 41
 storageIntakePower = 0.5
 
 #Digital input IDs
-topTriggerPort = 1
-bottomTriggerPort = 3
+shooterFeedTriggerPort = 5
+storageIntakeTriggerPort = 3
 
 # RIP rickroll
 # NSP
@@ -69,3 +69,8 @@ taTolerance = 0.3
 
 #Hood IDs
 HoodWheelID = 1
+
+ShooterWheel1ID = 13
+ShooterWheel2ID = 14
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0

@@ -32,21 +32,10 @@ PH_CAN_ID = 61
 storageIntakeID = 41
 storageIntakePower = 0.5
 
-#Digital input IDs
-topTriggerPort = 4
-bottomTriggerPort = 3
-
 #Shooter Feed
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
-
 ShooterFeedPower = 0.5
-
-topTriggerPort = 1
-bottomTriggerPort = 3
-
-storageIntakeInPower = 0.2
-storageIntakeOutPower = -0.2
 
 pivotSolenoidID = 1
 shiftSolenoidID = 2
@@ -67,3 +56,14 @@ taTolerance = 0.3
 
 #Hood IDs
 HoodWheelID = 1
+ShooterWheel1ID = 13
+ShooterWheel2ID = 14
+
+ShooterP = 0.5
+ShooterI = 0
+ShooterD = 0
+ShooterTolerance = 8000
+
+#Digital input IDs
+topTriggerPort = 5
+bottomTriggerPort = 3

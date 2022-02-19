@@ -8,6 +8,8 @@ import frc.robot.Utilities.AutoFromPathPlanner;
 
 public class ExampleAuto extends SequentialCommandGroup{
 
+    final AutoFromPathPlanner yourAutoName;
+
     /**
      * An example auto that doesn't work
      * 
@@ -15,7 +17,7 @@ public class ExampleAuto extends SequentialCommandGroup{
      */
     public ExampleAuto(Drivetrain drive) {
         
-        final AutoFromPathPlanner yourAutoName = new AutoFromPathPlanner(drive, "yourAutoName", Constants.AutoConstants.kMaxSpeed);
+        yourAutoName = new AutoFromPathPlanner(drive, "yourAutoName", Constants.AutoConstants.kMaxSpeed);
 
         addCommands(new InstantCommand(()->drive.resetOdometry(yourAutoName.getInitialPose())),
         yourAutoName

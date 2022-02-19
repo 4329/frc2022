@@ -22,6 +22,13 @@ public class Configrun
 
     }
 
+    /**
+     * Pulls a value from the deployed config file
+     * 
+     * @param defaultvalue
+     * @param key
+     * @return int
+     */
     public static int get(int defaultvalue, String key)
     {
         if (keys.get(key) != null)
@@ -35,6 +42,13 @@ public class Configrun
         }
     }
 
+    /**
+     * Pulls a value from the deployed config file
+     * 
+     * @param defaultvalue
+     * @param key
+     * @return double
+     */
     public static double get(double defaultvalue, String key)
     {
         if (keys.get(key) != null)
@@ -48,6 +62,13 @@ public class Configrun
 
     }
 
+    /**
+     * Pulls a value from the deployed config file
+     * 
+     * @param defaultvalue
+     * @param key
+     * @return boolean
+     */
     public static boolean get(boolean defaultvalue, String key)
     {
         if (keys.get(key) != null)

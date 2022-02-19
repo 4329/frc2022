@@ -8,6 +8,8 @@ import frc.robot.Utilities.AutoFromPathPlanner;
 
 public class MoveOneMeterAuto extends SequentialCommandGroup{
 
+    final AutoFromPathPlanner moveOneMeter;
+
     /**
      * Moves the robot one meter forward
      *
@@ -15,7 +17,7 @@ public class MoveOneMeterAuto extends SequentialCommandGroup{
      */
     public MoveOneMeterAuto(Drivetrain drive) {
 
-        final AutoFromPathPlanner moveOneMeter = new AutoFromPathPlanner(drive, "distancepath", Constants.AutoConstants.kMaxSpeed);
+        moveOneMeter = new AutoFromPathPlanner(drive, "distancepath", Constants.AutoConstants.kMaxSpeed);
 
         addCommands(new InstantCommand(()->drive.resetOdometry(moveOneMeter.getInitialPose())),
         moveOneMeter

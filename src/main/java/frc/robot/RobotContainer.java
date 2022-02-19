@@ -26,6 +26,7 @@ import frc.robot.Commands.ClimberButtonCommand;
 import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeBackwardsCommand;
+import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.ShooterFeedCommandUp;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeSensorsCommand;
@@ -33,6 +34,7 @@ import frc.robot.Commands.IntakeSolenoidDownCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.StorageIntakeOutCommand;
+import frc.robot.Commands.TowerCommand;
 import frc.robot.Constants.*;
 import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.Climber;
@@ -42,6 +44,7 @@ import frc.robot.Subsystems.Swerve.IntakeMotor;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import frc.robot.Subsystems.LimelightSubsystem;
+import frc.robot.Subsystems.Shooter;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -51,30 +54,28 @@ import frc.robot.Subsystems.LimelightSubsystem;
  */
 public class RobotContainer {
 
-  private static final int PH_CAN_ID = Configrun.get(61, "PH_CAN_ID");
-  private PneumaticHub pneumaticHub = new PneumaticHub(PH_CAN_ID);;
+  private final PneumaticHub pneumaticHub;
 
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
-  private final StorageIntake storageIntake = new StorageIntake();
-  private final IntakeSensors intakeSensors = new IntakeSensors();
-  private final ShooterFeedSubsytem shooterFeed = new ShooterFeedSubsytem();
-  private IntakeSolenoidSubsystem intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
-  private IntakeMotor intakeMotor = new IntakeMotor();
-  private final ShooterFeedSubsytem shooterFeedSubsytem = new ShooterFeedSubsytem();
-  private final SensorOutputCommand sensorOutputCommand = new SensorOutputCommand(intakeSensors);
+  private final StorageIntake storageIntake;
+  private final IntakeSensors intakeSensors;
+  private final ShooterFeedSubsytem shooterFeed;
+  private final IntakeSolenoidSubsystem intakeSolenoid;
+  private final IntakeMotor intakeMotor;
+  private final Shooter shooter;
+  private final Climber climber;
   // The driver's controllers
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  final XboxController m_driverController;
+  final XboxController m_operatorController;
 
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  final SendableChooser<Command> m_chooser;
 
   private final DriveByController m_drive;
 
-  private final Command moveOneMeter;
-  private final Command twoPaths;
-  private final Command intakeRun;
-  private Climber climber;
+  private Command moveOneMeter;
+  private Command twoPaths;
+  private Command intakeRun;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -82,32 +83,37 @@ public class RobotContainer {
    * @param drivetrain
    */
   public RobotContainer(Drivetrain drivetrain) {
+
+    pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
+
+    shooter = new Shooter();
+    shooterFeed = new ShooterFeedSubsytem();
+    storageIntake = new StorageIntake();
+    intakeMotor = new IntakeMotor();
+    intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
+    intakeSensors = new IntakeSensors();
     climber = new Climber(pneumaticHub);
-    m_robotDrive = drivetrain;
-
-    //Add autos to the chooser
-    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-    twoPaths = new TwoPathsAuto(m_robotDrive);
-    intakeRun = new IntakeRunAuto(m_robotDrive);
-
 
     initializeCamera();
-
-    configureAutoChooser();
-    configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
-                                function */
+    
+    m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+    m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 
-    intakeSensors.setDefaultCommand(sensorOutputCommand);//This makes sure that the status of the sensors is constantly being updated.
+    configureButtonBindings(); /* Configure the button bindings to commands using configureButtonBindings
+                               function */
+
+    m_chooser = new SendableChooser<>();
+    configureAutoChooser(drivetrain);
   }
 
-  ParallelCommandGroup intakeCommandGroup() {
-    return new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor));
-  }
-
-  // Creates and establishes camera streams for the shuffleboard ~Ben
+  /** 
+   * Creates and establishes camera streams for the shuffleboard ~Ben  
+  */
   private void initializeCamera() {
+
     CameraServer.startAutomaticCapture();
     VideoSource[] enumerateSources = VideoSource.enumerateSources();
 
@@ -130,33 +136,33 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // Reset drivetrain when down/up on the DPad is pressed
     new POVButton(m_driverController, 180)
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));
     new POVButton(m_driverController, 0)
         .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
+  //new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
-    new JoystickButton(m_operatorController, Button.kY.value).whileHeld(new ShooterFeedCommandUp(shooterFeedSubsytem));
+    new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
-    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(intakeCommandGroup()));
+    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor)));
 
     // new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new
     // ParallelCommandGroup(intakeStopCommandGroup()));
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
         .whenHeld(new StorageIntakeInCommand(storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
-        .whenHeld(new StorageIntakeOutCommand(storageIntake));
+        .whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
     //new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new ParallelCommandGroup(intakeStopCommandGroup()));
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new StorageIntakeInCommand(storageIntake));
-    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new StorageIntakeOutCommand(storageIntake));
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
@@ -168,22 +174,40 @@ public class RobotContainer {
 
   }
 
-  private void configureAutoChooser() {
+  /**
+   * Pulls autos and configures the chooser
+   */
+  private void configureAutoChooser(Drivetrain drivetrain) {
+
+    //Pulls autos
+    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+    twoPaths = new TwoPathsAuto(m_robotDrive);
+    intakeRun = new IntakeRunAuto(m_robotDrive);
+
+    //Adds autos to the chooser
     m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
+    m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
     m_chooser.addOption("TwoPathsAuto", twoPaths);
     m_chooser.addOption("IntakeRunAuto", intakeRun);
+
+    //Puts autos on Shuffleboard
     Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
     Shuffleboard.getTab("Autonomous").add("Documentation",
         "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29")
         .withPosition(2, 2).withSize(4, 1);
   }
 
+  /**
+   * @return Selected Auto
+   */
   public Command getAuto() {
+
     return m_chooser.getSelected();
   }
 
   public void disableRobot() {
-    shooterFeedSubsytem.coastShooterFeed();
+
+    shooterFeed.coastShooterFeed();
     storageIntake.storageIntakeCoast();
   }
 }
