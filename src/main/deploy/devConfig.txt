@@ -66,8 +66,8 @@ ShooterWheel2ID = 14
 ShooterP = 0.5
 ShooterI = 0
 ShooterD = 0
-ShooterTolerance = 2000
+ShooterTolerance = 8000
 
 #Digital input IDs
-shooterFeedTriggerPort = 5
-storageIntakeTriggerPort = 3
+topTriggerPort = 5
+bottomTriggerPort = 3

@@ -26,7 +26,7 @@ public class TowerCommand extends CommandBase {
     @Override
     public void execute() {
 
-        setpoint = 4500;
+        setpoint = 3500;
         shooter.shoot(setpoint);
 
         if (shooter.getShooterError()) {
