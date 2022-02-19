@@ -84,9 +84,8 @@ public class Climber {
         isExtendedShuffleboard.setBoolean(false);
     }
 
-    public void climb() {
-
-        climberNeoMotor1.set(Configrun.get(0.5, "climbPower"));
+    public void climb(double climbPower) {
+        climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
      
     }
@@ -97,9 +96,9 @@ public class Climber {
         isMoterActiveShuffleboard.setBoolean(false);
     }        
 
-    public void reverseClimb() {
+    public void reverseClimb(double climbPower) {
 
-        climberNeoMotor1.set(-Configrun.get(0.5, "climbPower"));
+        climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
     }
 

@@ -16,16 +16,15 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
     
     
     private static final int SOLENOID_CHANNEL = 0;
-    
     private Solenoid m_Solenoid;
     
     boolean intakeUp;
 
     public IntakeSolenoidSubsystem(PneumaticHub pneumaticHub) {
+
         intakeUp = Configrun.get(false, "intakeUp");
-        System.out.println("going to make new solenoid");
         m_Solenoid = pneumaticHub.makeSolenoid(SOLENOID_CHANNEL);
-        System.out.println("i made it");
+        m_Solenoid.set(Configrun.get(true, "intakeUp"));
     }
 
     public void intakeUp() {
@@ -59,4 +58,5 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
 
         m_Solenoid.toggle();
     }
+    
 }

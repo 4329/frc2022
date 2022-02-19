@@ -1,7 +1,6 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
@@ -10,16 +9,14 @@ public class TowerCommand extends CommandBase {
     
     StorageIntake storageIntake;
     ShooterFeedSubsytem shooterFeed;
-    IntakeSensors intakeSensors;
     Shooter shooter;
 
     double setpoint;
 
-    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, IntakeSensors intakeSensors, Shooter shooter) {
+    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
-        this.intakeSensors = intakeSensors;
         this.shooter = shooter;
     }
 
