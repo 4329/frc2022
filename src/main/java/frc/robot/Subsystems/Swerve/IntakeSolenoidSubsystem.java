@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 
+import com.fasterxml.jackson.databind.node.BooleanNode;
 
 //import com.fasterxml.jackson.databind.node.NullNode;
 
@@ -33,12 +34,17 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
         m_doubleSolenoid = pneumaticHub.makeDoubleSolenoid(14, 15);
     }
 
+    public boolean IsIntakeUp(){
+        return intakeUp;
+    }
+
     public void intakeUp() {
 
         intakeUp = true;
         //m_Solenoid.set(true);
         m_doubleSolenoid.set(kReverse);
         System.out.println("intakeup");
+
     }
 
     public void intakeDown() {
@@ -47,6 +53,7 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
         m_doubleSolenoid.set(kForward);
         intakeUp = false;
         System.out.println("intakedown");
+
     }
 
     public void changeIntake() {
@@ -56,11 +63,13 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
             //m_Solenoid.set(false);
             m_doubleSolenoid.set(kForward);
             intakeUp = false;
+
         } else {
 
             //m_Solenoid.set(true);
             m_doubleSolenoid.set(kReverse);
             intakeUp = true;
+
         }
     }
 

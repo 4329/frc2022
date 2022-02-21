@@ -28,7 +28,7 @@ public class IntakeRunAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->drive.resetOdometry(moveOneMeter.getInitialPose())),
             moveOneMeter,
-            new IntakeRunCommand(intakeMotor).withTimeout(1),
+            new IntakeRunCommand(intakeMotor, null).withTimeout(1),
             moveOneMeter2
         );
     }
