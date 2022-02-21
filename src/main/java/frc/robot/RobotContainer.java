@@ -146,12 +146,15 @@ public class RobotContainer {
   //new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
     new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));
+    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new IntakeRunCommand(intakeMotor));
 
     new JoystickButton(m_operatorController, Button.kX.value)
         .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
-    new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor)));
+    //new JoystickButton(m_operatorController, Button.kA.value).whileHeld(new ParallelCommandGroup(new IntakeSolenoidDownCommand(intakeSolenoid), new IntakeRunCommand(intakeMotor)));
 
+
+    
     // new JoystickButton(m_operatorController, Button.kA.value).whenReleased(new
     // ParallelCommandGroup(intakeStopCommandGroup()));
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
