@@ -23,12 +23,12 @@ import frc.robot.Utilities.*;
   //private static AnalogPotentiometer m_turretPotentiometer = new AnalogPotentiometer(TurretConstants.kTurretPotentiometerPort,
   //    2.0 * Math.PI, -2.80);
   private boolean searchClockwise = true; //creates boolean to indicate if the turret is searching clockwise for a target 
-  private boolean trackTarget = false;    //creates boolean to indicate if the turret is in trackTarget mode
+  private boolean trackTarget = true;    //creates boolean to indicate if the turret is in trackTarget mode
   private boolean visionSolution = false;
   public double turretEncoderValues = turretEncoder.getPwmPosition();
   public double maxTurretEncoderValue = turretEncoder.getPwmPosition();
   public double minTurretEncoderValue = turretEncoder.getPwmPosition();
-  public double limeLightTxValReplacement = 1.0; //-27 to 27, in degrees
+  public double limeLightTxValReplacement = 4.0; //in radians
 
   //max 3964      :one tick is 0.0893521966 degrees
   //min -127      :total is 4029
@@ -63,24 +63,7 @@ import frc.robot.Utilities.*;
     //Enables voltage compensation on the TalonSRX to attempt to normalize output over wide range of bus voltage throughout a match
     m_turretMotor.configVoltageCompSaturation(GlobalConstants.kVoltCompensation);
   }
-  /**
-   * Uses the output from the PIDController to set the motor%.
-   * 
-   * @param output is the PIDSubsystem's PIDController output motor%
-   * @param setpoint is the PIDSubsystem's current desired setpoint
-   */
-  @Override
-  public void useOutput(double output, double setpoint) { //LOOK AT DIS ASAP SOON AZ POSSIBLE
-    if (trackTarget){
-      //final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
-      m_turretMotor.set(TalonSRXControlMode.PercentOutput, output);
-      //System.out.println("output" + output);
-      //System.out.println("setpipnt" + setpoint);
-      System.out.println("turretEncoder Possition in radians" + (turretEncoder.getPwmPosition() + 127) / 4029.0 * 2.0 * Math.PI);
-      //System.out.println("turret encoder possitionn raw" + turretEncoder.getPwmPosition());
-      System.out.println("turret possition READ" + getPotentionmeter());
-    }
-  }
+ 
   /** 
    * 
    * @return the turret angle in radians
@@ -109,62 +92,71 @@ import frc.robot.Utilities.*;
    * @param angle is the robot gyro angle in radians
    */
   public void setAngle(double angle) {
-    System.out.println("set angle method called, angle at "+ angle);
     //NOTE: due to the sensor oreintation on the turret, the sensor reads positive when the turret turns clockwise,
     //this is opposite of normal and clockwise being positive will be assumed for the following code
     //this will potentially be fixed later on but is low prioirty at this time
 
     //Transform gyro angle into terms of turret angle
     angle = MathUtils.toUnitCircAngle(3 * Math.PI / 2.0 + angle);
+    System.out.println("angle being called at " + angle);
 
     //If trackTarget is set to true the turret will use the limelight to determine setpoint
     if (trackTarget) {
-      Limelight.enable();
+      Limelight.limeLight();
     } else {
-      Limelight.disable();
+      Limelight.limeLightStop();
     }
 
-    visionSolution = /*Limelight.valid() && */(Math.abs(getPotentionmeter()-angle) < Math.PI/6.0);
+    visionSolution = Limelight.putTargetAcquired() && (Math.abs(getPotentionmeter()-angle) < Math.PI/6.0);//<----
 
     //When the limelight does not have a valid solution, keep the turret facing the alliance wall and search back and
     //forth until a solution is found
     if (trackTarget && !visionSolution) {
       if (searchClockwise && getPotentionmeter() > angle + Math.PI / 6.0) {
         searchClockwise = false;
+        System.out.println("---> search clockwise is FALSE");
       }
       if (!searchClockwise && getPotentionmeter() < angle - Math.PI / 6.0) {
         searchClockwise = true;
+        System.out.println("---> search clockwise is TRUE");
       }
 
       //when searching clockwise add 0.10 radians to the desired setpoint every isntance of the loop (20ms)
       //vice versa when searching counter clockwise
       if (searchClockwise) {
         angle = getPotentionmeter() + 0.10;
+        System.out.println("---> moving clockwise");
       } else {
         angle = getPotentionmeter() - 0.10;
+        System.out.println("---> moving counter-clockwise");
       }
+
+      System.out.println("set angle method called, angle at "+ angle);
     } 
     
     //When the Limelight has a valid solution , use the limelight tx() angle and add it to the current turret postiion to 
     //determine the updated setpoint for the turret
     else if (trackTarget && visionSolution) {
-      angle = getPotentionmeter() + limeLightTxValReplacement; //Limelight.tx()
+      angle = getPotentionmeter() + Limelight.checkTx(); //Limelight.tx()
     }
     //if the angle setpoint is lower than the minimum allowed position, set the setpoint to the minimum allowed position
     //and set the turret to search clockwise 
     if (angle < TurretConstants.kTurretLow) {
       searchClockwise = true;
       setSetpoint(TurretConstants.kTurretLow);
+      System.out.println("ANGLE" + angle);
     } 
     //if the angle setpoint is hgiher than the maximum allowed position, set the setpoint to the maximum allowed position
     //and set the turret to search counter clockwise 
     else if (angle > TurretConstants.kTurretHigh) {
       searchClockwise = false;
       setSetpoint(TurretConstants.kTurretHigh);
+      System.out.println("ANGLE" + angle);
     } 
     //when the setpoint is neither too high nor too low, set the desired setpoint to the last updated value of angle 
     else {
       setSetpoint(angle);
+      System.out.println("ANGLE" + angle);
     }
   }
 
@@ -191,17 +183,42 @@ import frc.robot.Utilities.*;
     }
   }
 
+   /**
+   * Uses the output from the PIDController to set the motor%.
+   * 
+   * @param output is the PIDSubsystem's PIDController output motor%
+   * @param setpoint is the PIDSubsystem's current desired setpoint
+   */
+  @Override
+  public void useOutput(double output, double setpoint) { //LOOK AT DIS ASAP SOON AZ POSSIBLE
+    if (trackTarget){
+      final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
+      m_turretMotor.set(TalonSRXControlMode.PercentOutput, output + staticGain);
+      //System.out.println("output" + output);
+      //System.out.println(TalonSRXControlMode.PercentOutput);
+      //System.out.println("setpipnt" + setpoint);
+      //System.out.println("turretEncoder Possition in radians" + (turretEncoder.getPwmPosition() + 127) / 4029.0 * 2.0 * Math.PI);
+      //System.out.println("turret encoder possitionn raw" + turretEncoder.getPwmPosition());
+      //System.out.println("turret possition READ" + getPotentionmeter());  
+      System.out.println(Limelight.checkTx());
+      //System.out.println("the setSetpoint is" + setpoint);
+    }
+  }
+
+
 
   /**
    * Because the same PIDController is used for the turret at all times, a simple atSetpoint() call is not good enough to know it is
    * okay to shoot. Instead this fucntion is defined for when there is a valid solution and the limelight value is within the allowable
-   * tolerance
-   */
+   * tolerance */
+   
   public boolean visionAligned() {
-    if (/*Limelight.valid() &&*/ Math.abs(limeLightTxValReplacement) < VisionConstants.kTrackTolerance) {
+    if (Limelight.putTargetAcquired() && Math.abs(Limelight.checkTx()) < VisionConstants.kTrackTolerance) {
       return true;
     } else {
       return false;
     }
   }
-}//Limelight.tx()
+}
+
+//Limelight.tx()

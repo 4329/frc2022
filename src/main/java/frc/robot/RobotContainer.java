@@ -6,6 +6,10 @@ import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.JoystickAnalogButton;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.*;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.GoalShoot;
+import frc.robot.Subsystems.Limelight;
 //import frc.robot.Commands.EncoderTestMotorBack;
 //import frc.robot.Commands.EncoderTestMotorForward;
 import frc.robot.Constants.*;
@@ -34,6 +39,8 @@ public class RobotContainer {
   private final Drivetrain m_robotDrive;
   private final GoalShoot m_goalShoot = new GoalShoot(m_turret); 
 
+ 
+
   // The driver's controllers
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -49,6 +56,7 @@ public class RobotContainer {
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
+    initializeCamera();
     configureAutoChooser();
     configureButtonBindings(); // Configure the button bindings to commands using configureButtonBindings
                                // function
@@ -56,6 +64,14 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
   }
 
+  private void initializeCamera() {
+
+  HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
+  CameraServer.startAutomaticCapture(limelight);
+
+  Shuffleboard.getTab("RobotData").add("Limelight Baby", limelight).withPosition(2, 0).withSize(2, 2)
+      .withWidget(BuiltInWidgets.kCameraStream);
+  }
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of

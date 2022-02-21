@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.*;
 //import frc.robot.Subsystems.EncoderTestSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
+import frc.robot.Subsystems.Limelight;
 import frc.robot.Subsystems.Turret;
 
 
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain;
   //private EncoderTestSubsystem encoderTestSubsystem;
   private Turret turret;
+  private Limelight limelight;
   
   /**
    * This function is run when the robot is first started up and should be used
@@ -114,11 +116,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    if(limelight == null){  //This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
+      limelight = new Limelight();}
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    limelight.putDistance();
+    limelight.putTargetAcquired();
+    limelight.putValuesToShuffleboard();
   //encoderTestSubsystem.getEncoderPulses();
   //turret.displayTurretEncoderPulses();
 
