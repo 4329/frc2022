@@ -1,17 +1,15 @@
-package frc.robot.Subsystems.Swerve;
+package frc.robot.Subsystems;
 
 import frc.robot.Configrun;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-
 public class IntakeMotor {
 
     private TalonSRX intakeMotor = new TalonSRX(Configrun.get(40, "Intake_ID"));
-    double intakeSpeed = Configrun.get(0.2,"intakeSpeed");
+    double intakeSpeed = Configrun.get(0.2, "intakeSpeed");
 
-    public void runIntakeIn()
-    {
+    public void runIntakeIn() {
         intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
     }
 

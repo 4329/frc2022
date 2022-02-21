@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 
-public class IntakeSensors {
+public class IntakeSensors extends SubsystemBase {
 
     private final NetworkTableEntry topTriggerStatus;
     private final NetworkTableEntry bottomTriggerStatus;
@@ -17,10 +17,12 @@ public class IntakeSensors {
 
     public IntakeSensors() {
 
-        topTrigger = new DigitalInput(Configrun.get(1,"topTriggerPort"));
-        bottomTrigger = new DigitalInput(Configrun.get(3,"bottomTriggerPort"));
-        topTriggerStatus = Shuffleboard.getTab("Competition Info").add("Top Trigger", true).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-        bottomTriggerStatus = Shuffleboard.getTab("Competition Info").add("Bottom Trigger", true).withPosition(0, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        topTrigger = new DigitalInput(Configrun.get(1, "topTriggerPort"));
+        bottomTrigger = new DigitalInput(Configrun.get(3, "bottomTriggerPort"));
+        topTriggerStatus = Shuffleboard.getTab("Competition Info").add("Top Trigger", true)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        bottomTriggerStatus = Shuffleboard.getTab("Competition Info").add("Bottom Trigger", true).withPosition(0, 1)
+                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
     }
 
     public boolean topTrigger() {

@@ -15,14 +15,13 @@ public class ClimberButtonCommandReverse extends CommandBase {
     }
 
     public void execute() {
-            double climbPower = controller.getLeftTriggerAxis();
-            climber.reverseClimb(climbPower * -1);
+        double climbPower = controller.getLeftTriggerAxis();
+        climber.reverseClimb(climbPower * -1);
     }
-    
-    public void end(boolean interuppted) {
-            climber.stopClimb();
 
-    
+    public void end(boolean interuppted) {
+        climber.stopClimb();
+
     }
 
 }

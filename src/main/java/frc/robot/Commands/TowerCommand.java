@@ -6,7 +6,7 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 
 public class TowerCommand extends CommandBase {
-    
+
     StorageIntake storageIntake;
     ShooterFeedSubsytem shooterFeed;
     Shooter shooter;
@@ -31,7 +31,7 @@ public class TowerCommand extends CommandBase {
             storageIntake.storageIntakeIn();
             shooterFeed.shooterFeedUp();
         } else {
-            
+
             storageIntake.storageIntakeStop();
             shooterFeed.shooterFeedStop();
         }
@@ -47,7 +47,7 @@ public class TowerCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        
+
         return false;
     }
 

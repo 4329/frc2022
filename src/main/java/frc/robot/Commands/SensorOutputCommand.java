@@ -8,9 +8,10 @@ public class SensorOutputCommand extends CommandBase {
 
     public SensorOutputCommand(IntakeSensors intakeSensors) {
         this.intakeSensors = intakeSensors;
+        addRequirements(intakeSensors);
     }
 
-    public void execute() {//This command keeps the sensors updated for the Shuffleboard display.
+    public void execute() {// This command keeps the sensors updated for the Shuffleboard display.
         intakeSensors.topTrigger();
         intakeSensors.bottomTrigger();
     }

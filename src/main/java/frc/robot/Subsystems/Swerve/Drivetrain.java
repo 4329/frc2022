@@ -18,50 +18,55 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.*;
 
-  /**
-   * Implements a swerve Drivetrain Subsystem for the Robot
-   */
-  public class Drivetrain extends SubsystemBase {
+/**
+ * Implements a swerve Drivetrain Subsystem for the Robot
+ */
+public class Drivetrain extends SubsystemBase {
 
-  //Create the PIDController for the Keep Angle PID
+  // Create the PIDController for the Keep Angle PID
   private final PIDController m_keepAnglePID = new PIDController(DriveConstants.kKeepAnglePID[0],
-    DriveConstants.kKeepAnglePID[1],DriveConstants.kKeepAnglePID[2]);
+      DriveConstants.kKeepAnglePID[1], DriveConstants.kKeepAnglePID[2]);
 
-  private double keepAngle = 0.0;       //Double to store the current target keepAngle in radians
-  private double timeSinceRot = 0.0;    //Double to store the time since last rotation command
-  private double lastRotTime = 0.0;     //Double to store the time of the last rotation command
-  private double timeSinceDrive = 0.0;  //Double to store the time since last translation command
-  private double lastDriveTime = 0.0;   //Double to store the time of the last translation command
+  private double keepAngle = 0.0; // Double to store the current target keepAngle in radians
+  private double timeSinceRot = 0.0; // Double to store the time since last rotation command
+  private double lastRotTime = 0.0; // Double to store the time of the last rotation command
+  private double timeSinceDrive = 0.0; // Double to store the time since last translation command
+  private double lastDriveTime = 0.0; // Double to store the time of the last translation command
 
-  private final Timer keepAngleTimer = new Timer(); //Creates timer used in the perform keep angle function
+  private final Timer keepAngleTimer = new Timer(); // Creates timer used in the perform keep angle function
 
-  //Creates a swerveModule object for the front left swerve module feeding in parameters from the constants file
+  // Creates a swerveModule object for the front left swerve module feeding in
+  // parameters from the constants file
   private final SwerveModule m_frontLeft = new SwerveModule(DriveConstants.kFrontLeftDriveMotorPort,
       DriveConstants.kFrontLeftTurningMotorPort, DriveConstants.kFrontLeftTurningEncoderPort,
       DriveConstants.kFrontLeftOffset, DriveConstants.kFrontLeftTuningVals);
 
-  //Creates a swerveModule object for the front right swerve module feeding in parameters from the constants file
+  // Creates a swerveModule object for the front right swerve module feeding in
+  // parameters from the constants file
   private final SwerveModule m_frontRight = new SwerveModule(DriveConstants.kFrontRightDriveMotorPort,
       DriveConstants.kFrontRightTurningMotorPort, DriveConstants.kFrontRightTurningEncoderPort,
       DriveConstants.kFrontRightOffset, DriveConstants.kFrontRightTuningVals);
 
-  //Creates a swerveModule object for the back left swerve module feeding in parameters from the constants file
+  // Creates a swerveModule object for the back left swerve module feeding in
+  // parameters from the constants file
   private final SwerveModule m_backLeft = new SwerveModule(DriveConstants.kBackLeftDriveMotorPort,
       DriveConstants.kBackLeftTurningMotorPort, DriveConstants.kBackLeftTurningEncoderPort,
       DriveConstants.kBackLeftOffset, DriveConstants.kBackLeftTuningVals);
 
-  //Creates a swerveModule object for the back right swerve module feeding in parameters from the constants file
+  // Creates a swerveModule object for the back right swerve module feeding in
+  // parameters from the constants file
   private final SwerveModule m_backRight = new SwerveModule(DriveConstants.kBackRightDriveMotorPort,
       DriveConstants.kBackRightTurningMotorPort, DriveConstants.kBackRightTurningEncoderPort,
       DriveConstants.kBackRightOffset, DriveConstants.kBackRightTuningVals);
 
-  //Creates an ahrs gyro (NavX) on the MXP port of the RoboRIO
+  // Creates an ahrs gyro (NavX) on the MXP port of the RoboRIO
   private static AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
-  //Creates Odometry object to store the pose of the robot
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, ahrs.getRotation2d());
+  // Creates Odometry object to store the pose of the robot
+  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
+      ahrs.getRotation2d());
 
-    /**
+  /**
    * Constructs a Drivetrain and resets the Gyro and Keep Angle parameters
    */
   public Drivetrain() {
@@ -82,28 +87,33 @@ import frc.robot.Constants.*;
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    rot = performKeepAngle(xSpeed,ySpeed,rot); //Calls the keep angle function to update the keep angle or rotate depending on driver input
+    rot = performKeepAngle(xSpeed, ySpeed, rot); // Calls the keep angle function to update the keep angle or rotate
+                                                 // depending on driver input
 
     SmartDashboard.putNumber("xSpeed Commanded", xSpeed);
     SmartDashboard.putNumber("ySpeed Commanded", ySpeed);
 
-    //creates an array of the desired swerve module states based on driver command and if the commands are field relative or not
+    // creates an array of the desired swerve module states based on driver command
+    // and if the commands are field relative or not
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, ahrs.getRotation2d())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-    //normalize wheel speeds so all individual states are scaled to achievable velocities
+    // normalize wheel speeds so all individual states are scaled to achievable
+    // velocities
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
     setModuleStates(swerveModuleStates);
   }
-  @Override
-  public void periodic(){
-        //Update swerve drive odometry periodically so robot pose can be tracked
-        updateOdometry();
 
-        //Calls get pose function which sends the Pose information to the SmartDashboard
-        getPose();
+  @Override
+  public void periodic() {
+    // Update swerve drive odometry periodically so robot pose can be tracked
+    updateOdometry();
+
+    // Calls get pose function which sends the Pose information to the
+    // SmartDashboard
+    getPose();
   }
 
   /**
@@ -113,14 +123,14 @@ import frc.robot.Constants.*;
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    SmartDashboard.putNumber("desired angle 1",desiredStates[0].angle.getRadians());
+    SmartDashboard.putNumber("desired angle 1", desiredStates[0].angle.getRadians());
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_backLeft.setDesiredState(desiredStates[2]);
     m_backRight.setDesiredState(desiredStates[3]);
   }
 
-  public void stop(){
+  public void stop() {
     m_frontLeft.stop();
     m_frontRight.stop();
     m_backLeft.stop();
@@ -138,15 +148,19 @@ import frc.robot.Constants.*;
 
   /**
    * Function to retrieve latest robot gyro angle.
+   * 
    * @return Rotation2d object containing Gyro angle
    */
   public Rotation2d getGyro() {
     return ahrs.getRotation2d();
   }
 
-    /**
-   * Function created to retreieve and push the robot pose to the SmartDashboard for diagnostics
-   * @return Pose2d object containing the X and Y position and the heading of the robot.
+  /**
+   * Function created to retreieve and push the robot pose to the SmartDashboard
+   * for diagnostics
+   * 
+   * @return Pose2d object containing the X and Y position and the heading of the
+   *         robot.
    */
   public Pose2d getPose() {
     SmartDashboard.putNumber("Robot X", m_odometry.getPoseMeters().getX());
@@ -167,68 +181,89 @@ import frc.robot.Constants.*;
   }
 
   /**
-   * Converts the 4 swerve module states into a chassisSpeed by making use of the swerve drive kinematics.
+   * Converts the 4 swerve module states into a chassisSpeed by making use of the
+   * swerve drive kinematics.
+   * 
    * @return ChassisSpeeds object containing robot X, Y, and Angular velocity
    */
-  public ChassisSpeeds getChassisSpeed(){
-    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
-    m_backRight.getState());
+  public ChassisSpeeds getChassisSpeed() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
+        m_backLeft.getState(),
+        m_backRight.getState());
   }
 
-  public ChassisSpeeds getFieldRelativeSpeeds(){
+  public ChassisSpeeds getFieldRelativeSpeeds() {
     return new ChassisSpeeds(
-        getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getCos() - getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getSin(),
-        getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getCos() + getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getSin(),
+        getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getCos()
+            - getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getSin(),
+        getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getCos()
+            + getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getSin(),
         getChassisSpeed().omegaRadiansPerSecond);
   }
 
   /**
-   * Keep angle function is performed to combat drivetrain drift without the need of constant "micro-adjustments" from the driver.
-   * A PIDController is used to attempt to maintain the robot heading to the keepAngle value. This value is updated when the robot
+   * Keep angle function is performed to combat drivetrain drift without the need
+   * of constant "micro-adjustments" from the driver.
+   * A PIDController is used to attempt to maintain the robot heading to the
+   * keepAngle value. This value is updated when the robot
    * is rotated manually by the driver input
+   * 
    * @return rotation command in radians/s
    * @param xSpeed is the input drive X speed command
    * @param ySpeed is the input drive Y speed command
-   * @param rot is the input drive rotation speed command
+   * @param rot    is the input drive rotation speed command
    */
-  private double performKeepAngle(double xSpeed, double ySpeed, double rot){
-    double output = rot; //Output shouold be set to the input rot command unless the Keep Angle PID is called
-    if(Math.abs(rot) >= DriveConstants.kMinRotationCommand){  //If the driver commands the robot to rotate set the last rotate time to the current time
+  private double performKeepAngle(double xSpeed, double ySpeed, double rot) {
+    double output = rot; // Output shouold be set to the input rot command unless the Keep Angle PID is
+                         // called
+    if (Math.abs(rot) >= DriveConstants.kMinRotationCommand) { // If the driver commands the robot to rotate set the
+                                                               // last rotate time to the current time
       lastRotTime = keepAngleTimer.get();
     }
-    if( Math.abs(xSpeed) >= DriveConstants.kMinTranslationCommand
-          || Math.abs(ySpeed) >= DriveConstants.kMinTranslationCommand){ //if driver commands robot to translate set the last drive time to the current time
+    if (Math.abs(xSpeed) >= DriveConstants.kMinTranslationCommand
+        || Math.abs(ySpeed) >= DriveConstants.kMinTranslationCommand) { // if driver commands robot to translate set the
+                                                                        // last drive time to the current time
       lastDriveTime = keepAngleTimer.get();
     }
-    timeSinceRot = keepAngleTimer.get()-lastRotTime;      //update variable to the current time - the last rotate time
-    timeSinceDrive = keepAngleTimer.get()-lastDriveTime;  //update variable to the current time - the last drive time
-    if(timeSinceRot < 0.5){                               //Update keepAngle up until 0.5s after rotate command stops to allow rotation move to finish
+    timeSinceRot = keepAngleTimer.get() - lastRotTime; // update variable to the current time - the last rotate time
+    timeSinceDrive = keepAngleTimer.get() - lastDriveTime; // update variable to the current time - the last drive time
+    if (timeSinceRot < 0.5) { // Update keepAngle up until 0.5s after rotate command stops to allow rotation
+                              // move to finish
       keepAngle = getGyro().getRadians();
-    }
-    else if(Math.abs(rot) < DriveConstants.kMinRotationCommand && timeSinceDrive < 0.75){ //Run Keep angle pid until 0.75s after drive command stops to combat decel drift
-      output = m_keepAnglePID.calculate(getGyro().getRadians(), keepAngle);               //Set output command to the result of the Keep Angle PID
+    } else if (Math.abs(rot) < DriveConstants.kMinRotationCommand && timeSinceDrive < 0.75) { // Run Keep angle pid
+                                                                                              // until 0.75s after drive
+                                                                                              // command stops to combat
+                                                                                              // decel drift
+      output = m_keepAnglePID.calculate(getGyro().getRadians(), keepAngle); // Set output command to the result of the
+                                                                            // Keep Angle PID
     }
     return output;
   }
-  public double getFrontLeftAngle(){
+
+  public double getFrontLeftAngle() {
     return m_frontLeft.getTurnEncoder();
   }
-  public double getFrontRightAngle(){
+
+  public double getFrontRightAngle() {
     return m_frontRight.getTurnEncoder();
   }
-  public double getBackLeftAngle(){
+
+  public double getBackLeftAngle() {
     return m_backLeft.getTurnEncoder();
   }
-  public double getBackRightAngle(){
+
+  public double getBackRightAngle() {
     return m_backRight.getTurnEncoder();
   }
-  public void brakeMode(){
+
+  public void brakeMode() {
     m_frontLeft.brakeModeModule();
     m_frontRight.brakeModeModule();
     m_backLeft.brakeModeModule();
     m_backRight.brakeModeModule();
   }
-  public void coastMode(){
+
+  public void coastMode() {
     m_frontLeft.coastModeModule();
     m_frontRight.coastModeModule();
     m_backLeft.coastModeModule();

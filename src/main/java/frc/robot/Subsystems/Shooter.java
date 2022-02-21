@@ -10,8 +10,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
-public class Shooter
-{
+public class Shooter {
 
   private PIDController shooterPID;
   private TalonFX shooterwheel1;
@@ -22,14 +21,16 @@ public class Shooter
   private NetworkTableEntry percentEntry;
   private NetworkTableEntry pidErrorEntry;
 
-  public Shooter (){
+  public Shooter() {
 
     percentEntry = Shuffleboard.getTab("shooteryness").add("percent", percent).withWidget("Graph").getEntry();
-    pidErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Error", 1).withWidget("Graph").withPosition(3, 0).getEntry();
-    shooterPID = new PIDController(Configrun.get(0.5, "ShooterP"), Configrun.get(0, "ShooterI"), Configrun.get(0, "ShooterD"));
+    pidErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Error", 1).withWidget("Graph").withPosition(3, 0)
+        .getEntry();
+    shooterPID = new PIDController(Configrun.get(0.5, "ShooterP"), Configrun.get(0, "ShooterI"),
+        Configrun.get(0, "ShooterD"));
     shooterPID.setTolerance(Configrun.get(2000, "ShooterTolerance"));
-    shooterwheel1 = new TalonFX(Configrun.get(13, "ShooterWheel1ID" ));
-    shooterwheel2 = new TalonFX(Configrun.get(14, "ShooterWheel2ID" ));
+    shooterwheel1 = new TalonFX(Configrun.get(13, "ShooterWheel1ID"));
+    shooterwheel2 = new TalonFX(Configrun.get(14, "ShooterWheel2ID"));
     shooterwheel1.setInverted(true);
     shooterwheel2.setInverted(true);
     shooterwheel2.follow(shooterwheel1, FollowerType.PercentOutput);
@@ -42,15 +43,15 @@ public class Shooter
    * @param shooterSetpoint
    */
   public void shoot(double shooterSetpoint) {
-        
+
     double pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     double setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     double pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-    //kMaxrpm = 6380;
-    //sensor units per rotation = 2048
-    //kGearRotation = 1
-    //maxPowerCtre = 21,777
-    double maxPowerCtre = (6380/600) * (2048/1);
+    // kMaxrpm = 6380;
+    // sensor units per rotation = 2048
+    // kGearRotation = 1
+    // maxPowerCtre = 21,777
+    double maxPowerCtre = (6380 / 600) * (2048 / 1);
     percent = pidCalculated / maxPowerCtre;
     percent = percent + (percent * feedForward);
     shooterwheel1.set(ControlMode.PercentOutput, percent);
@@ -61,7 +62,7 @@ public class Shooter
 
     shooterwheel1.set(ControlMode.PercentOutput, 0);
   }
- 
+
   /**
    * @return Whether or not shooterPID is within tolerance
    */

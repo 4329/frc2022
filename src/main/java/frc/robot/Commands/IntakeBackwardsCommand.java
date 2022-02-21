@@ -1,11 +1,11 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Subsystems.IntakeMotor;
+import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 //import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
-import frc.robot.Subsystems.Swerve.IntakeMotor;
-import frc.robot.Subsystems.Swerve.IntakeSolenoidSubsystem;
 
 public class IntakeBackwardsCommand extends CommandBase {
     private ShooterFeedSubsytem shooterFeed;
@@ -13,7 +13,8 @@ public class IntakeBackwardsCommand extends CommandBase {
     private IntakeMotor intakeMotor;
     private IntakeSolenoidSubsystem intakeSolenoid;
 
-    public IntakeBackwardsCommand( ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor, IntakeSolenoidSubsystem intakeSolenoid) {
+    public IntakeBackwardsCommand(ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor,
+            IntakeSolenoidSubsystem intakeSolenoid) {
         this.shooterFeed = shooterFeed;
         this.storageIntake = storageIntake;
         this.intakeMotor = intakeMotor;
@@ -22,7 +23,7 @@ public class IntakeBackwardsCommand extends CommandBase {
 
     public void initialize() {
 
-       //intakeSolenoid.intakeDown();
+        // intakeSolenoid.intakeDown();
         intakeMotor.runIntakeOut();
         storageIntake.storageIntakeOut();
         shooterFeed.shooterFeedDown();
@@ -32,7 +33,7 @@ public class IntakeBackwardsCommand extends CommandBase {
     public void end(boolean interrupted) {
         storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
-        //intakeSolenoid.intakeUp();
+        // intakeSolenoid.intakeUp();
         shooterFeed.shooterFeedStop();
     }
 

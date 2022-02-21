@@ -40,17 +40,17 @@ public class AutoFromPathPlanner extends SequentialCommandGroup {
 
     // Run path following command, then stop at the end.
     addCommands(
-      swerveControllerCommand, 
-      new InstantCommand(()->drive.stop()));
+        swerveControllerCommand,
+        new InstantCommand(() -> drive.stop()));
 
   }
 
   /**
    * Gets robot pose at the path's first point
    */
-  public Pose2d getInitialPose(){
+  public Pose2d getInitialPose() {
     return new Pose2d(m_trajectory.getInitialState().poseMeters.getX(),
-    m_trajectory.getInitialState().poseMeters.getY(),
-    m_trajectory.getInitialState().holonomicRotation);
+        m_trajectory.getInitialState().poseMeters.getY(),
+        m_trajectory.getInitialState().holonomicRotation);
   }
 }
