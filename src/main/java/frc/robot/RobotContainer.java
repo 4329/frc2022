@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
@@ -37,6 +40,9 @@ import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.Drivetrain;
+import frc.robot.Subsystems.Turret;
+
+import frc.robot.Subsystems.Swerve.IntakeMotor;
 import frc.robot.Utilities.JoystickAnalogButton;
 
 /*
@@ -58,6 +64,7 @@ public class RobotContainer {
   private final IntakeMotor intakeMotor;
   private final Shooter shooter;
   private final Climber climber;
+  private final Turret turret;
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -90,6 +97,7 @@ public class RobotContainer {
     climber = new Climber(pneumaticHub);
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
+    turret = new Turret();
 
     initializeCamera();
 
@@ -160,6 +168,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
+    new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(new InstantCommand(turret::setPositonFromShuffleBoard, turret));
+
 
     new JoystickAnalogButton(m_operatorController, false)
         .whenHeld(new ClimberButtonCommand(m_operatorController, climber));
