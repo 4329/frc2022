@@ -25,6 +25,8 @@ backRightOffset = 2.79
 Intake_ID = 40
 intakeSpeed = 0.2
 intakeUp = false
+intakeSolenoidID_1 = 0
+intakeSolenoidID_2 = 1
 
 PH_CAN_ID = 61
 
@@ -50,9 +52,12 @@ BackShooterFeedDown = 0.5
 
 ShooterFeedPower = 0.5
 
-pivotSolenoidID = 1
-shiftSolenoidID = 2
-extendSolenoidID = 3
+pivotSolenoidID_1 = 4
+shiftSolenoidID_1 = 2
+extendSolenoidID_1 = 6
+pivotSolenoidID_2 = 5
+shiftSolenoidID_2 = 3
+extendSolenoidID_2 = 7
 
 climberMotor1ID = 9
 climberMotor2ID = 10

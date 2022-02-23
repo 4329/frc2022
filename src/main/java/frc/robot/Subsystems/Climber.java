@@ -4,16 +4,18 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
 public class Climber {
-    private final Solenoid pivotSolenoid;
-    private final Solenoid shiftSolenoid;
-    private final Solenoid extendSolenoid;
+    private final DoubleSolenoid pivotSolenoid;
+    private final DoubleSolenoid shiftSolenoid;
+    private final DoubleSolenoid extendSolenoid;
     private final CANSparkMax climberNeoMotor1;
     private final CANSparkMax climberNeoMotor2;
     private final CANSparkMax climberNeoMotor3;
@@ -27,9 +29,9 @@ public class Climber {
 
     public Climber(PneumaticHub hubbie) {
 
-        pivotSolenoid = hubbie.makeSolenoid(Configrun.get(1, "pivotSolenoidID"));
-        shiftSolenoid = hubbie.makeSolenoid(Configrun.get(2, "shiftSolenoidID"));
-        extendSolenoid = hubbie.makeSolenoid(Configrun.get(3, "extendSolenoidID"));
+        pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(4, "pivotSolenoidID_1"), Configrun.get(5, "pivotSolenoidID_2"));
+        shiftSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
+        extendSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
         climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
         climberNeoMotor2 = new CANSparkMax(Configrun.get(10, "climberMotor2ID"), MotorType.kBrushless);
         climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
@@ -43,33 +45,33 @@ public class Climber {
     }
 
     public void pivotClimber() {
-        pivotSolenoid.set(true);
+        pivotSolenoid.set(Value.kForward);
         isPivotedShuffleboard.setBoolean(true);
     }
 
     public void reversePivotClimber() {
-        pivotSolenoid.set(false);
+        pivotSolenoid.set(Value.kReverse);
         isPivotedShuffleboard.setBoolean(false);
 
     }
 
     public void shift() {
 
-        shiftSolenoid.set(true);
+        shiftSolenoid.set(Value.kForward);
         shifted = true;
         isShiftedShuffleboard.setBoolean(true);
     }
 
     public void unShift() {
 
-        shiftSolenoid.set(false);
+        shiftSolenoid.set(Value.kReverse);
         shifted = false;
         isShiftedShuffleboard.setBoolean(false);
     }
 
     public void extend() {
 
-        extendSolenoid.set(true);
+        extendSolenoid.set(Value.kForward);
         shift();
         isExtendedShuffleboard.setBoolean(true);
 
@@ -77,7 +79,7 @@ public class Climber {
 
     public void retract() {
 
-        extendSolenoid.set(false);
+        extendSolenoid.set(Value.kReverse);
         unShift();
         isExtendedShuffleboard.setBoolean(false);
     }
