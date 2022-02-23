@@ -187,7 +187,7 @@ public class RobotContainer {
     //Pulls autos
     moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
     twoPaths = new TwoPathsAuto(m_robotDrive);
-    intakeRun = new IntakeRunAuto(m_robotDrive);
+    intakeRun = new IntakeRunAuto(m_robotDrive, intakeMotor, intakeSolenoid);
 
     //Adds autos to the chooser
     m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);

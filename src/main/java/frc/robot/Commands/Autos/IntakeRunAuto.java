@@ -7,11 +7,11 @@ import frc.robot.Constants;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Subsystems.Swerve.IntakeMotor;
+import frc.robot.Subsystems.Swerve.IntakeSolenoidSubsystem;
 import frc.robot.Utilities.AutoFromPathPlanner;
 
 public class IntakeRunAuto extends SequentialCommandGroup{
 
-    private IntakeMotor intakeMotor = new IntakeMotor();
 
     /**
      * Moves the robot one meter forward, 
@@ -20,7 +20,7 @@ public class IntakeRunAuto extends SequentialCommandGroup{
      * 
      * @param drive
      */
-    public IntakeRunAuto(Drivetrain drive) {
+    public IntakeRunAuto(Drivetrain drive, IntakeMotor intakeMotor, IntakeSolenoidSubsystem intakeSolenoid) {
         
         final AutoFromPathPlanner moveOneMeter = new AutoFromPathPlanner(drive, "distancepath", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner moveOneMeter2 = new AutoFromPathPlanner(drive, "distancepath2", Constants.AutoConstants.kMaxSpeed);
@@ -28,7 +28,7 @@ public class IntakeRunAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->drive.resetOdometry(moveOneMeter.getInitialPose())),
             moveOneMeter,
-            new IntakeRunCommand(intakeMotor, null).withTimeout(1),
+            new IntakeRunCommand(intakeMotor, intakeSolenoid).withTimeout(1),
             moveOneMeter2
         );
     }
