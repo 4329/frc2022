@@ -42,6 +42,7 @@ public class Climber {
         isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot Active", false).getEntry();
         isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Extetend Active", false).getEntry();
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Moters Active", false).getEntry();
+        retract();
     }
 
     public void pivotClimber() {
@@ -71,7 +72,7 @@ public class Climber {
 
     public void extend() {
 
-        extendSolenoid.set(Value.kForward);
+        extendSolenoid.set(Value.kReverse);
         shift();
         isExtendedShuffleboard.setBoolean(true);
 
@@ -79,7 +80,7 @@ public class Climber {
 
     public void retract() {
 
-        extendSolenoid.set(Value.kReverse);
+        extendSolenoid.set(Value.kForward);
         unShift();
         isExtendedShuffleboard.setBoolean(false);
     }
