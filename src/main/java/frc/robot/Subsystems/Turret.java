@@ -194,14 +194,14 @@ import frc.robot.Utilities.*;
     if (trackTarget){
       final double staticGain = TurretConstants.kStaticGain*Math.signum(output);
       m_turretMotor.set(TalonSRXControlMode.PercentOutput, output + staticGain);
-      //System.out.println("output" + output);
+      System.out.println("output" + output);
       //System.out.println(TalonSRXControlMode.PercentOutput);
       //System.out.println("setpipnt" + setpoint);
       //System.out.println("turretEncoder Possition in radians" + (turretEncoder.getPwmPosition() + 127) / 4029.0 * 2.0 * Math.PI);
       //System.out.println("turret encoder possitionn raw" + turretEncoder.getPwmPosition());
       //System.out.println("turret possition READ" + getPotentionmeter());  
-      System.out.println(Limelight.checkTx());
-      //System.out.println("the setSetpoint is" + setpoint);
+      //System.out.println(Limelight.checkTx());
+      System.out.println("the setSetpoint is" + setpoint);
     }
   }
 
