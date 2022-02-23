@@ -26,6 +26,9 @@ import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.TowerCommand;
+import frc.robot.Commands.TurretCommandsRight;
+import frc.robot.Commands.TurretCommandsLeft;
+import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
@@ -55,6 +58,7 @@ public class RobotContainer {
   private final StorageIntake storageIntake;
   private final IntakeSensors intakeSensors;
   private final ShooterFeedSubsytem shooterFeed;
+  private final TurretSubsystem turretSubsystem;
   private final IntakeSolenoidSubsystem intakeSolenoid;
   private final IntakeMotor intakeMotor;
   private final Shooter shooter;
@@ -91,6 +95,7 @@ public class RobotContainer {
     climber = new Climber(pneumaticHub);
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
+    turretSubsystem = new TurretSubsystem();
 
     initializeCamera();
 

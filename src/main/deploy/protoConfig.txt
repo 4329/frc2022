@@ -31,7 +31,7 @@ intakeSolenoidID_2 = 1
 PH_CAN_ID = 61
 
 # Storage Intake
-storageIntakeID = 41
+storageIntakeID = 44
 storageIntakePower = 0.5
 
 #Digital input IDs
@@ -71,6 +71,13 @@ h1In = 36
 h21n = 104
 a1Degree = 11
 taTolerance = 0.3
+
+# Turret
+turretID = 41
+
+turretRightPower = 0.5
+turretLeftPower = 0.5
+turretStop = 0
 
 #Hood IDs
 HoodWheelID = 1
