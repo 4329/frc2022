@@ -25,17 +25,14 @@ public class Climber {
     private final NetworkTableEntry isExtendedShuffleboard;
     private final NetworkTableEntry isMoterActiveShuffleboard;
 
-
-
-
-    public Climber (PneumaticHub hubbie) {
+    public Climber(PneumaticHub hubbie) {
 
         pivotSolenoid = hubbie.makeSolenoid(Configrun.get(1, "pivotSolenoidID"));
         shiftSolenoid = hubbie.makeSolenoid(Configrun.get(2, "shiftSolenoidID"));
         extendSolenoid = hubbie.makeSolenoid(Configrun.get(3, "extendSolenoidID"));
-        climberNeoMotor1 = new CANSparkMax (Configrun.get(9,  "climberMotor1ID"), MotorType.kBrushless);
-        climberNeoMotor2 = new CANSparkMax (Configrun.get(10,  "climberMotor2ID"), MotorType.kBrushless);
-        climberNeoMotor3 = new CANSparkMax (Configrun.get(11,  "climberMotor3ID"), MotorType.kBrushless);
+        climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
+        climberNeoMotor2 = new CANSparkMax(Configrun.get(10, "climberMotor2ID"), MotorType.kBrushless);
+        climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
         climberNeoMotor2.follow(climberNeoMotor1);
         climberNeoMotor3.follow(climberNeoMotor1);
 
@@ -46,10 +43,11 @@ public class Climber {
     }
 
     public void pivotClimber() {
-        pivotSolenoid.set(true); 
+        pivotSolenoid.set(true);
         isPivotedShuffleboard.setBoolean(true);
     }
-    public void reversePivotClimber(){
+
+    public void reversePivotClimber() {
         pivotSolenoid.set(false);
         isPivotedShuffleboard.setBoolean(false);
 
@@ -68,15 +66,15 @@ public class Climber {
         shifted = false;
         isShiftedShuffleboard.setBoolean(false);
     }
-    
+
     public void extend() {
 
         extendSolenoid.set(true);
         shift();
         isExtendedShuffleboard.setBoolean(true);
 
-
     }
+
     public void retract() {
 
         extendSolenoid.set(false);
@@ -87,14 +85,14 @@ public class Climber {
     public void climb(double climbPower) {
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
-     
+
     }
 
     public void stopClimb() {
 
         climberNeoMotor1.set(0);
         isMoterActiveShuffleboard.setBoolean(false);
-    }        
+    }
 
     public void reverseClimb(double climbPower) {
 
@@ -107,12 +105,11 @@ public class Climber {
 
             reversePivotClimber();
             pivoted = false;
-        }
-        else {
+        } else {
 
             pivotClimber();
             pivoted = true;
-        }       
+        }
     }
 
     public void toggleShift() {
@@ -120,24 +117,15 @@ public class Climber {
         if (shifted) {
 
             unShift();
-        }
-        else {
+        } else {
 
             shift();
         }
     }
 
-
-
-
-
-
-
-
-    
-    // extend - 
+    // extend -
     // pivotcommand -- toggle
-    // shift + extend  
+    // shift + extend
     // unshift + retract
 
     // climb == while held

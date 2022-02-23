@@ -1,10 +1,10 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.Swerve.IntakeSolenoidSubsystem;
+import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 
 public class IntakePosCommand extends CommandBase {
-    
+
     IntakeSolenoidSubsystem intakeSolenoid;
 
     public IntakePosCommand(IntakeSolenoidSubsystem intakeSolenoid) {
@@ -13,7 +13,7 @@ public class IntakePosCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        
+
         intakeSolenoid.changeIntake();
     }
 

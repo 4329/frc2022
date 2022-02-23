@@ -4,24 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.LimelightSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
-
-import com.kauailabs.navx.frc.Tracer;
-
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.Solenoid;
-import frc.robot.Subsystems.LimelightSubsystem
-;
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,7 +29,7 @@ public class Robot extends TimedRobot {
   private double coastWait;
 
   private LimelightSubsystem limelightSubsystem;
-  
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -76,7 +66,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //SmartDashboard.putBoolean("Get Solenoid", m_Solenoid.get());
+    // SmartDashboard.putBoolean("Get Solenoid", m_Solenoid.get());
 
   }
 
@@ -86,7 +76,7 @@ public class Robot extends TimedRobot {
     drivetrain.brakeMode();
     coastWait = RobotController.getFPGATime();
     m_robotContainer.disableRobot();
-    
+
   }
 
   @Override
@@ -123,7 +113,6 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
   }
 
-
   @Override
   public void teleopInit() {
     drivetrain.brakeMode();
@@ -140,10 +129,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
-    //RobotContainer.limelightSubsystem = limeputDistance();
+    // m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
+    // RobotContainer.limelightSubsystem = limeputDistance();
   }
-
 
   @Override
   public void testInit() {
@@ -151,12 +139,14 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     drivetrain.coastMode();
 
-    if(m_swerveAlignment == null){//This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
+    if (m_swerveAlignment == null) {// This prevents 2 sets of widgets from appearing when disabling & enabling the
+                                    // robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
 
-    if(limelightSubsystem == null){  //This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
+    if (limelightSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
+                                      // robot, causing a crash
       limelightSubsystem = new LimelightSubsystem();
     }
 

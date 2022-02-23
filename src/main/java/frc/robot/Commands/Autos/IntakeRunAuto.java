@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Commands.IntakeRunCommand;
+import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.Swerve.Drivetrain;
-import frc.robot.Subsystems.Swerve.IntakeMotor;
 import frc.robot.Utilities.AutoFromPathPlanner;
 
 public class IntakeRunAuto extends SequentialCommandGroup{

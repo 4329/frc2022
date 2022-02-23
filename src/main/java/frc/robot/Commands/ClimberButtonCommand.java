@@ -15,11 +15,11 @@ public class ClimberButtonCommand extends CommandBase {
     }
 
     public void execute() {
-            double climbPower = controller.getRightTriggerAxis();
-            climber.climb(climbPower);
+        double climbPower = controller.getRightTriggerAxis();
+        climber.climb(climbPower);
     }
-    
+
     public void end(boolean interuppted) {
-            climber.stopClimb();
+        climber.stopClimb();
     }
 }

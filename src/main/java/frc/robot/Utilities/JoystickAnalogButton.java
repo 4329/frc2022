@@ -13,19 +13,18 @@ public class JoystickAnalogButton extends Button {
    * Create a button for triggering commands off a controller's analog axis
    * 
    * @param controller The controller to use
-   * @param side Which side of the controller (Left = true, Right = false)
+   * @param side       Which side of the controller (Left = true, Right = false)
    */
   public JoystickAnalogButton(XboxController controller, boolean side) {
-      m_controller = controller;
-      m_side = side;
+    m_controller = controller;
+    m_side = side;
   }
 
   public boolean get() {
-    if(m_side){
-      return m_controller.getLeftTriggerAxis() > m_threshold; 
-    }
-    else{
-      return m_controller.getRightTriggerAxis() > m_threshold; 
+    if (m_side) {
+      return m_controller.getLeftTriggerAxis() > m_threshold;
+    } else {
+      return m_controller.getRightTriggerAxis() > m_threshold;
     }
   }
 

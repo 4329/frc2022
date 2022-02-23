@@ -16,17 +16,19 @@ public class PathPlanner {
 
     /**
      * Load a path file from storage
-     * @param name The name of the path to load
-     * @param maxVel Max velocity of the path
+     * 
+     * @param name     The name of the path to load
+     * @param maxVel   Max velocity of the path
      * @param maxAccel Max velocity of the path
      * @param reversed whether the robot should follow this path while reversed
      * @return The generated path
      */
     public static PathPlannerTrajectory loadPath(String name, double maxVel, double maxAccel, boolean reversed) {
-        try(BufferedReader br = new BufferedReader(new FileReader(new File(Filesystem.getDeployDirectory(), "pathplanner/" + name + ".path")))){
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(new File(Filesystem.getDeployDirectory(), "pathplanner/" + name + ".path")))) {
             StringBuilder fileContentBuilder = new StringBuilder();
             String line;
-            while((line = br.readLine()) != null){
+            while ((line = br.readLine()) != null) {
                 fileContentBuilder.append(line);
             }
 
@@ -41,18 +43,21 @@ public class PathPlanner {
                 JSONObject jsonWaypoint = (JSONObject) waypoint;
 
                 JSONObject jsonAnchor = (JSONObject) jsonWaypoint.get("anchorPoint");
-                Translation2d anchorPoint = new Translation2d((double) jsonAnchor.get("x"), (double) jsonAnchor.get("y"));
+                Translation2d anchorPoint = new Translation2d((double) jsonAnchor.get("x"),
+                        (double) jsonAnchor.get("y"));
 
                 JSONObject jsonPrevControl = (JSONObject) jsonWaypoint.get("prevControl");
                 Translation2d prevControl = null;
                 if (jsonPrevControl != null) {
-                    prevControl = new Translation2d((double) jsonPrevControl.get("x"), (double) jsonPrevControl.get("y"));
+                    prevControl = new Translation2d((double) jsonPrevControl.get("x"),
+                            (double) jsonPrevControl.get("y"));
                 }
 
                 JSONObject jsonNextControl = (JSONObject) jsonWaypoint.get("nextControl");
                 Translation2d nextControl = null;
                 if (jsonNextControl != null) {
-                    nextControl = new Translation2d((double) jsonNextControl.get("x"), (double) jsonNextControl.get("y"));
+                    nextControl = new Translation2d((double) jsonNextControl.get("x"),
+                            (double) jsonNextControl.get("y"));
                 }
 
                 Rotation2d holonomicAngle = Rotation2d.fromDegrees((double) jsonWaypoint.get("holonomicAngle"));
@@ -62,18 +67,19 @@ public class PathPlanner {
                     velOverride = (double) jsonWaypoint.get("velOverride");
                 }
 
-                waypoints.add(new PathPlannerTrajectory.Waypoint(anchorPoint, prevControl, nextControl, velOverride, holonomicAngle, isReversal));
+                waypoints.add(new PathPlannerTrajectory.Waypoint(anchorPoint, prevControl, nextControl, velOverride,
+                        holonomicAngle, isReversal));
             }
 
             ArrayList<ArrayList<PathPlannerTrajectory.Waypoint>> splitPaths = new ArrayList<>();
             ArrayList<PathPlannerTrajectory.Waypoint> currentPath = new ArrayList<>();
 
-            for(int i = 0; i < waypoints.size(); i++){
+            for (int i = 0; i < waypoints.size(); i++) {
                 PathPlannerTrajectory.Waypoint w = waypoints.get(i);
 
                 currentPath.add(w);
 
-                if(w.isReversal || i == waypoints.size() - 1){
+                if (w.isReversal || i == waypoints.size() - 1) {
                     splitPaths.add(currentPath);
                     currentPath = new ArrayList<>();
                     currentPath.add(w);
@@ -82,13 +88,13 @@ public class PathPlanner {
 
             ArrayList<PathPlannerTrajectory> paths = new ArrayList<>();
             boolean shouldReverse = reversed;
-            for(int i = 0; i < splitPaths.size(); i++){
+            for (int i = 0; i < splitPaths.size(); i++) {
                 paths.add(new PathPlannerTrajectory(splitPaths.get(i), maxVel, maxAccel, shouldReverse));
                 shouldReverse = !shouldReverse;
             }
 
             return joinPaths(paths);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -96,23 +102,24 @@ public class PathPlanner {
 
     /**
      * Load a path from storage
-     * @param name The name of the path to load
-     * @param maxVel Max velocity of the path
+     * 
+     * @param name     The name of the path to load
+     * @param maxVel   Max velocity of the path
      * @param maxAccel Max velocity of the path
      * @return The generated path
      */
-    public static PathPlannerTrajectory loadPath(String name, double maxVel, double maxAccel){
+    public static PathPlannerTrajectory loadPath(String name, double maxVel, double maxAccel) {
         return loadPath(name, maxVel, maxAccel, false);
     }
 
-    private static PathPlannerTrajectory joinPaths(ArrayList<PathPlannerTrajectory> paths){
+    private static PathPlannerTrajectory joinPaths(ArrayList<PathPlannerTrajectory> paths) {
         ArrayList<Trajectory.State> joinedStates = new ArrayList<>();
 
-        for(int i = 0; i < paths.size(); i++){
-            if (i != 0){
+        for (int i = 0; i < paths.size(); i++) {
+            if (i != 0) {
                 double lastEndTime = joinedStates.get(joinedStates.size() - 1).timeSeconds;
 
-                for(Trajectory.State s : paths.get(i).getStates()){
+                for (Trajectory.State s : paths.get(i).getStates()) {
                     s.timeSeconds += lastEndTime;
                 }
             }

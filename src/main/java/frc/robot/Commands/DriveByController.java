@@ -9,37 +9,41 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
-  /**
-   * Implements a DriveByController command which extends the CommandBase class
-   */
+/**
+ * Implements a DriveByController command which extends the CommandBase class
+ */
 public class DriveByController extends CommandBase {
   private final Drivetrain m_robotDrive;
   private final XboxController m_controller;
   private boolean fieldOrient = true;
 
-  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field orient on", true).getEntry();
-
- 
+  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field orient on", true)
+      .getEntry();
 
   /**
-   * Contructs a DriveByController object which applys the driver inputs from the controller to the swerve drivetrain
-   * @param drive is the swerve drivetrain object which should be created in the RobotContainer class
-   * @param controller is the user input controller object for controlling the drivetrain
+   * Contructs a DriveByController object which applys the driver inputs from the
+   * controller to the swerve drivetrain
+   * 
+   * @param drive      is the swerve drivetrain object which should be created in
+   *                   the RobotContainer class
+   * @param controller is the user input controller object for controlling the
+   *                   drivetrain
    */
   public DriveByController(Drivetrain drive, XboxController controller) {
-    m_robotDrive = drive;           //Set the private member to the input drivetrain
-    m_controller = controller;      //Set the private member to the input controller
-    addRequirements(m_robotDrive);  //Because this will be used as a default command, add the subsystem which will use this as the default
+    m_robotDrive = drive; // Set the private member to the input drivetrain
+    m_controller = controller; // Set the private member to the input controller
+    addRequirements(m_robotDrive); // Because this will be used as a default command, add the subsystem which will
+                                   // use this as the default
   }
 
-
   /**
-   * the execute function is overloaded with the function to drive the swerve drivetrain
+   * the execute function is overloaded with the function to drive the swerve
+   * drivetrain
    */
   @Override
   public void execute() {
     m_robotDrive.drive(
-        -inputTransform(m_controller.getLeftY()) 
+        -inputTransform(m_controller.getLeftY())
             * DriveConstants.kMaxSpeedMetersPerSecond,
         -inputTransform(m_controller.getLeftX())
             * DriveConstants.kMaxSpeedMetersPerSecond,
@@ -49,29 +53,35 @@ public class DriveByController extends CommandBase {
   }
 
   /**
-   * when this fucntion of the command is called the current fieldOrient boolean is flipped. This
-   * is fed into the drive command for the swerve drivetrain so the driver can decide to drive in 
+   * when this fucntion of the command is called the current fieldOrient boolean
+   * is flipped. This
+   * is fed into the drive command for the swerve drivetrain so the driver can
+   * decide to drive in
    * a robot oreinted when they please (not recommended in most instances)
    */
   public void changeFieldOrient() {
     if (fieldOrient == true) {
       fieldOrient = false;
       fieldOrientStatus.setBoolean(false);
-    } 
-    else {
+    } else {
       fieldOrient = true;
       fieldOrientStatus.setBoolean(true);
     }
   }
 
   /**
-   * This function takes the user input from the controller analog sticks, applys a deadband and then quadratically
-   * transforms the input so that it is easier for the user to drive, this is especially important on high torque motors 
-   * such as the NEOs or Falcons as it makes it more intuitive and easier to make small corrections
-   * @param input is the input value from the controller axis, should be a value between -1.0 and 1.0
+   * This function takes the user input from the controller analog sticks, applys
+   * a deadband and then quadratically
+   * transforms the input so that it is easier for the user to drive, this is
+   * especially important on high torque motors
+   * such as the NEOs or Falcons as it makes it more intuitive and easier to make
+   * small corrections
+   * 
+   * @param input is the input value from the controller axis, should be a value
+   *              between -1.0 and 1.0
    * @return the transformed input value
    */
-  private double inputTransform(double input){
+  private double inputTransform(double input) {
     return MathUtils.singedSquare(MathUtils.applyDeadband(input));
   }
 
