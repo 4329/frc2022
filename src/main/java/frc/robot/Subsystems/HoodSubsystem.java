@@ -32,7 +32,7 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodClose;
   private double hoodMiddle;
   private double hoodFar;
-  private static final int MAX_RANGE = 29;
+  private static final int MAX_RANGE = 33;
   // 29 is the max range the varaible hood can travel without hitting a hard limit
   // or throwing itself off the track
 
@@ -89,7 +89,7 @@ public class HoodSubsystem extends SubsystemBase {
   private void DetermineHoodProfiles() {
     hoodClose = hoodEncoder.getPosition();
     hoodMiddle = hoodEncoder.getPosition() + MAX_RANGE / 2;
-    hoodFar = hoodEncoder.getPosition() + 26; // Adding 26 instead of the max 29 incase the manual zero doesn't get it
+    hoodFar = hoodEncoder.getPosition() + 30; // Adding 30 instead of the max 33 incase the manual zero doesn't get it
                                               // to true 0
   }
 
@@ -102,7 +102,6 @@ public class HoodSubsystem extends SubsystemBase {
       hoodEncoder.setPosition(hoodFar);
     }
   }
-
   public enum HoodPosition {
     CLOSE, MIDDLE, FAR;
   }
