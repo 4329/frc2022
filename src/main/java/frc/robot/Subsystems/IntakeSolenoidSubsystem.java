@@ -21,7 +21,7 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
         intakeUp = Configrun.get(false, "intakeUp");
         // m_Solenoid = pneumaticHub.makeSolenoid(SOLENOID_CHANNEL);
         // m_Solenoid.set(Configrun.get(true, "intakeUp"));
-        m_doubleSolenoid = pneumaticHub.makeDoubleSolenoid(14, 15);
+        m_doubleSolenoid = pneumaticHub.makeDoubleSolenoid(Configrun.get(0, "intakeSolenoidID_1"), Configrun.get(1, "intakeSolenoidID_2"));
     }
 
     public void intakeUp() {

@@ -17,14 +17,16 @@ backLeftTurningEncoderPort = 2
 backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
-frontLeftOffset = 0.0
-frontRightOffset = 0.7853
-backLeftOffset = -0.0884
-backRightOffset = 2.79
+frontLeftOffset = 2.676
+frontRightOffset = 4.58
+backLeftOffset = 2.0
+backRightOffset = 0.54
 
 Intake_ID = 40
 intakeSpeed = 0.7
 intakeUp = false
+intakeSolenoidID_1 = 0
+intakeSolenoidID_2 = 1
 
 PH_CAN_ID = 61
 
@@ -37,9 +39,12 @@ FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
 ShooterFeedPower = 0.5
 
-pivotSolenoidID = 1
-shiftSolenoidID = 2
-extendSolenoidID = 3
+pivotSolenoidID_1 = 4
+shiftSolenoidID_1 = 2
+extendSolenoidID_1 = 6
+pivotSolenoidID_2 = 5
+shiftSolenoidID_2 = 3
+extendSolenoidID_2 = 7
 
 climberMotor1ID = 9
 climberMotor2ID = 10

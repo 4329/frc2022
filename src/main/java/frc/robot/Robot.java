@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.LimelightSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
+  private Climber climber;
 
   private double coastWait;
 
@@ -138,6 +140,7 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     drivetrain.coastMode();
+    
 
     if (m_swerveAlignment == null) {// This prevents 2 sets of widgets from appearing when disabling & enabling the
                                     // robot, causing a crash
