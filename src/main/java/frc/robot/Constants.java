@@ -197,11 +197,14 @@ public final class Constants {
    * Static method containing all Turret constants
    */
   public static final class TurretConstants {
-    public static final int kTurretPort = 1; // CANID of the turret motor controller
+    public static final int kTurretPort = 41; // CANID of the turret motor controller
     public static final int kTurretPotentiometerPort = 4; // Analog port of the turret analog potentiometer
-    public static final double kTurretTolerance = 0.0139626; // allowable angle error in radians for the PIDSubsystem to
+    public static final double kTurretTolerance = 1.5; // allowable angle error in degrees for the PIDSubsystem to
                                                              // report atSetpoint() to true
-    public static final double[] kTurretPID = { 1.6, 0.0, 0 }; // Defines the PID values for rotation of the turret
+    public static final double kTurretP = 1.6; // Defines the PID values for rotation of the turret
+    public static final double kTurretI = 0.0 ;
+    public static final double kTurretD = 0 ;
+
     public static final double kStaticGain = 0.025; // Limits Integral term so as to not wind up values when making
                                                     // larger moves
     public static final double kTurretLow = 1.00; // Minimum angle in radians allowed (defines the turret deadzone)

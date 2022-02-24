@@ -62,7 +62,7 @@ public class LimelightSubsystem extends SubsystemBase {
         getDistanceFromTargetDisplay.setDouble(getDistanceFromTarget());
     }
 
-    public double checkTx() {
+    public static double checkTx() {
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         double x = tx.getDouble(0.0);
