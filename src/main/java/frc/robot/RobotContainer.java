@@ -162,10 +162,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
 
-    new JoystickAnalogButton(m_operatorController, false)
-        .whenHeld(new ClimberButtonCommand(m_operatorController, climber));
-    new JoystickAnalogButton(m_operatorController, true)
-        .whenHeld(new ClimberButtonCommandReverse(m_operatorController, climber));
+    new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_operatorController, climber));
+    new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_operatorController, climber));
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));
 
   }
 

@@ -39,7 +39,7 @@ public class Climber {
         climberNeoMotor2.follow(climberNeoMotor1);
         climberNeoMotor3.follow(climberNeoMotor1);
 
-        isShiftedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Shift Active", false).getEntry();
+        isShiftedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch in Gear", false).getEntry();
         isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot Active", false).getEntry();
         isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Extetend Active", false).getEntry();
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Moters Active", false).getEntry();
@@ -57,14 +57,14 @@ public class Climber {
 
     }
 
-    public void shift() {//neutral or engage
+    public void engage() {//neutral or engage
 
         shiftSolenoid.set(Value.kForward);
         shifted = true;
         isShiftedShuffleboard.setBoolean(true);
     }
 
-    public void unShift() {//neutral or engage
+    public void neutral() {//neutral or engage
 
         shiftSolenoid.set(Value.kReverse);
         shifted = false;
@@ -74,7 +74,6 @@ public class Climber {
     public void extend() {
 
         extendSolenoid.set(Value.kReverse);
-        shift();
         isExtendedShuffleboard.setBoolean(true);
 
     }
@@ -82,11 +81,13 @@ public class Climber {
     public void retract() {
 
         extendSolenoid.set(Value.kForward);
-        unShift();
         isExtendedShuffleboard.setBoolean(false);
     }
 
     public void climb(double climbPower) {
+        if (climbPower > 0 && extendSolenoid.get().equals(Value.kReverse)) {
+            retract();
+        }
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
 
@@ -99,7 +100,7 @@ public class Climber {
     }
 
     public void reverseClimb(double climbPower) {
-
+        //should we add extend or retract?!
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
     }
@@ -120,10 +121,10 @@ public class Climber {
 
         if (shifted) {
 
-            unShift();
+            neutral();
         } else {
 
-            shift();
+            engage();
         }
     }
 
