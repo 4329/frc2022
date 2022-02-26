@@ -204,4 +204,10 @@ public class RobotContainer {
     shooterFeed.coastShooterFeed();
     storageIntake.storageIntakeCoast();
   }
+
+public void init() {
+  
+    climber.neutral();
+    
+}
 }
