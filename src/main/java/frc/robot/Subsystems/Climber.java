@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -56,14 +57,14 @@ public class Climber {
 
     }
 
-    public void shift() {
+    public void shift() {//neutral or engage
 
         shiftSolenoid.set(Value.kForward);
         shifted = true;
         isShiftedShuffleboard.setBoolean(true);
     }
 
-    public void unShift() {
+    public void unShift() {//neutral or engage
 
         shiftSolenoid.set(Value.kReverse);
         shifted = false;

@@ -22,7 +22,7 @@ import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
-import frc.robot.Commands.IntakeSensorsCommand;
+import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.TowerCommand;
@@ -38,6 +38,7 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
+import frc.robot.Commands.ClimberEngageCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -154,7 +155,7 @@ public class RobotContainer {
         .whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));
 
     new JoystickButton(m_operatorController, Button.kB.value)
-        .whenHeld(new IntakeSensorsCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
+        .whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
