@@ -20,7 +20,7 @@ backRightTurningEncoderPort = 3
 frontLeftOffset = 2.676
 frontRightOffset = 4.58
 backLeftOffset = 2.0
-backRightOffset = 0.54
+backRightOffset = 1.321
 
 Intake_ID = 40
 intakeSpeed = 0.7
