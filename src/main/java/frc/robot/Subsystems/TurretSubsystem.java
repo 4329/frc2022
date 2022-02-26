@@ -23,7 +23,7 @@ public class TurretSubsystem extends SubsystemBase{
     private volatile int lastValue = Integer.MIN_VALUE;
 
     PIDController pidController;
-    double staticFeedforward = Configrun.get(0.103, "turnStaticFeedforward");
+    double staticFeedforward = 0;
 
     SmartDashboard table;
     SmartDashboard ledSmartDashboard;
@@ -54,7 +54,8 @@ public class TurretSubsystem extends SubsystemBase{
     public TurretSubsystem() {
         turret = new TalonSRX (Configrun.get(41, "turretID"));
         turret.getSensorCollection();
-        limeLightPid = new PIDController(limelightP, limelightI, limelightD);
+        // limeLightPid = new PIDController(limelightP, limelightI, limelightD);
+        limeLightPid = new PIDController(1, 0, 0);
         taTolerance = Configrun.get(0.3, "taTolerance");
         limeLightPid.setTolerance(limeLightTolerance);
         targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
@@ -69,7 +70,7 @@ public class TurretSubsystem extends SubsystemBase{
         pidController.setTolerance(PIDConstants.TOLERANCE);
         //pidController.enableContinuousInput(0, 360);
     }
-    
+
     // public void setDistance() {
     //     currentDistance = getDistanceFromTarget();
     // }
@@ -87,6 +88,17 @@ public class TurretSubsystem extends SubsystemBase{
         NetworkTableEntry tx = table.getEntry("tx");
         double x = tx.getDouble(0.0);
         return x;
+    }
+
+    public boolean targetVisible() {
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        NetworkTableEntry tv = table.getEntry("tv");
+        double v = tv.getDouble(0.0);
+
+        if (v == 1) {
+            return true;
+        }
+        return false;
     }
     // check Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
 
@@ -146,7 +158,6 @@ public class TurretSubsystem extends SubsystemBase{
 
         int actualValue = Math.min(4096, raw - 128);
         lastValue = actualValue;
-        System.out.println(actualValue);
         return actualValue;
     }
 
@@ -160,23 +171,29 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void rotateTurret(double output){
         System.out.println(getPwmPosition()+ " " + output);
-        if(getPwmPosition() >= Configrun.get(943, "turretMin") && output > 0) {  
-            /*if (Math.abs(output) >= 0.2 && Math.abs(output) <= 0.5)*{
-              turretPower(output);
+
+        if(targetVisible()) {
+            if(getPwmPosition() >= Configrun.get(943, "turretMin") && output > 0) {
+                /*if (Math.abs(output) >= 0.2 && Math.abs(output) <= 0.5)*{
+                turretPower(output);
+                }
+                else {
+                    turretStop();
+                } */
+                turretPower(output);
+            }
+            else if(getPwmPosition() <= Configrun.get(1557, "turretMax") && output < 0) {
+                // if (Math.abs(output) >= 0.2 && Math.abs(output) <= 0.5){
+                //   turretPower(output);
+                // }
+                // else {
+                //     turretStop();
+                // }
+                turretPower(output);
             }
             else {
                 turretStop();
-            } */       
-            turretPower(output);
-        }   
-        else if(getPwmPosition() <= Configrun.get(1557, "turretMax") && output < 0) {  
-            // if (Math.abs(output) >= 0.2 && Math.abs(output) <= 0.5){
-            //   turretPower(output);
-            // } 
-            // else {
-            //     turretStop();
-            // }    
-            turretPower(output);
+            }
         }
         else {
             turretStop();
@@ -189,12 +206,10 @@ public class TurretSubsystem extends SubsystemBase{
             output = output / 30;
             if (output < 0) {
                 output = output - staticFeedforward;
-            } 
+            }
             else {
                 output = output + staticFeedforward;
             }
-            System.out.println(output);
-            // SmartDashboard.putNumber("LimelightOutput", output);
 
             rotateTurret(output);
             // setDistance();
@@ -220,7 +235,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "turretRightPower"));
     }
 
-  
+
 
     // public void turretPeriodic(){
     //     double output = hoodPID.calculate(hoodposition, hoodSetpoint.getDouble(0));
