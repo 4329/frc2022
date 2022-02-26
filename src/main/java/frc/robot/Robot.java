@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     m_robotContainer = new RobotContainer(drivetrain);
     System.out.println("still working");
+    m_robotContainer.init();
   }
 
   /**

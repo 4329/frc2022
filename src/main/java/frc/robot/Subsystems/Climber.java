@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -29,7 +30,7 @@ public class Climber {
 
     public Climber(PneumaticHub hubbie) {
 
-        pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(4, "pivotSolenoidID_1"), Configrun.get(5, "pivotSolenoidID_2"));
+        pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(5, "pivotSolenoidID_1"), Configrun.get(4, "pivotSolenoidID_2"));
         shiftSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
         extendSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
         climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
@@ -38,11 +39,10 @@ public class Climber {
         climberNeoMotor2.follow(climberNeoMotor1);
         climberNeoMotor3.follow(climberNeoMotor1);
 
-        isShiftedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Shift Active", false).getEntry();
-        isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot Active", false).getEntry();
-        isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Extetend Active", false).getEntry();
-        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Moters Active", false).getEntry();
-        retract();
+        isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
+        isPivotedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Pivot Active", false).getEntry();
+        isExtendedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Extetend Active", false).getEntry();
+        isMoterActiveShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Moters Active", false).getEntry();
     }
 
     public void pivotClimber() {
@@ -56,14 +56,14 @@ public class Climber {
 
     }
 
-    public void shift() {
+    public void engage() {//neutral or engage
 
         shiftSolenoid.set(Value.kForward);
         shifted = true;
         isShiftedShuffleboard.setBoolean(true);
     }
 
-    public void unShift() {
+    public void neutral() {//neutral or engage
 
         shiftSolenoid.set(Value.kReverse);
         shifted = false;
@@ -73,7 +73,6 @@ public class Climber {
     public void extend() {
 
         extendSolenoid.set(Value.kReverse);
-        shift();
         isExtendedShuffleboard.setBoolean(true);
 
     }
@@ -81,13 +80,18 @@ public class Climber {
     public void retract() {
 
         extendSolenoid.set(Value.kForward);
-        unShift();
         isExtendedShuffleboard.setBoolean(false);
     }
 
     public void climb(double climbPower) {
+        System.out.println("ClimbPower is " + climbPower);
+        if (Math.abs(climbPower) > 0 && extendSolenoid.get().equals(Value.kReverse)) {
+            retract();
+        }
+        
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
+    
 
     }
 
@@ -98,7 +102,8 @@ public class Climber {
     }
 
     public void reverseClimb(double climbPower) {
-
+        System.out.println("ReverseClimbPower is " + climbPower);
+        //should we add extend or retract?!
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
     }
@@ -119,10 +124,10 @@ public class Climber {
 
         if (shifted) {
 
-            unShift();
+            neutral();
         } else {
 
-            shift();
+            engage();
         }
     }
 

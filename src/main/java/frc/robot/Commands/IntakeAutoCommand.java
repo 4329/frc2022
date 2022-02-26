@@ -7,15 +7,14 @@ import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 
-public class IntakeSensorsCommand extends CommandBase {
+public class IntakeAutoCommand extends CommandBase {
     private IntakeSensors intakeSensors;
     private ShooterFeedSubsytem shooterFeed;
     private StorageIntake storageIntake;
     private IntakeMotor intakeMotor;
     private IntakeSolenoidSubsystem intakeSolenoid;
 
-    public IntakeSensorsCommand(IntakeSensors intakeSensors, ShooterFeedSubsytem shooterFeed,
-            StorageIntake storageIntake, IntakeMotor intakeMotor, IntakeSolenoidSubsystem intakeSolenoid) {
+    public IntakeAutoCommand(IntakeSensors intakeSensors, ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor, IntakeSolenoidSubsystem intakeSolenoid) {
         this.intakeSensors = intakeSensors;
         this.shooterFeed = shooterFeed;
         this.storageIntake = storageIntake;
@@ -24,7 +23,6 @@ public class IntakeSensorsCommand extends CommandBase {
     }
 
     public void initialize() {
-
         // intakeSolenoid.intakeDown();
         intakeMotor.runIntakeIn();
         storageIntake.storageIntakeIn();

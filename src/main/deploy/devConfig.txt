@@ -39,10 +39,10 @@ FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
 ShooterFeedPower = 0.5
 
-pivotSolenoidID_1 = 4
+pivotSolenoidID_1 = 5
 shiftSolenoidID_1 = 2
 extendSolenoidID_1 = 6
-pivotSolenoidID_2 = 5
+pivotSolenoidID_2 = 4
 shiftSolenoidID_2 = 3
 extendSolenoidID_2 = 7
 
