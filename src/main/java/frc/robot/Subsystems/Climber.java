@@ -30,7 +30,7 @@ public class Climber {
 
     public Climber(PneumaticHub hubbie) {
 
-        pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(4, "pivotSolenoidID_1"), Configrun.get(5, "pivotSolenoidID_2"));
+        pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(5, "pivotSolenoidID_1"), Configrun.get(4, "pivotSolenoidID_2"));
         shiftSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
         extendSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
         climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
@@ -43,7 +43,6 @@ public class Climber {
         isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot Active", false).getEntry();
         isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Extetend Active", false).getEntry();
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Moters Active", false).getEntry();
-        retract();
     }
 
     public void pivotClimber() {
@@ -85,11 +84,14 @@ public class Climber {
     }
 
     public void climb(double climbPower) {
-        if (climbPower > 0 && extendSolenoid.get().equals(Value.kReverse)) {
+        System.out.println("ClimbPower is " + climbPower);
+        if (Math.abs(climbPower) > 0 && extendSolenoid.get().equals(Value.kReverse)) {
             retract();
         }
+        
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
+    
 
     }
 
@@ -100,6 +102,7 @@ public class Climber {
     }
 
     public void reverseClimb(double climbPower) {
+        System.out.println("ReverseClimbPower is " + climbPower);
         //should we add extend or retract?!
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);

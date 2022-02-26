@@ -14,6 +14,7 @@ public class ClimberEngageCommand extends CommandBase{
     }
 
     public void initialize() {
+        done = false;
         climber.neutral();//shift or neutral
         climber.extend();
         climber.pivotClimber();
