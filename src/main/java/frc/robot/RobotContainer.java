@@ -26,6 +26,7 @@ import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.TowerCommand;
+import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretCommandsRight;
 import frc.robot.Commands.TurretCommandsLeft;
 import frc.robot.Subsystems.TurretSubsystem;
@@ -42,6 +43,7 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
 import frc.robot.Commands.ClimberEngageCommand;
+import frc.robot.Commands.TurretCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -76,6 +78,7 @@ public class RobotContainer {
   private Command intakeRun;
 
   private SensorOutputCommand sensorOutputCommand;
+  private TurretCommand turretCommand;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -92,10 +95,12 @@ public class RobotContainer {
     intakeMotor = new IntakeMotor();
     intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
     intakeSensors = new IntakeSensors();
+    turretSubsystem = new TurretSubsystem();
     climber = new Climber(pneumaticHub);
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
-    turretSubsystem = new TurretSubsystem();
+    turretCommand = new TurretCommand(turretSubsystem);
+    turretSubsystem.setDefaultCommand(turretCommand);
 
     initializeCamera();
 
