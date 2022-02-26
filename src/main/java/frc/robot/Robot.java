@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.LimelightSubsystem;
+import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
 
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   private double coastWait;
 
   private LimelightSubsystem limelightSubsystem;
+  private TurretSubsystem turretSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -149,9 +151,14 @@ public class Robot extends TimedRobot {
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
 
-    if (limelightSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
-                                      // robot, causing a crash
-      limelightSubsystem = new LimelightSubsystem();
+    // if (limelightSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
+    //                                   // robot, causing a crash
+    //   limelightSubsystem = new LimelightSubsystem();
+    // }
+
+    if (turretSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
+      // robot, causing a crash
+      turretSubsystem = new TurretSubsystem();
     }
 
   }
@@ -160,8 +167,9 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
-    limelightSubsystem.putDistance();
-    limelightSubsystem.putTargetAcquired();
-    limelightSubsystem.putValuesToShuffleboard();
+    // limelightSubsystem.putDistance();
+    // limelightSubsystem.putTargetAcquired();
+    // limelightSubsystem.putValuesToShuffleboard();
+    turretSubsystem.getPwmPosition();
   }
 }

@@ -6,29 +6,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import frc.robot.Configrun;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.RelativeEncoder;
 import frc.robot.PIDConstants;
-import frc.robot.Subsystems.LimelightSubsystem;
-import frc.robot.RobotContainer;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Configrun;
-//import frc.robot.RobotContainer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-//import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import frc.robot.RobotContainer;
 
 public class TurretSubsystem extends SubsystemBase{
 
     private TalonSRX turret;
-    private RelativeEncoder turretEncoder;
     private double output, error;
+
+    private volatile int lastValue = Integer.MIN_VALUE;
+
     PIDController pidController;
     double staticFeedforward = Configrun.get(0.103, "turnStaticFeedforward");
 
@@ -60,7 +53,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public TurretSubsystem() {
         turret = new TalonSRX (Configrun.get(41, "turretID"));
-        //turretEncoder = turret.getEncoder;
+        turret.getSensorCollection();
         limeLightPid = new PIDController(limelightP, limelightI, limelightD);
         taTolerance = Configrun.get(0.3, "taTolerance");
         limeLightPid.setTolerance(limeLightTolerance);
@@ -76,7 +69,7 @@ public class TurretSubsystem extends SubsystemBase{
         pidController.setTolerance(PIDConstants.TOLERANCE);
         //pidController.enableContinuousInput(0, 360);
     }
-
+    
     // public void setDistance() {
     //     currentDistance = getDistanceFromTarget();
     // }
@@ -141,6 +134,55 @@ public class TurretSubsystem extends SubsystemBase{
         targetStatus.setBoolean(status);
     }
 
+    public int getPwmPosition() {
+        int raw = turret.getSensorCollection().getPulseWidthRiseToFallUs();
+        if (raw == 0) {
+            int lastValue = this.lastValue;
+            if (lastValue == Integer.MIN_VALUE) {
+                return 0;
+            }
+            return lastValue;
+        }
+
+        int actualValue = Math.min(4096, raw - 128);
+        lastValue = actualValue;
+        System.out.println(actualValue);
+        return actualValue;
+    }
+
+    public void turretPower(double output){
+        turret.set(TalonSRXControlMode.PercentOutput, output);
+    }
+
+    public void turretStop(){
+        turret.set(TalonSRXControlMode.PercentOutput, Configrun.get(0, "turretStop"));
+    }
+
+    public void rotateTurret(double output){
+        System.out.println(getPwmPosition()+ " " + output);
+        if(getPwmPosition() >= Configrun.get(943, "turretMin") && output > 0) {  
+            /*if (Math.abs(output) >= 0.2 && Math.abs(output) <= 0.5)*{
+              turretPower(output);
+            }
+            else {
+                turretStop();
+            } */       
+            turretPower(output);
+        }   
+        else if(getPwmPosition() <= Configrun.get(1557, "turretMax") && output < 0) {  
+            // if (Math.abs(output) >= 0.2 && Math.abs(output) <= 0.5){
+            //   turretPower(output);
+            // } 
+            // else {
+            //     turretStop();
+            // }    
+            turretPower(output);
+        }
+        else {
+            turretStop();
+        }
+    }
+
     public void targeting() {
             double output = limeLightPid.calculate(checkTx(), 0);
             //30 is the limiting factor for the output
@@ -154,9 +196,13 @@ public class TurretSubsystem extends SubsystemBase{
             System.out.println(output);
             // SmartDashboard.putNumber("LimelightOutput", output);
 
-            // RobotContainer.swerveDrive.drive(0, 0, output);
+            rotateTurret(output);
             // setDistance();
+            putValuesToShuffleboard();
     }
+
+
+
 
     // Runs the PID loop for angles within delta 90
     // public double controlRotationWithin90(double x, SwerveModule module) {
@@ -174,13 +220,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "turretRightPower"));
     }
 
-    public void turretLeft(){
-        turret.set(TalonSRXControlMode.PercentOutput, Configrun.get(0.5, "turretLeftPower"));
-    }
-
-    public void turretStop(){
-        turret.set(TalonSRXControlMode.PercentOutput, Configrun.get(0, "turretStop"));
-    }
+  
 
     // public void turretPeriodic(){
     //     double output = hoodPID.calculate(hoodposition, hoodSetpoint.getDouble(0));

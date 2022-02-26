@@ -43,11 +43,11 @@ public class LimelightSubsystem extends SubsystemBase {
         limeLightPid = new PIDController(limelightP, limelightI, limelightD);
         taTolerance = Configrun.get(0.3, "taTolerance");
         limeLightPid.setTolerance(limeLightTolerance);
-        targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
-        checkTXDisplay = Shuffleboard.getTab("limlight").add("Tx", 0).withPosition(3, 1).getEntry();
-        checkTYDisplay = Shuffleboard.getTab("limlight").add("TY", 0).withPosition(3, 0).getEntry();
-        checkTADisplay = Shuffleboard.getTab("limlight").add("TA", 0).withPosition(4, 0).getEntry();
-        getDistanceFromTargetDisplay = Shuffleboard.getTab("limlight").add("Distance", 0).withPosition(5, 0).getEntry();
+        // targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
+        // checkTXDisplay = Shuffleboard.getTab("limlight").add("Tx", 0).withPosition(3, 1).getEntry();
+        // checkTYDisplay = Shuffleboard.getTab("limlight").add("TY", 0).withPosition(3, 0).getEntry();
+        // checkTADisplay = Shuffleboard.getTab("limlight").add("TA", 0).withPosition(4, 0).getEntry();
+        // getDistanceFromTargetDisplay = Shuffleboard.getTab("limlight").add("Distance", 0).withPosition(5, 0).getEntry();
     }
 
     // public void setDistance() {
