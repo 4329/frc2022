@@ -62,6 +62,7 @@ taTolerance = 0.3
 ShooterP = 0.5
 ShooterI = 0
 ShooterD = 0
+#ShooterTolerance is in RPM
 ShooterTolerance = 8000
 
 #Digital input IDs

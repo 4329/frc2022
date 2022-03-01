@@ -1,5 +1,7 @@
 package frc.robot.Subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -18,17 +20,32 @@ public class Shooter {
   double feedForward = 1;
 
   double percent;
-  private NetworkTableEntry percentEntry;
+  //private NetworkTableEntry percentEntry;
   private NetworkTableEntry pidErrorEntry;
+  private NetworkTableEntry pidSetpointErrorEntry;
+  private NetworkTableEntry percentEntryNum;
+  private NetworkTableEntry pidErrorEntryNum;
+  private NetworkTableEntry atSetpoint;
+  private NetworkTableEntry belowZero;
+
 
   public Shooter() {
 
-    percentEntry = Shuffleboard.getTab("shooteryness").add("percent", percent).withWidget("Graph").getEntry();
-    pidErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Error", 1).withWidget("Graph").withPosition(3, 0)
-        .getEntry();
-    shooterPID = new PIDController(Configrun.get(0.5, "ShooterP"), Configrun.get(0, "ShooterI"),
-        Configrun.get(0, "ShooterD"));
-    shooterPID.setTolerance(Configrun.get(2000, "ShooterTolerance"));
+    //percentEntry = Shuffleboard.getTab("shooteryness").add("PID Setpoint", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 10000, "Lower bound", 0, "Unit", "RPM")).getEntry();
+    pidErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Velocity Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -2000, "Unit", "RPM")).getEntry();
+    pidSetpointErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 10000, "Lower bound", -10000, "Unit", "RPM")).getEntry();
+    percentEntryNum = Shuffleboard.getTab("shooteryness").add("percent num", percent).getEntry();
+    pidErrorEntryNum = Shuffleboard.getTab("shooteryness").add("PID Error num", 1).getEntry();
+    atSetpoint = Shuffleboard.getTab("shooteryness").add("At Setpoint", false).withPosition(0, 1).getEntry();
+    belowZero = Shuffleboard.getTab("shooteryness").add("Below Zero", false).withPosition(1, 1).getEntry();
+    
+    shooterPID = new PIDController(
+      Configrun.get(2.5, "ShooterP"), 
+      Configrun.get(0, "ShooterI"),
+      Configrun.get(0, "ShooterD")
+    );
+    shooterPID.setTolerance(Configrun.get(100, "ShooterTolerance") * 2048.0 / 600.0);
+
     shooterwheel1 = new TalonFX(Configrun.get(13, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(14, "ShooterWheel2ID"));
     shooterwheel1.setInverted(true);
@@ -39,7 +56,6 @@ public class Shooter {
   }
 
   /**
-   * 
    * @param shooterSetpoint
    */
   public void shoot(double shooterSetpoint) {
@@ -55,12 +71,15 @@ public class Shooter {
     percent = pidCalculated / maxPowerCtre;
     percent = percent + (percent * feedForward);
     shooterwheel1.set(ControlMode.PercentOutput, percent);
-    percentEntry.setDouble(shooterPID.getSetpoint());
+  //  percentEntry.setDouble(shooterPID.getSetpoint());
+    percentEntryNum.setDouble(shooterPID.getSetpoint() / 2048 * 600);
   }
 
   public void holdFire() {
 
     shooterwheel1.set(ControlMode.PercentOutput, 0);
+  //  percentEntry.setDouble(shooterPID.getSetpoint());
+    percentEntryNum.setDouble(shooterPID.getSetpoint() / 2048 * 600);
   }
 
   /**
@@ -68,7 +87,13 @@ public class Shooter {
    */
   public boolean getShooterError() {
 
-    pidErrorEntry.setDouble(shooterPID.getVelocityError());
+    pidErrorEntry.setDouble(shooterPID.getVelocityError() / 2048 * 600);
+    pidErrorEntryNum.setDouble(shooterPID.getPositionError() / 2048 * 600);
+    pidSetpointErrorEntry.setDouble(shooterPID.getPositionError() / 2048 * 600);
+    atSetpoint.setBoolean(shooterPID.atSetpoint());
+    if (shooterPID.getPositionError() / 2048 * 600 < 0) {
+      belowZero.setBoolean(true);
+    }
     return shooterPID.atSetpoint();
   }
 
