@@ -26,7 +26,6 @@ import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
-import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
@@ -37,6 +36,7 @@ import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
+import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
 import frc.robot.Commands.ClimberEngageCommand;
@@ -82,7 +82,10 @@ public class RobotContainer {
    *
    * @param drivetrain
    */
-  public RobotContainer(Drivetrain drivetrain) {
+
+  public RobotContainer(Drivetrain drivetrain, TurretSubsystem turretSubsystem) {
+    m_robotDrive = drivetrain;
+    this.turretSubsystem = turretSubsystem;
 
     pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
 
@@ -92,7 +95,6 @@ public class RobotContainer {
     intakeMotor = new IntakeMotor();
     intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
     intakeSensors = new IntakeSensors();
-    turretSubsystem = new TurretSubsystem();
     climber = new Climber(pneumaticHub);
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
@@ -104,7 +106,6 @@ public class RobotContainer {
 
     m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-    m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 

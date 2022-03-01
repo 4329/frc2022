@@ -30,8 +30,6 @@ public class Robot extends TimedRobot {
   private Climber climber;
 
   private double coastWait;
-
-  private LimelightSubsystem limelightSubsystem;
   private TurretSubsystem turretSubsystem;
 
   /**
@@ -40,16 +38,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    SmartDashboard.setDefaultBoolean("Set Solenoid", false);
-    System.out.println("its working");
     Configrun.loadconfig();
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
     drivetrain = new Drivetrain();
-    m_robotContainer = new RobotContainer(drivetrain);
+    turretSubsystem = new TurretSubsystem();
+    m_robotContainer = new RobotContainer(drivetrain, turretSubsystem);
     System.out.println("still working");
     m_robotContainer.init();
+    
   }
 
   /**
@@ -127,7 +125,6 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-      System.out.println("Its working now");
     }
   }
 
@@ -145,31 +142,18 @@ public class Robot extends TimedRobot {
     drivetrain.coastMode();
     
 
-    if (m_swerveAlignment == null) {// This prevents 2 sets of widgets from appearing when disabling & enabling the
-                                    // robot, causing a crash
+    if (m_swerveAlignment == null) {
+      // This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
-
-    // if (limelightSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
-    //                                   // robot, causing a crash
-    //   limelightSubsystem = new LimelightSubsystem();
-    // }
-
-    if (turretSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
-      // robot, causing a crash
-      turretSubsystem = new TurretSubsystem();
-    }
-
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
-    // limelightSubsystem.putDistance();
-    // limelightSubsystem.putTargetAcquired();
-    // limelightSubsystem.putValuesToShuffleboard();
+    turretSubsystem.putValuesToShuffleboard();
     turretSubsystem.getPwmPosition();
   }
 }

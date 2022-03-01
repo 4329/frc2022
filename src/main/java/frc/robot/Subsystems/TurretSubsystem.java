@@ -36,7 +36,11 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry checkTXDisplay;
     private NetworkTableEntry checkTYDisplay;
     private NetworkTableEntry checkTADisplay;
+    private NetworkTableEntry checkTVDisplay;
     private NetworkTableEntry getDistanceFromTargetDisplay;
+    private NetworkTableEntry turretPos;
+    private NetworkTableEntry turretRotationMin;
+    private NetworkTableEntry turretRotationMax;
     NetworkTableEntry targetStatus;
 
     public TurretSubsystem() {
@@ -47,14 +51,22 @@ public class TurretSubsystem extends SubsystemBase{
         checkTXDisplay = Shuffleboard.getTab("Limlight").add("Tx", 0).withPosition(3, 1).getEntry();
         checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
         checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
+        checkTVDisplay = Shuffleboard.getTab("Limlight").add("TV", 0).withPosition(4, 1).getEntry();
         getDistanceFromTargetDisplay = Shuffleboard.getTab("Limlight").add("Distance", 0).withPosition(5, 0).getEntry();
+        turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
+        turretRotationMin = Shuffleboard.getTab("Limlight").add("Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
+        turretRotationMax = Shuffleboard.getTab("Limlight").add("Turret Maximum", getPwmPosition() + 307).withPosition(3, 4).getEntry();
     }
 
     public void putValuesToShuffleboard() {
         checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
         checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
         checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
+        checkTVDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0));
         getDistanceFromTargetDisplay.setDouble(getDistanceFromTarget());
+        turretPos.setDouble(getPwmPosition());
+        turretRotationMin.setDouble(getPwmPosition() - 307);
+        turretRotationMax.setDouble(getPwmPosition() + 307);
     }
 
     public double getTx() {
