@@ -11,6 +11,10 @@ public class TurretCommand extends CommandBase{
         addRequirements(turretSubsystem);
     }
 
+    public void initialize() {
+        turretSubsystem.goToZero();
+    }
+
     public void execute() {
         turretSubsystem.targeting();
     }

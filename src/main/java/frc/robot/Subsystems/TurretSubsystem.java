@@ -153,8 +153,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret.set(TalonSRXControlMode.PercentOutput, Configrun.get(0, "turretStop"));
     }
 
-    public void rotateTurret(double output){
-        System.out.println(getPwmPosition()+ " " + output);
+    public void rotateTurret(double output) {
 
         if(targetVisible()) {
             if(getPwmPosition() >= Configrun.get(943, "turretMin") && output > 0) {
@@ -168,7 +167,7 @@ public class TurretSubsystem extends SubsystemBase{
             }
         }
         else {
-            turretStop();
+            goToZero();
         }
     }
 
@@ -185,5 +184,20 @@ public class TurretSubsystem extends SubsystemBase{
 
         rotateTurret(output);
         putValuesToShuffleboard();
+    }
+
+    public void goToZero() {
+        System.out.println("GOING TO ZERO!!!!!!!!!!");
+        if (getPwmPosition() > Configrun.get(1250, "turretZero") + 500) {
+            turretPower(-0.2);
+        }
+
+        else if (getPwmPosition() < Configrun.get(1250, "turretZero") - 500) {
+            turretPower(0.2);
+        }
+
+        else {
+            turretStop();
+        }
     }
 }
