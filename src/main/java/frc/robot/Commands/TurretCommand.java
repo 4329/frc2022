@@ -12,7 +12,8 @@ public class TurretCommand extends CommandBase{
     }
 
     public void initialize() {
-        turretSubsystem.goToZero();
+        // turretSubsystem.goToZero();
+        turretSubsystem.turretToZero();
     }
 
     public void execute() {
