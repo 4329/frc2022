@@ -27,17 +27,18 @@ public class Shooter {
   private NetworkTableEntry pidErrorEntryNum;
   private NetworkTableEntry atSetpoint;
   private NetworkTableEntry belowZero;
+  private NetworkTableEntry shooterRPM;
 
 
   public Shooter() {
 
-    //percentEntry = Shuffleboard.getTab("shooteryness").add("PID Setpoint", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 10000, "Lower bound", 0, "Unit", "RPM")).getEntry();
     pidErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Velocity Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -2000, "Unit", "RPM")).getEntry();
     pidSetpointErrorEntry = Shuffleboard.getTab("shooteryness").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 10000, "Lower bound", -10000, "Unit", "RPM")).getEntry();
     percentEntryNum = Shuffleboard.getTab("shooteryness").add("percent num", percent).getEntry();
     pidErrorEntryNum = Shuffleboard.getTab("shooteryness").add("PID Error num", 1).getEntry();
     atSetpoint = Shuffleboard.getTab("shooteryness").add("At Setpoint", false).withPosition(0, 1).getEntry();
     belowZero = Shuffleboard.getTab("shooteryness").add("Below Zero", false).withPosition(1, 1).getEntry();
+    shooterRPM = Shuffleboard.getTab("shooteryness").add("Shooter RPM", 3500).withPosition(0, 2).getEntry();
     
     shooterPID = new PIDController(
       Configrun.get(2.5, "ShooterP"), 
@@ -91,10 +92,18 @@ public class Shooter {
     pidErrorEntryNum.setDouble(shooterPID.getPositionError() / 2048 * 600);
     pidSetpointErrorEntry.setDouble(shooterPID.getPositionError() / 2048 * 600);
     atSetpoint.setBoolean(shooterPID.atSetpoint());
+
     if (shooterPID.getPositionError() / 2048 * 600 < 0) {
+
       belowZero.setBoolean(true);
     }
+
     return shooterPID.atSetpoint();
+  }
+
+  public double getShooterRPM() {
+
+    return shooterRPM.getDouble(3500);
   }
 
 }
