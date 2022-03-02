@@ -14,7 +14,7 @@ import frc.robot.Configrun;
 public class TurretSubsystem extends SubsystemBase{
 
     private static final double LIMELIGHT_RANGE = 30;
-    private static final double TURRET_RANGE = 4029;
+    private static final double TURRET_RANGE = 4128;
 
     private TalonSRX turret;
     private volatile int lastValue = Integer.MIN_VALUE;
@@ -32,7 +32,7 @@ public class TurretSubsystem extends SubsystemBase{
     // angle of the front of the limelight in relation to level
     double limeLightDistance;
     int limeLightTolerance = 1;
-    int turretTolerance = 1;
+    int turretTolerance = 20;
     double taTolerance = 0.3;
 
     public double currentDistance = 120;
@@ -51,7 +51,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret = new TalonSRX (Configrun.get(41, "turretID"));
         limeLightPid = new PIDController(1, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
-        turretPid = new PIDController(1, 0, 0);
+        turretPid = new PIDController(4, 0, 0);
         turretPid.setTolerance(turretTolerance);
         targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
         checkTXDisplay = Shuffleboard.getTab("Limlight").add("Tx", 0).withPosition(3, 1).getEntry();
@@ -60,8 +60,8 @@ public class TurretSubsystem extends SubsystemBase{
         checkTVDisplay = Shuffleboard.getTab("Limlight").add("TV", 0).withPosition(4, 1).getEntry();
         getDistanceFromTargetDisplay = Shuffleboard.getTab("Limlight").add("Distance", 0).withPosition(5, 0).getEntry();
         turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
-        turretRotationMin = Shuffleboard.getTab("Limlight").add("Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
-        turretRotationMax = Shuffleboard.getTab("Limlight").add("Turret Maximum", getPwmPosition() + 307).withPosition(3, 4).getEntry();
+        turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
+        turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
     }
 
     public void putValuesToShuffleboard() {
@@ -71,8 +71,6 @@ public class TurretSubsystem extends SubsystemBase{
         checkTVDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0));
         getDistanceFromTargetDisplay.setDouble(getDistanceFromTarget());
         turretPos.setDouble(getPwmPosition());
-        turretRotationMin.setDouble(getPwmPosition() - 307);
-        turretRotationMax.setDouble(getPwmPosition() + 307);
     }
 
     public double getTx() {
@@ -146,13 +144,14 @@ public class TurretSubsystem extends SubsystemBase{
             return lastValue;
         }
 
-        int actualValue = Math.min(4096, raw - 128);
+        int actualValue = Math.min(4128, raw );
         lastValue = actualValue;
         return actualValue;
     }
 
     public void turretPower(double output){
         turret.set(TalonSRXControlMode.PercentOutput, output);
+        System.out.println("turretPower method is " + output);
     }
 
     public void turretStop(){
@@ -176,6 +175,22 @@ public class TurretSubsystem extends SubsystemBase{
         // }
     }
 
+    public void rotateTurretZero(double output) {
+
+       /* if (output > 0 && getPwmPosition() < Configrun.get(1250, "turretZero"))
+        {*/
+            turretPower(-1 * output);
+       /* }
+        else if (output < 0 && getPwmPosition() > Configrun.get(1250 , "turretZero"))
+        {
+            turretPower(output);
+        }
+        else
+        {
+            turretStop();
+        }*/
+    }
+
     public void targeting() {
         double output;
         if(targetVisible()) {
@@ -188,35 +203,30 @@ public class TurretSubsystem extends SubsystemBase{
             else {
                 output = output + staticFeedforward;
             }    
-
+            rotateTurret(output);
         }
         else {
-            output = turretPid.calculate(getPwmPosition(), Configrun.get(1250, "turretZero"));
-            //converts range to % power
-            output = output / TURRET_RANGE;
-            if (output < 0) {
-                output = output - staticFeedforward;
-            }
-            else {
-                output = output + staticFeedforward;
-            }
+            turretStop();
         }
-        rotateTurret(output);
+        
         putValuesToShuffleboard();
     }
 
     public void turretToZero() {
+        System.out.println("turret pwm possition" + getPwmPosition());
         double output = turretPid.calculate(getPwmPosition(), Configrun.get(1250, "turretZero"));
         //converts range to % power
+        System.out.println( "Before Calculation " + output);
         output = output / TURRET_RANGE;
+
         if (output < 0) {
             output = output - staticFeedforward;
         }
         else {
             output = output + staticFeedforward;
         }
-
-        rotateTurret(output);
+        System.out.println( "Calculation " + output);
+        rotateTurretZero(output);
         putValuesToShuffleboard();
     }
 

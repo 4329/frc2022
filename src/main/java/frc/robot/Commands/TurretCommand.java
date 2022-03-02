@@ -8,12 +8,6 @@ public class TurretCommand extends CommandBase{
 
     public TurretCommand(TurretSubsystem turretSubsystem){
         this.turretSubsystem = turretSubsystem;
-        addRequirements(turretSubsystem);
-    }
-
-    public void initialize() {
-        // turretSubsystem.goToZero();
-        turretSubsystem.turretToZero();
     }
 
     public void execute() {

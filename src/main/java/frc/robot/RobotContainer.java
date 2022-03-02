@@ -26,6 +26,7 @@ import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
+import frc.robot.Commands.TurretToZeroCommand;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
@@ -76,7 +77,7 @@ public class RobotContainer {
 
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
-
+  private TurretToZeroCommand turretToZeroCommand;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
@@ -99,7 +100,8 @@ public class RobotContainer {
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
     turretCommand = new TurretCommand(turretSubsystem);
-    turretSubsystem.setDefaultCommand(turretCommand);
+    turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
+    turretSubsystem.setDefaultCommand(turretToZeroCommand);
 
 
     initializeCamera();
