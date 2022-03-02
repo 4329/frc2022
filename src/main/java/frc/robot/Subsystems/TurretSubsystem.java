@@ -71,6 +71,8 @@ public class TurretSubsystem extends SubsystemBase{
         checkTVDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0));
         getDistanceFromTargetDisplay.setDouble(getDistanceFromTarget());
         turretPos.setDouble(getPwmPosition());
+        turretRotationMin.setDouble(getPwmPosition()- 307);
+        turretRotationMax.setDouble(getPwmPosition()+ 307);
     }
 
     public double getTx() {
@@ -125,7 +127,6 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void putTargetAcquired() {
         boolean status;
-        // true or false value
         if (getTa() >= taTolerance) {
             status = true;
         } else {
@@ -149,9 +150,9 @@ public class TurretSubsystem extends SubsystemBase{
         return actualValue;
     }
 
-    public void turretPower(double output){
+    public void turretPower(double output)
+    {
         turret.set(TalonSRXControlMode.PercentOutput, output);
-        System.out.println("turretPower method is " + output);
     }
 
     public void turretStop(){
@@ -169,26 +170,6 @@ public class TurretSubsystem extends SubsystemBase{
             else {
                 turretStop();
             }
-        // else {
-        //     // goToZero();
-        //     turretStop();
-        // }
-    }
-
-    public void rotateTurretZero(double output) {
-
-       /* if (output > 0 && getPwmPosition() < Configrun.get(1250, "turretZero"))
-        {*/
-            turretPower(-1 * output);
-       /* }
-        else if (output < 0 && getPwmPosition() > Configrun.get(1250 , "turretZero"))
-        {
-            turretPower(output);
-        }
-        else
-        {
-            turretStop();
-        }*/
     }
 
     public void targeting() {
@@ -213,10 +194,8 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void turretToZero() {
-        System.out.println("turret pwm possition" + getPwmPosition());
         double output = turretPid.calculate(getPwmPosition(), Configrun.get(1250, "turretZero"));
         //converts range to % power
-        System.out.println( "Before Calculation " + output);
         output = output / TURRET_RANGE;
 
         if (output < 0) {
@@ -225,23 +204,7 @@ public class TurretSubsystem extends SubsystemBase{
         else {
             output = output + staticFeedforward;
         }
-        System.out.println( "Calculation " + output);
-        rotateTurretZero(output);
+        turretPower(-1 * output);
         putValuesToShuffleboard();
     }
-
-    // public void goToZero() {
-    //     System.out.println("GOING TO ZERO!!!!!!!!!!");
-    //     if (getPwmPosition() > Configrun.get(1250, "turretZero") + 500) {
-    //         turretPower(-0.2);
-    //     }
-
-    //     else if (getPwmPosition() < Configrun.get(1250, "turretZero") - 500) {
-    //         turretPower(0.2);
-    //     }
-
-    //     else {
-    //         turretStop();
-    //     }
-    // }
 }
