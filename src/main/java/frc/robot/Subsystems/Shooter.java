@@ -28,6 +28,7 @@ public class Shooter {
   private NetworkTableEntry atSetpoint;
   private NetworkTableEntry belowZero;
   private NetworkTableEntry shooterRPM;
+  private NetworkTableEntry manualOverride;
 
 
   public Shooter() {
@@ -39,6 +40,7 @@ public class Shooter {
     atSetpoint = Shuffleboard.getTab("shooteryness").add("At Setpoint", false).withPosition(0, 1).getEntry();
     belowZero = Shuffleboard.getTab("shooteryness").add("Below Zero", false).withPosition(1, 1).getEntry();
     shooterRPM = Shuffleboard.getTab("shooteryness").add("Shooter RPM", 3500).withPosition(0, 2).getEntry();
+    manualOverride = Shuffleboard.getTab("shooteryness").add("Manual Override", true).withPosition(1, 2).getEntry();
     
     shooterPID = new PIDController(
       Configrun.get(2.5, "ShooterP"), 
@@ -101,9 +103,26 @@ public class Shooter {
     return shooterPID.atSetpoint();
   }
 
-  public double getShooterRPM() {
+  public double manualOverride() {
 
-    return shooterRPM.getDouble(3500);
+    if (manualOverride.getBoolean(true)) {
+
+      return shooterRPM.getDouble(3500);
+    } else {
+
+      return 3500;
+    }
+  }
+
+  public void toggleOverride() {
+
+    if (manualOverride.getBoolean(true)) {
+      
+      manualOverride.setBoolean(false);
+    } else {
+
+      manualOverride.setBoolean(true);
+    }
   }
 
 }

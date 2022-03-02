@@ -23,7 +23,7 @@ public class TowerCommand extends CommandBase {
     @Override
     public void execute() {
 
-        setpoint = shooter.getShooterRPM();
+        setpoint = shooter.manualOverride();
         shooter.shoot(setpoint);
 
         if (shooter.getShooterError()) {
