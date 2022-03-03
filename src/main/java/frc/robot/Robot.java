@@ -46,7 +46,6 @@ public class Robot extends TimedRobot {
     turretSubsystem = new TurretSubsystem();
     m_robotContainer = new RobotContainer(drivetrain, turretSubsystem);
     System.out.println("still working");
-    m_robotContainer.init();
     
   }
 
@@ -95,7 +94,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
+    m_robotContainer.init();
     m_autonomousCommand = m_robotContainer.getAuto();
 
     /*
@@ -118,6 +117,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.init();
     drivetrain.brakeMode();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

@@ -101,7 +101,7 @@ public class RobotContainer {
     intakeSensors.setDefaultCommand(sensorOutputCommand);
     turretCommand = new TurretCommand(turretSubsystem);
     turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
-    turretSubsystem.setDefaultCommand(turretToZeroCommand);
+    
 
 
     initializeCamera();
@@ -216,9 +216,10 @@ public class RobotContainer {
     storageIntake.storageIntakeCoast();
   }
 
-public void init() {
+  public void init() {
   
+    turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.neutral();
     
-}
+  }
 }
