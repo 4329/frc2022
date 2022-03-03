@@ -29,9 +29,9 @@ public class HoodSubsystem extends SubsystemBase {
   private NetworkTableEntry sparkPosition;
   private NetworkTableEntry hoodSetpoint;
   private double setpointDifference;
-  private double hoodClose;
-  private double hoodMiddle;
-  private double hoodFar;
+  private double hoodOpen;
+  private double hoodHalf;
+  private double hoodClosed;
   private static final int MAX_RANGE = 33;
   // 29 is the max range the varaible hood can travel without hitting a hard limit
   // or throwing itself off the track
@@ -41,7 +41,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   public HoodSubsystem() {
 
-    hoodwheel = new CANSparkMax(Configrun.get(1, "HoodWheelID"), MotorType.kBrushless);
+    hoodwheel = new CANSparkMax(Configrun.get(11, "HoodWheelID"), MotorType.kBrushless);
 
     hoodEncoder = hoodwheel.getEncoder();
 
@@ -75,7 +75,10 @@ public class HoodSubsystem extends SubsystemBase {
     double hoodposition = hoodEncoder.getPosition();
     sparkPosition.setDouble(hoodposition);
 
-    double output = hoodPID.calculate(hoodposition, hoodSetpoint.getDouble(0));
+
+    double setpoint = Math.max(3, hoodSetpoint.getDouble(0));
+    double output = hoodPID.calculate(hoodposition, setpoint);
+
     output = output / MAX_RANGE;
     setpointDifference = hoodSetpoint.getDouble(0) - hoodposition;
 
@@ -83,26 +86,36 @@ public class HoodSubsystem extends SubsystemBase {
       output = hoodposition;
       inputError.setBoolean(false);
     }
+
+
     hoodwheel.set(output);
+
+    System.out.println(hoodEncoder.getPosition());
   }
 
   private void DetermineHoodProfiles() {
-    hoodClose = hoodEncoder.getPosition();
-    hoodMiddle = hoodEncoder.getPosition() + MAX_RANGE / 2;
-    hoodFar = hoodEncoder.getPosition() + 30; // Adding 30 instead of the max 33 incase the manual zero doesn't get it
-                                              // to true 0
+    hoodOpen = Configrun.get(3, "hoodOpen");
+    hoodHalf = Configrun.get(15, "hoodHalf");
+    hoodClosed = Configrun.get(30, "hoodClosed");
   }
 
   public void SetPosition(HoodPosition Position) {
-    if (Position.equals(HoodPosition.CLOSE)) {
-      hoodEncoder.setPosition(hoodClose);
-    } else if (Position.equals(HoodPosition.MIDDLE)) {
-      hoodEncoder.setPosition(hoodMiddle);
-    } else if (Position.equals(HoodPosition.FAR)) {
-      hoodEncoder.setPosition(hoodFar);
+    if (Position.equals(HoodPosition.OPEN)) {
+      hoodEncoder.setPosition(hoodOpen);
+    } else if (Position.equals(HoodPosition.HALF)) {
+      hoodEncoder.setPosition(hoodHalf);
+    } else if (Position.equals(HoodPosition.CLOSED)) {
+      hoodEncoder.setPosition(hoodClosed);
     }
   }
+
   public enum HoodPosition {
-    CLOSE, MIDDLE, FAR;
+    OPEN, HALF, CLOSED;
+  }
+
+  public void hoodTestMode() {
+    hoodwheel.setIdleMode(IdleMode.kCoast);
+    double hoodposition = hoodEncoder.getPosition();
+    sparkPosition.setDouble(hoodposition);
   }
 }

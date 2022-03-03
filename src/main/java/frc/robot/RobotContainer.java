@@ -114,10 +114,15 @@ public class RobotContainer {
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 
+<<<<<<< HEAD
     configureButtonBindings(); /*
                                 * Configure the button bindings to commands using configureButtonBindings
                                 * function
                                 */
+=======
+    // intakeSensors.setDefaultCommand(sensorOutputCommand);//This makes sure that the status of the sensors is constantly being updated.
+  }
+>>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
 
     m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);

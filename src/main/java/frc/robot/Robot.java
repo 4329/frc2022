@@ -15,6 +15,19 @@ import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
 
+<<<<<<< HEAD
+=======
+import com.kauailabs.navx.frc.Tracer;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Solenoid;
+import frc.robot.Subsystems.HoodSubsystem;
+import frc.robot.Subsystems.LimelightSubsystem;
+
+>>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -30,7 +43,12 @@ public class Robot extends TimedRobot {
   private Climber climber;
 
   private double coastWait;
+<<<<<<< HEAD
   private TurretSubsystem turretSubsystem;
+=======
+  private HoodSubsystem hoodSubsystem;
+  private LimelightSubsystem limelightSubsystem;
+>>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -133,28 +151,57 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
     // RobotContainer.limelightSubsystem = limeputDistance();
+<<<<<<< HEAD
 
   }
 
+=======
+  }
+
+>>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     drivetrain.coastMode();
 
+<<<<<<< HEAD
 
     if (m_swerveAlignment == null) {
       // This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
+=======
+    if (m_swerveAlignment == null) {// This prevents 2 sets of widgets from appearing when disabling & enabling the
+                                    // robot, causing a crash
+      m_swerveAlignment = new SwerveAlignment(drivetrain);
+      m_swerveAlignment.initSwerveAlignmentWidgets();
+    }
+
+    if (limelightSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
+                                      // robot, causing a crash
+      limelightSubsystem = new LimelightSubsystem();
+    }
+
+    if (hoodSubsystem == null) {
+      hoodSubsystem = new HoodSubsystem();
+    }
+>>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
+<<<<<<< HEAD
     turretSubsystem.putValuesToShuffleboard();
     turretSubsystem.getPwmPosition();
+=======
+    limelightSubsystem.putDistance();
+    limelightSubsystem.putTargetAcquired();
+    limelightSubsystem.putValuesToShuffleboard();
+    hoodSubsystem.hoodTestMode();
+>>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
   }
 }
