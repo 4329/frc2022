@@ -13,4 +13,8 @@ public class TurretCommand extends CommandBase{
     public void execute() {
         turretSubsystem.targeting();
     }
+
+    public boolean isFinished() {
+        return turretSubsystem.targeted();
+    }
 }

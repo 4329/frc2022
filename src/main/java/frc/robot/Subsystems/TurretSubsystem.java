@@ -183,13 +183,13 @@ public class TurretSubsystem extends SubsystemBase{
             }
             else {
                 output = output + staticFeedforward;
-            }    
+            }
             rotateTurret(output);
         }
         else {
             turretStop();
         }
-        
+
         putValuesToShuffleboard();
     }
 
@@ -206,5 +206,9 @@ public class TurretSubsystem extends SubsystemBase{
         }
         turretPower(-1 * output);
         putValuesToShuffleboard();
+    }
+
+    public boolean targeted() {
+        return limeLightPid.atSetpoint();
     }
 }
