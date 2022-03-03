@@ -48,7 +48,7 @@ extendSolenoidID_2 = 7
 
 climberMotor1ID = 9
 climberMotor2ID = 10
-climberMotor3ID = 11
+# climberMotor3ID = 11
 
 climbPower = 0.5
 reverseClimbPower = -0.5
