@@ -49,11 +49,11 @@ public class Shooter {
     );
     shooterPID.setTolerance(Configrun.get(100, "ShooterTolerance") * 2048.0 / 600.0);
 
-    shooterwheel1 = new TalonFX(Configrun.get(13, "ShooterWheel1ID"));
-    shooterwheel2 = new TalonFX(Configrun.get(14, "ShooterWheel2ID"));
+    shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
+    shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
     shooterwheel1.setInverted(true);
-    shooterwheel2.setInverted(true);
-    shooterwheel2.follow(shooterwheel1, FollowerType.PercentOutput);
+    //shooterwheel2.setInverted(false);
+    //shooterwheel2.follow(shooterwheel1, FollowerType.PercentOutput);
     shooterwheel1.setNeutralMode(NeutralMode.Coast);
     shooterwheel2.setNeutralMode(NeutralMode.Coast);
   }

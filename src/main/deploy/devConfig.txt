@@ -59,6 +59,9 @@ h21n = 104
 a1Degree = 11
 taTolerance = 0.3
 
+ShooterWheel1ID = 30
+ShooterWheel2ID = 31
+
 ShooterP = 0.5
 ShooterI = 0
 ShooterD = 0
