@@ -24,8 +24,9 @@ import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.SensorOutputCommand;
-import frc.robot.Commands.StorageIntakeInCommand;
 import frc.robot.Commands.TowerCommand;
+import frc.robot.Commands.TurretCommand;
+import frc.robot.Commands.TurretToZeroCommand;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
@@ -36,9 +37,12 @@ import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
+import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
 import frc.robot.Commands.ClimberEngageCommand;
+import frc.robot.Commands.TurretCommand;
+import frc.robot.Commands.CommandGroups;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -55,10 +59,12 @@ public class RobotContainer {
   private final StorageIntake storageIntake;
   private final IntakeSensors intakeSensors;
   private final ShooterFeedSubsytem shooterFeed;
+  private final TurretSubsystem turretSubsystem;
   private final IntakeSolenoidSubsystem intakeSolenoid;
   private final IntakeMotor intakeMotor;
   private final Shooter shooter;
   private final Climber climber;
+  private final CommandGroups commandGroups;
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -72,13 +78,17 @@ public class RobotContainer {
   private Command intakeRun;
 
   private SensorOutputCommand sensorOutputCommand;
-
+  private TurretCommand turretCommand;
+  private TurretToZeroCommand turretToZeroCommand;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
    * @param drivetrain
    */
-  public RobotContainer(Drivetrain drivetrain) {
+
+  public RobotContainer(Drivetrain drivetrain, TurretSubsystem turretSubsystem) {
+    m_robotDrive = drivetrain;
+    this.turretSubsystem = turretSubsystem;
 
     pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
 
@@ -91,12 +101,16 @@ public class RobotContainer {
     climber = new Climber(pneumaticHub);
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
+    turretCommand = new TurretCommand(turretSubsystem);
+    turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
+    commandGroups = new CommandGroups();
+
+
 
     initializeCamera();
 
     m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
-    m_robotDrive = drivetrain;
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 
@@ -156,6 +170,7 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));
 
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -205,9 +220,10 @@ public class RobotContainer {
     storageIntake.storageIntakeCoast();
   }
 
-public void init() {
-  
+  public void init() {
+
+    turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.neutral();
-    
-}
+
+  }
 }

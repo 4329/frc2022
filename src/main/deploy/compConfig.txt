@@ -63,3 +63,22 @@ taTolerance = 0.3
 
 #Hood IDs
 HoodWheelID = 1
+
+# Turret
+turretID = 41
+
+turretRightPower = 0.5
+turretLeftPower = 0.5
+turretStop = 0
+
+turretMax = 1557
+turretMin = 943
+turretZero = 1250
+
+#Hood IDs
+HoodWheelID = 1
+
+ShooterWheel1ID = 13
+ShooterWheel2ID = 14
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0

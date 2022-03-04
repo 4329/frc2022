@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.LimelightSubsystem;
+import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
 
@@ -29,8 +30,7 @@ public class Robot extends TimedRobot {
   private Climber climber;
 
   private double coastWait;
-
-  private LimelightSubsystem limelightSubsystem;
+  private TurretSubsystem turretSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -38,16 +38,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    SmartDashboard.setDefaultBoolean("Set Solenoid", false);
-    System.out.println("its working");
     Configrun.loadconfig();
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
     drivetrain = new Drivetrain();
-    m_robotContainer = new RobotContainer(drivetrain);
-    System.out.println("still working");
-    m_robotContainer.init();
+    turretSubsystem = new TurretSubsystem();
+    m_robotContainer = new RobotContainer(drivetrain, turretSubsystem);
   }
 
   /**
@@ -95,7 +92,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
+    m_robotContainer.init();
     m_autonomousCommand = m_robotContainer.getAuto();
 
     /*
@@ -118,6 +115,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.init();
     drivetrain.brakeMode();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -125,15 +123,17 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-      System.out.println("Its working now");
     }
   }
+
+
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     // m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
     // RobotContainer.limelightSubsystem = limeputDistance();
+
   }
 
   @Override
@@ -141,27 +141,20 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     drivetrain.coastMode();
-    
 
-    if (m_swerveAlignment == null) {// This prevents 2 sets of widgets from appearing when disabling & enabling the
-                                    // robot, causing a crash
+
+    if (m_swerveAlignment == null) {
+      // This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
-
-    if (limelightSubsystem == null) { // This prevents 2 sets of widgets from appearing when disabling & enabling the
-                                      // robot, causing a crash
-      limelightSubsystem = new LimelightSubsystem();
-    }
-
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
-    limelightSubsystem.putDistance();
-    limelightSubsystem.putTargetAcquired();
-    limelightSubsystem.putValuesToShuffleboard();
+    turretSubsystem.putValuesToShuffleboard();
+    turretSubsystem.getPwmPosition();
   }
 }

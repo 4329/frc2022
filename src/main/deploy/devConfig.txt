@@ -72,3 +72,22 @@ ShooterTolerance = 8000
 #Digital input IDs
 topTriggerPort = 5
 bottomTriggerPort = 3
+
+# Turret
+turretID = 44
+
+turretRightPower = 0.5
+turretLeftPower = 0.5
+turretStop = 0
+
+turretMax = 1620
+turretMin = 1006
+turretZero = 1313
+
+#Hood IDs
+HoodWheelID = 1
+
+ShooterWheel1ID = 13
+ShooterWheel2ID = 14
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0
