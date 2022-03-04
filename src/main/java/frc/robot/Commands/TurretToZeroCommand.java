@@ -11,10 +11,6 @@ public class TurretToZeroCommand extends CommandBase{
         addRequirements(turretSubsystem);
     }
 
-    public void initialize() {
-
-    }
-
     public void execute() {
         turretSubsystem.turretToZero();
     }

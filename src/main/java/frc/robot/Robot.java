@@ -45,8 +45,6 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     turretSubsystem = new TurretSubsystem();
     m_robotContainer = new RobotContainer(drivetrain, turretSubsystem);
-    System.out.println("still working");
-    
   }
 
   /**
@@ -143,7 +141,7 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     drivetrain.coastMode();
-    
+
 
     if (m_swerveAlignment == null) {
       // This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash

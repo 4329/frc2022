@@ -50,11 +50,6 @@ public class LimelightSubsystem extends SubsystemBase {
         // getDistanceFromTargetDisplay = Shuffleboard.getTab("limlight").add("Distance", 0).withPosition(5, 0).getEntry();
     }
 
-    // public void setDistance() {
-    //     currentDistance = getDistanceFromTarget();
-    // }
-    // Sets calculation distance for shooter
-
     public void putValuesToShuffleboard() {
         checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
         checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
