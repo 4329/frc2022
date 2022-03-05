@@ -11,17 +11,16 @@ backLeftTurningMotorPort = 6
 backRightTurningMotorPort = 8
 
 # Encoder IDs -DO NOT CHANGE-
-frontLeftTurningEncoderPort = 3
-frontRightTurningEncoderPort = 2
-backLeftTurningEncoderPort = 0
-backRightTurningEncoderPort = 1
+frontLeftTurningEncoderPort = 1
+frontRightTurningEncoderPort = 0
+backLeftTurningEncoderPort = 2
+backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
-frontLeftOffset = 0.0
-frontRightOffset = 0.7853
-backLeftOffset = -0.0884
-backRightOffset = 2.79
-
+frontLeftOffset = 2.71957
+frontRightOffset = 7.72467
+backLeftOffset = 2.06131
+backRightOffset = 1.321
 
 Intake_ID = 40
 intakeSpeed = 0.7
@@ -37,8 +36,7 @@ storageIntakePower = 0.5
 
 #Shooter Feed
 FrontShooterFeed_ID = 42
-BackShooterFeed_ID = 43
-
+#The only shooter feed motor on comp is FRontShooterFeed, with an id of 42
 ShooterFeedPower = 0.5
 
 pivotSolenoidID_1 = 5
@@ -61,16 +59,30 @@ h21n = 104
 a1Degree = 11
 taTolerance = 0.3
 
+#Hood IDs
+HoodWheelID = 1
+ShooterWheel1ID = 13
+ShooterWheel2ID = 14
+
+ShooterP = 0.5
+ShooterI = 0
+ShooterD = 0
+ShooterTolerance = 8000
+
+#Digital input IDs
+topTriggerPort = 5
+bottomTriggerPort = 3
+
 # Turret
-turretID = 41
+turretID = 44
 
 turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 1557
-turretMin = 943
-turretZero = 1250
+turretMax = 1620
+turretMin = 1006
+turretZero = 1313
 
 ShooterWheel1ID = 13
 ShooterWheel2ID = 14
