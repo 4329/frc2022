@@ -229,6 +229,12 @@ public class RobotContainer {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.engage();
+  }
+
+  public void test() {
+
+    //hoodSubsystem.hoodTestMode();
+    turretSubsystem.putValuesToShuffleboard();
 
   }
 }

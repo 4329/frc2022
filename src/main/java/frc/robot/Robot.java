@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
-  private Climber climber;
 
   private double coastWait;
   private TurretSubsystem turretSubsystem;
@@ -157,8 +156,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
-    turretSubsystem.putValuesToShuffleboard();
-    turretSubsystem.getPwmPosition();
-    hoodSubsystem.hoodTestMode();
+    m_robotContainer.test();
+
   }
 }
