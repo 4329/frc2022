@@ -44,16 +44,16 @@ public class Shooter {
     belowZero = Shuffleboard.getTab("Shooter").add("Below Zero", false).withPosition(1, 2).getEntry();
     shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
     manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", true).withPosition(5, 1).getEntry();
-    
+
     shooterPID = new PIDController(
-      Configrun.get(2.5, "ShooterP"), 
+      Configrun.get(2.5, "ShooterP"),
       Configrun.get(0.0, "ShooterI"),
       Configrun.get(0.0, "ShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterPIDConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
-    Constants.ShooterPIDConstants.shooterKs, 
-    Constants.ShooterPIDConstants.shooterKv, 
+    Constants.ShooterPIDConstants.shooterKs,
+    Constants.ShooterPIDConstants.shooterKv,
     Constants.ShooterPIDConstants.shooterKa);
 
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
@@ -73,7 +73,7 @@ public class Shooter {
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
+    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) *
     Constants.ShooterPIDConstants.velocityFeedForwardMultiplier);
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048

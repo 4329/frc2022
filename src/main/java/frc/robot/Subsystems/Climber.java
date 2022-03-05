@@ -1,14 +1,11 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
@@ -130,11 +127,4 @@ public class Climber {
             engage();
         }
     }
-
-    // extend -
-    // pivotcommand -- toggle
-    // shift + extend
-    // unshift + retract
-
-    // climb == while held
 }

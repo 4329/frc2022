@@ -8,7 +8,7 @@ public class LinearInterpolationTable {
     private final Point2D[] m_points;
     public final int size;
 
-    public LinearInterpolationTable(Point2D... points) {
+    public LinearInterpolationTable(Point2D... points) { 
         m_points = points;
         size = m_points.length;
         for (int i = 0; i < size; i++) {
@@ -22,7 +22,7 @@ public class LinearInterpolationTable {
 
     }
 
-    public double getOutput(double input) {
+    public double getOutput(double input) { 
         int index = 0;
         if (input <= m_minInput) {
             index = 0;
