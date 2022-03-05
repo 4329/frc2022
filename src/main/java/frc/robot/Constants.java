@@ -194,6 +194,16 @@ public final class Constants {
   }
 
   /**
+   * Static method containing all shooterPID constants
+   */
+  public static final class ShooterPIDConstants {
+    public static final double staticfeedForward = 9001;
+    public static final double velocityFeedForward = 0;
+    public static final double pidCalculatedMultiplier = 1.3;
+    public static final double shooterToleranceInRPMs = 10;
+  }
+
+  /**
    * Static method containing all Turret constants
    */
   public static final class TurretConstants {
