@@ -17,7 +17,7 @@ public class DriveByController extends CommandBase {
   private final XboxController m_controller;
   private boolean fieldOrient = true;
 
-  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field orient on", true)
+  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true)
       .getEntry();
 
   /**
