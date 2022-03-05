@@ -231,6 +231,9 @@ public class RobotContainer {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.engage();
+    climber.retract();
+    climber.reversePivotClimber();
+
   }
 
   public void teleopPeriodic() {
