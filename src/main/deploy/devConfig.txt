@@ -59,10 +59,16 @@ h21n = 104
 a1Degree = 11
 taTolerance = 0.3
 
-ShooterP = 0.5
-ShooterI = 0
-ShooterD = 0
-ShooterTolerance = 8000
+ShooterWheel1ID = 30
+ShooterWheel2ID = 31
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0
+
+ShooterP = 3
+ShooterI = 12
+ShooterD = 0.06
+#ShooterTolerance is in RPM
+ShooterToleranceInRPMs = 10
 
 #Digital input IDs
 topTriggerPort = 5
@@ -78,13 +84,6 @@ turretStop = 0
 turretMax = 1620
 turretMin = 1006
 turretZero = 1313
-
-
-ShooterWheel1ID = 13
-ShooterWheel2ID = 14
-
-FrontShooterFeedStop = 0
-BackShooterFeedStop = 0
 
 # Hood IDs
 HoodWheelID = 11

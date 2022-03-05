@@ -28,11 +28,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private SwerveAlignment m_swerveAlignment;
   private Drivetrain drivetrain;
-  private Climber climber;
 
   private double coastWait;
-  private TurretSubsystem turretSubsystem;
-  private HoodSubsystem hoodSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -45,8 +42,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     drivetrain = new Drivetrain();
-    turretSubsystem = new TurretSubsystem();
-    m_robotContainer = new RobotContainer(drivetrain, turretSubsystem);
+    m_robotContainer = new RobotContainer(drivetrain);
   }
 
   /**
@@ -148,17 +144,13 @@ public class Robot extends TimedRobot {
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
     }
-    if (hoodSubsystem == null) {
-      hoodSubsystem = new HoodSubsystem();
-    }
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
     m_swerveAlignment.updateSwerveAlignment();
-    turretSubsystem.putValuesToShuffleboard();
-    turretSubsystem.getPwmPosition();
-    hoodSubsystem.hoodTestMode();
+    m_robotContainer.test();
+
   }
 }
