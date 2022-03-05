@@ -62,7 +62,7 @@ taTolerance = 0.3
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
-ShooterP = 0.5
+ShooterP = 2.5
 ShooterI = 0
 ShooterD = 0
 #ShooterTolerance is in RPM
