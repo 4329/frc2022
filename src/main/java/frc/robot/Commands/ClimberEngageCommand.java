@@ -6,7 +6,7 @@ import frc.robot.Subsystems.Climber;
 public class ClimberEngageCommand extends CommandBase{
     private Climber climber;   
     private long initTime;
-    private static final int TIMETOENGAGE = 1750;
+   // private static final int TIMETOENGAGE = 1750;
     private boolean done = false;
 
     public ClimberEngageCommand(Climber climber) {
@@ -14,24 +14,24 @@ public class ClimberEngageCommand extends CommandBase{
     }
 
     public void initialize() {
-        done = false;
-        climber.neutral();//shift or neutral
+        //done = false;
+        // climber.neutral();//engage or neutral
         climber.extend();
         climber.pivotClimber();
-        initTime =  System.currentTimeMillis();
+        //initTime =  System.currentTimeMillis();
     }
 
-    public void execute() {
+    // public void execute() {
 
-        if (System.currentTimeMillis() - initTime >= TIMETOENGAGE) {
-            climber.engage();
-            done = true;
-        }
+    //     if (System.currentTimeMillis() - initTime >= TIMETOENGAGE) {
+    //         climber.engage();
+    //         done = true;
+    //     }
 
-    }
-    @Override
-    public boolean isFinished() {
-        return done;
+    // }
+    // @Override
+    // public boolean isFinished() {
+    //     return done;
 
-    }
+    // }
 }

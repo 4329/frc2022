@@ -223,7 +223,7 @@ public class RobotContainer {
   public void init() {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
-    climber.neutral();
-
+    climber.engage();
+    
   }
 }

@@ -19,7 +19,7 @@ public class Climber {
     private final DoubleSolenoid extendSolenoid;
     private final CANSparkMax climberNeoMotor1;
     private final CANSparkMax climberNeoMotor2;
-    private final CANSparkMax climberNeoMotor3;
+    //private final CANSparkMax climberNeoMotor3;
     private boolean pivoted = false;
     private boolean shifted = false;
 
@@ -35,9 +35,9 @@ public class Climber {
         extendSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
         climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
         climberNeoMotor2 = new CANSparkMax(Configrun.get(10, "climberMotor2ID"), MotorType.kBrushless);
-        climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
+        // climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
         climberNeoMotor2.follow(climberNeoMotor1);
-        climberNeoMotor3.follow(climberNeoMotor1);
+        //climberNeoMotor3.follow(climberNeoMotor1);
 
         isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
         isPivotedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Pivot Active", false).getEntry();
