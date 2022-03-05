@@ -201,7 +201,7 @@ public final class Constants {
     public static final double shooterKv = 0.35;
     public static final double shooterKa = 0.06;
     public static final double velocityFeedForwardMultiplier = 2.9;
-    public static final double shooterToleranceInRPMs = 10;
+    public static final double shooterToleranceInRPMs = 100;
   }
 
   /**

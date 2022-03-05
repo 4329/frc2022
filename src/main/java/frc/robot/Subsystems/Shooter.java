@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 import frc.robot.Constants;
+import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
 
 public class Shooter {
 
@@ -106,14 +107,15 @@ public class Shooter {
     return shooterPID.atSetpoint();
   }
 
-  public double manualOverride() {
+  public double manualOverride(HoodSubsystem hood) {
 
     if (manualOverride.getBoolean(true)) {
 
       return shooterRPM.getDouble(3500);
-    } else {
+    } else { //TODO add aiming code here
 
-      return 3500; //TODO add aiming velocity code here
+      hood.setPosition(HoodPosition.HALF);
+      return 3500;
     }
   }
 

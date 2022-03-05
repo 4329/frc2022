@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.print.attribute.HashPrintJobAttributeSet;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.VideoSource;
@@ -104,10 +106,12 @@ public class RobotContainer {
     climber = new Climber(pneumaticHub);
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
+    hoodSubsystem = new HoodSubsystem();
+
     turretCommand = new TurretCommand(turretSubsystem);
     turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
     commandGroups = new CommandGroups();
-    hoodSubsystem = new HoodSubsystem();
+
 
     initializeCamera();
 
@@ -168,12 +172,12 @@ public class RobotContainer {
         .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
-        .whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));
+        .whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
-        .whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));
+        .whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));
 
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -236,5 +240,5 @@ public class RobotContainer {
     hoodSubsystem.hoodTestMode();
     turretSubsystem.putValuesToShuffleboard();
   }
-  
+
 }
