@@ -13,8 +13,8 @@ backRightTurningMotorPort = 8
 # Encoder IDs -DO NOT CHANGE-
 frontLeftTurningEncoderPort = 1
 frontRightTurningEncoderPort = 0
-backLeftTurningEncoderPort = 2
-backRightTurningEncoderPort = 3
+backLeftTurningEncoderPort = 3
+backRightTurningEncoderPort = 2
 
 # Motor Offsets in Radians
 frontLeftOffset = 2.71957
@@ -48,7 +48,6 @@ extendSolenoidID_2 = 7
 
 climberMotor1ID = 9
 climberMotor2ID = 10
-# climberMotor3ID = 11
 
 climbPower = 0.5
 reverseClimbPower = -0.5
@@ -60,9 +59,9 @@ a1Degree = 11
 taTolerance = 0.3
 
 #Hood IDs
-HoodWheelID = 1
-ShooterWheel1ID = 13
-ShooterWheel2ID = 14
+HoodWheelID = 11
+ShooterWheel1ID = 30
+ShooterWheel2ID = 31
 
 ShooterP = 0.5
 ShooterI = 0
