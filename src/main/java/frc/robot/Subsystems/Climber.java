@@ -14,21 +14,12 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
 public class Climber {
-<<<<<<< HEAD
     private final DoubleSolenoid pivotSolenoid;
     private final DoubleSolenoid shiftSolenoid;
     private final DoubleSolenoid extendSolenoid;
     private final CANSparkMax climberNeoMotor1;
     private final CANSparkMax climberNeoMotor2;
     //private final CANSparkMax climberNeoMotor3;
-=======
-    private Solenoid pivotSolenoid;
-    private Solenoid shiftSolenoid;
-    private Solenoid extendSolenoid;
-    private CANSparkMax climberNeoMotor1;
-    private CANSparkMax climberNeoMotor2;
-    // private CANSparkMax climberNeoMotor3;
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
     private boolean pivoted = false;
     private boolean shifted = false;
 
@@ -39,7 +30,6 @@ public class Climber {
 
     public Climber(PneumaticHub hubbie) {
 
-<<<<<<< HEAD
         pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(5, "pivotSolenoidID_1"), Configrun.get(4, "pivotSolenoidID_2"));
         shiftSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
         extendSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
@@ -48,28 +38,6 @@ public class Climber {
         // climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
         climberNeoMotor2.follow(climberNeoMotor1);
         //climberNeoMotor3.follow(climberNeoMotor1);
-=======
-
-
-    public Climber (PneumaticHub hubbie) {
-        pivotSolenoid = hubbie.makeSolenoid(Configrun.get(1, "pivotSolenoidID"));
-        shiftSolenoid = hubbie.makeSolenoid(Configrun.get(2, "shiftSolenoidID"));
-        extendSolenoid = hubbie.makeSolenoid(Configrun.get(3, "extendSolenoidID"));
-        climberNeoMotor1 = new CANSparkMax (Configrun.get(9,  "climberMotor1ID"), MotorType.kBrushless);
-        climberNeoMotor2 = new CANSparkMax (Configrun.get(10,  "climberMotor2ID"), MotorType.kBrushless);
-        // climberNeoMotor3 = new CANSparkMax (Configrun.get(11,  "climberMotor3ID"), MotorType.kBrushless);
-        climberNeoMotor2.follow(climberNeoMotor1);
-        // climberNeoMotor3.follow(climberNeoMotor1);
-
-        isShiftedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Shift Active", false).getEntry();
-        isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot Active", false).getEntry();
-        isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Extetend Active", false).getEntry();
-        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Moters Active", false).getEntry();
-
-
-
-
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
 
         isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
         isPivotedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Pivot Active", false).getEntry();
@@ -78,11 +46,7 @@ public class Climber {
     }
 
     public void pivotClimber() {
-<<<<<<< HEAD
         pivotSolenoid.set(Value.kForward);
-=======
-        pivotSolenoid.set(true);
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
         isPivotedShuffleboard.setBoolean(true);
     }
 
@@ -124,13 +88,10 @@ public class Climber {
         if (Math.abs(climbPower) > 0 && extendSolenoid.get().equals(Value.kReverse)) {
             retract();
         }
-        
+
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
-<<<<<<< HEAD
-    
-=======
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
+
 
     }
 
@@ -145,12 +106,6 @@ public class Climber {
         //should we add extend or retract?!
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
     }
 
     public void togglePivot() {
@@ -162,18 +117,6 @@ public class Climber {
 
             pivotClimber();
             pivoted = true;
-<<<<<<< HEAD
-=======
-        }
-    }
-
-    public void toggleShift() {
-        if(shifted) {
-            unShift();
-        }
-        else {
-            shift();
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
         }
     }
 
@@ -188,13 +131,6 @@ public class Climber {
         }
     }
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
     // extend -
     // pivotcommand -- toggle
     // shift + extend
