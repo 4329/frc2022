@@ -197,6 +197,9 @@ public final class Constants {
    * Static method containing all shooterPID constants
    */
   public static final class ShooterPIDConstants {
+    public static final double shooterKs = 12;
+    public static final double shooterKv = 0.35;
+    public static final double shooterKa = 0.06;
     public static final double velocityFeedForwardMultiplier = 2.9;
     public static final double shooterToleranceInRPMs = 10;
   }

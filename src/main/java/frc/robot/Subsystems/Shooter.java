@@ -51,7 +51,10 @@ public class Shooter {
       Configrun.get(0.0, "ShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterPIDConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
-    simpleFeedForward = new SimpleMotorFeedforward(12, 0.35, 0.06);
+    simpleFeedForward = new SimpleMotorFeedforward(
+    Constants.ShooterPIDConstants.shooterKs, 
+    Constants.ShooterPIDConstants.shooterKv, 
+    Constants.ShooterPIDConstants.shooterKa);
 
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
