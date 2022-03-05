@@ -17,6 +17,8 @@ import frc.robot.Constants;
 public class Shooter {
 
   private PIDController shooterPID;
+  SimpleMotorFeedforward simpleFeedForward;
+
   private TalonFX shooterwheel1;
   private TalonFX shooterwheel2;
 
@@ -25,7 +27,6 @@ public class Shooter {
   double setpointCTRE;
   double pidCalculated;
   double maxPowerCtre;
-  SimpleMotorFeedforward simpleFeedForward;
 
   private NetworkTableEntry pidSetpointErrorEntry;
   private NetworkTableEntry pidErrorEntryNum;
@@ -69,8 +70,8 @@ public class Shooter {
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-
-    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 2.9);
+    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
+    Constants.ShooterPIDConstants.velocityFeedForwardMultiplier);
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
     // kGearRotation = 1
