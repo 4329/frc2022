@@ -1,6 +1,5 @@
-package frc.robot.Subsystems.Swerve;
+package frc.robot.Subsystems;
 
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,13 +9,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IntakeSolenoidSubsystemTest {
    @Mock
-   private Solenoid mockSolenoid;
+   private DoubleSolenoid mockSolenoid;
 
    @Mock
    private PneumaticHub mockPneumaticHub;
@@ -25,7 +25,7 @@ public class IntakeSolenoidSubsystemTest {
 
    @Before
    public void setUp() {
-      when(mockPneumaticHub.makeSolenoid(0)).thenReturn(mockSolenoid);
+      when(mockPneumaticHub.makeDoubleSolenoid(0, 1)).thenReturn(mockSolenoid);
       testObject = new IntakeSolenoidSubsystem(mockPneumaticHub);
    }
 
@@ -33,31 +33,13 @@ public class IntakeSolenoidSubsystemTest {
    public void intakeUp_solenoidSet() {
       testObject.intakeUp();
 
-      verify(mockSolenoid).set(false);
+      verify(mockSolenoid).set(Value.kReverse);
    }
 
    @Test
    public void intakeDown() {
       testObject.intakeDown();
 
-      verify(mockSolenoid).set(true);
-   }
-
-   @Test
-   public void keepIntakePosition_intakeDownGetsCalled() {
-      when(mockSolenoid.get()).thenReturn(true);
-
-      testObject.keepIntakePosition();
-
-      verify(mockSolenoid).set(true);
-   }
-
-   @Test
-   public void keepIntakePosition_intakeUpGetsCalled() {
-      when(mockSolenoid.get()).thenReturn(false);
-
-      testObject.keepIntakePosition();
-
-      verify(mockSolenoid).set(false);
+      verify(mockSolenoid).set(Value.kForward);
    }
 }
