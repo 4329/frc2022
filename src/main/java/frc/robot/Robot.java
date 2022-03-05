@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Climber;
+import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.LimelightSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
 
   private double coastWait;
   private TurretSubsystem turretSubsystem;
+  private HoodSubsystem hoodSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -126,8 +128,6 @@ public class Robot extends TimedRobot {
     }
   }
 
-
-
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
@@ -142,11 +142,14 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     drivetrain.coastMode();
 
-
     if (m_swerveAlignment == null) {
-      // This prevents 2 sets of widgets from appearing when disabling & enabling the robot, causing a crash
+      // This prevents 2 sets of widgets from appearing when disabling & enabling the
+      // robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
+    }
+    if (hoodSubsystem == null) {
+      hoodSubsystem = new HoodSubsystem();
     }
   }
 
@@ -156,5 +159,6 @@ public class Robot extends TimedRobot {
     m_swerveAlignment.updateSwerveAlignment();
     turretSubsystem.putValuesToShuffleboard();
     turretSubsystem.getPwmPosition();
+    hoodSubsystem.hoodTestMode();
   }
 }

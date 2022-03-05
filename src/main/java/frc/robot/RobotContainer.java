@@ -6,6 +6,7 @@ import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -18,11 +19,14 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Commands.ClimberButtonCommand;
 import frc.robot.Commands.ClimberButtonCommandReverse;
+import frc.robot.Commands.ClimberEngageCommand;
+import frc.robot.Commands.CommandGroups;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
-import frc.robot.Commands.IntakeAutoCommand;
+import frc.robot.Commands.ManualHoodCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
@@ -31,6 +35,7 @@ import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
+import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.IntakeSolenoidSubsystem;
@@ -40,9 +45,6 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
-import frc.robot.Commands.ClimberEngageCommand;
-import frc.robot.Commands.TurretCommand;
-import frc.robot.Commands.CommandGroups;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -65,6 +67,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Climber climber;
   private final CommandGroups commandGroups;
+  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -80,6 +83,7 @@ public class RobotContainer {
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
@@ -104,8 +108,6 @@ public class RobotContainer {
     turretCommand = new TurretCommand(turretSubsystem);
     turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
     commandGroups = new CommandGroups();
-
-
 
     initializeCamera();
 
@@ -170,7 +172,8 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+        .whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));
 
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -178,9 +181,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
 
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));
-    new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));
+    new JoystickAnalogButton(m_driverController, true)
+        .whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));
-
+    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
+    new JoystickButton(m_driverController, Button.kBack.value).whenPressed(() -> hoodSubsystem.CyclePosition());
   }
 
   /**
@@ -224,6 +229,6 @@ public class RobotContainer {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.engage();
-    
+
   }
 }

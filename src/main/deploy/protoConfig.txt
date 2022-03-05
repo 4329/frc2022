@@ -84,10 +84,18 @@ turretMax = 1557
 turretMin = 943
 turretZero = 1250
 
-#Hood IDs
-HoodWheelID = 1
 
 ShooterWheel1ID = 13
 ShooterWheel2ID = 14
+
 FrontShooterFeedStop = 0
 BackShooterFeedStop = 0
+
+# Hood IDs
+HoodWheelID = 11
+
+# Hood Offsets (in Encoder ticks)
+hoodNeutral = 0
+hoodOpen = 3
+hoodHalf = 15
+hoodClosed = 30

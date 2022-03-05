@@ -88,10 +88,10 @@ public class Climber {
         if (Math.abs(climbPower) > 0 && extendSolenoid.get().equals(Value.kReverse)) {
             retract();
         }
-        
+
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
-    
+
 
     }
 

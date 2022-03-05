@@ -4,6 +4,8 @@ package frc.robot.Subsystems;
 
 import java.util.Collections;
 
+import javax.swing.text.Position;
+
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -29,10 +31,14 @@ public class HoodSubsystem extends SubsystemBase {
   private NetworkTableEntry sparkPosition;
   private NetworkTableEntry hoodSetpoint;
   private double setpointDifference;
-  private double hoodClose;
-  private double hoodMiddle;
-  private double hoodFar;
+  private double hoodOpen;
+  private double hoodHalf;
+  private double hoodClosed;
+  private double hoodNeutral;
   private static final int MAX_RANGE = 33;
+  private HoodPosition currentPosition = HoodPosition.NEUTRAL;
+  private double setpoint;
+
   // 29 is the max range the varaible hood can travel without hitting a hard limit
   // or throwing itself off the track
 
@@ -40,14 +46,20 @@ public class HoodSubsystem extends SubsystemBase {
   // the limit switch for zeroing
 
   public HoodSubsystem() {
+    hoodNeutral = Configrun.get(0, "hoodNeutral");
+    hoodOpen = Configrun.get(3, "hoodOpen");
+    setpoint = hoodOpen;
+    hoodHalf = Configrun.get(15, "hoodHalf");
+    hoodClosed = Configrun.get(30, "hoodClosed");
 
-    hoodwheel = new CANSparkMax(Configrun.get(1, "HoodWheelID"), MotorType.kBrushless);
+    hoodwheel = new CANSparkMax(Configrun.get(11, "HoodWheelID"), MotorType.kBrushless);
 
     hoodEncoder = hoodwheel.getEncoder();
+    hoodEncoder.setPosition(0);
 
-    hoodPID = new PIDController(1.25, 0, 0);
+    hoodPID = new PIDController(2.2, 0, 0);
     hoodwheel.setIdleMode(IdleMode.kBrake);
-    // hoodPID.setTolerance(1);
+    hoodPID.setTolerance(1);
 
     sparkOutput = Shuffleboard.getTab("Hood Data").add("Spark Output Percent", 0)
         .withWidget(BuiltInWidgets.kNumberSlider)
@@ -67,42 +79,85 @@ public class HoodSubsystem extends SubsystemBase {
 
     Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
         .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
-
-    DetermineHoodProfiles();
   }
 
   public void HoodPeriodic() {
+    System.out.println("OUTPUT PRE<--------------------------------------" + output);
     double hoodposition = hoodEncoder.getPosition();
+    System.out.println("Hood Position" + hoodposition);
     sparkPosition.setDouble(hoodposition);
 
-    double output = hoodPID.calculate(hoodposition, hoodSetpoint.getDouble(0));
-    output = output / MAX_RANGE;
-    setpointDifference = hoodSetpoint.getDouble(0) - hoodposition;
+    // System.out.println("Hood Position<-----" + hoodposition);
+    // double setpoint = 0; // sits at neutral position until told otherwise.
 
-    if (Math.abs(setpointDifference) > MAX_RANGE) {
-      output = hoodposition;
-      inputError.setBoolean(false);
+    if (currentPosition.equals(HoodPosition.OPEN)) {
+      setpoint = hoodOpen;
+    } else if (currentPosition.equals(HoodPosition.HALF)) {
+      setpoint = hoodHalf;
+    } else if (currentPosition.equals(HoodPosition.CLOSED)) {
+      setpoint = hoodClosed;
+    }
+
+    System.out.println("----------" + setpoint);
+
+    double output = hoodPID.calculate(hoodposition, setpoint);
+
+    System.out.println("HOOD PERIODIC <-----------------" + setpoint);
+    output = output / MAX_RANGE;
+    // setpointDifference = hoodSetpoint.getDouble(0) - hoodposition;
+
+    if (Math.abs(hoodposition) > MAX_RANGE) {
+      output = 0;
     }
     hoodwheel.set(output);
+    System.out.println("OUTPUT FINAL <-------------" + output);
   }
 
-  private void DetermineHoodProfiles() {
-    hoodClose = hoodEncoder.getPosition();
-    hoodMiddle = hoodEncoder.getPosition() + MAX_RANGE / 2;
-    hoodFar = hoodEncoder.getPosition() + 30; // Adding 30 instead of the max 33 incase the manual zero doesn't get it
-                                              // to true 0
+  // System.out.println(hoodEncoder.getPosition());
+
+  public boolean hoodSet() {
+    return hoodPID.atSetpoint();
   }
 
-  public void SetPosition(HoodPosition Position) {
-    if (Position.equals(HoodPosition.CLOSE)) {
-      hoodEncoder.setPosition(hoodClose);
-    } else if (Position.equals(HoodPosition.MIDDLE)) {
-      hoodEncoder.setPosition(hoodMiddle);
-    } else if (Position.equals(HoodPosition.FAR)) {
-      hoodEncoder.setPosition(hoodFar);
+  public void stop() {
+    hoodwheel.set(0);
+  }
+
+  public void setPosition(HoodPosition Position) {
+    System.out.println("`````````````````````````Setting Position to" + Position + "`````````````````````````");
+    // if (Position.equals(HoodPosition.OPEN)) {
+    // hoodEncoder.setPosition(hoodOpen);
+    // } else if (Position.equals(HoodPosition.HALF)) {
+    // hoodEncoder.setPosition(hoodHalf);
+    // } else if (Position.equals(HoodPosition.CLOSED)) {
+    // hoodEncoder.setPosition(hoodClosed);
+    // }
+    currentPosition = Position;
+  }
+
+  // may be unnecessary
+  public void CyclePosition() {
+    System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
+
+    if (currentPosition.equals(HoodPosition.NEUTRAL)) {
+      setPosition(HoodPosition.OPEN);
+    } else if (currentPosition.equals(HoodPosition.OPEN)) {
+      setPosition(HoodPosition.HALF);
+    } else if (currentPosition.equals(HoodPosition.HALF)) {
+      setPosition(HoodPosition.CLOSED);
+    } else if (currentPosition.equals(HoodPosition.CLOSED)) {
+      setPosition(HoodPosition.OPEN);
     }
   }
+
   public enum HoodPosition {
-    CLOSE, MIDDLE, FAR;
+    OPEN, HALF, CLOSED, NEUTRAL;
+
+  }
+
+  public void hoodTestMode() {
+    hoodwheel.setIdleMode(IdleMode.kCoast);
+    double hoodposition = hoodEncoder.getPosition();
+    sparkPosition.setDouble(hoodposition);
   }
 }
