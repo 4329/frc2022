@@ -30,8 +30,6 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain;
 
   private double coastWait;
-  private TurretSubsystem turretSubsystem;
-  private HoodSubsystem hoodSubsystem;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -44,8 +42,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     drivetrain = new Drivetrain();
-    turretSubsystem = new TurretSubsystem();
-    m_robotContainer = new RobotContainer(drivetrain, turretSubsystem);
+    m_robotContainer = new RobotContainer(drivetrain);
   }
 
   /**
@@ -146,9 +143,6 @@ public class Robot extends TimedRobot {
       // robot, causing a crash
       m_swerveAlignment = new SwerveAlignment(drivetrain);
       m_swerveAlignment.initSwerveAlignmentWidgets();
-    }
-    if (hoodSubsystem == null) {
-      hoodSubsystem = new HoodSubsystem();
     }
   }
 

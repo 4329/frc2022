@@ -67,7 +67,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Climber climber;
   private final CommandGroups commandGroups;
-  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
+  private final HoodSubsystem hoodSubsystem;
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -80,22 +80,21 @@ public class RobotContainer {
   private Command twoPaths;
   private Command intakeRun;
 
-  private SensorOutputCommand sensorOutputCommand;
-  private TurretCommand turretCommand;
-  private TurretToZeroCommand turretToZeroCommand;
+  private final SensorOutputCommand sensorOutputCommand;
+  private final TurretCommand turretCommand;
+  private final TurretToZeroCommand turretToZeroCommand;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
    * @param drivetrain
    */
-
-  public RobotContainer(Drivetrain drivetrain, TurretSubsystem turretSubsystem) {
+  public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
-    this.turretSubsystem = turretSubsystem;
 
     pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
 
+    turretSubsystem = new TurretSubsystem();
     shooter = new Shooter();
     shooterFeed = new ShooterFeedSubsytem();
     storageIntake = new StorageIntake();
@@ -108,6 +107,7 @@ public class RobotContainer {
     turretCommand = new TurretCommand(turretSubsystem);
     turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
     commandGroups = new CommandGroups();
+    hoodSubsystem = new HoodSubsystem();
 
     initializeCamera();
 
@@ -233,8 +233,8 @@ public class RobotContainer {
 
   public void test() {
 
-    //hoodSubsystem.hoodTestMode();
+    hoodSubsystem.hoodTestMode();
     turretSubsystem.putValuesToShuffleboard();
-
   }
+  
 }
