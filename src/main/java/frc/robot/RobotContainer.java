@@ -18,11 +18,14 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Commands.ClimberButtonCommand;
 import frc.robot.Commands.ClimberButtonCommandReverse;
+import frc.robot.Commands.ClimberEngageCommand;
+import frc.robot.Commands.CommandGroups;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
-import frc.robot.Commands.IntakeAutoCommand;
+import frc.robot.Commands.ManualHoodCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
@@ -31,6 +34,7 @@ import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
+import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.IntakeSolenoidSubsystem;
@@ -40,9 +44,6 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
-import frc.robot.Commands.ClimberEngageCommand;
-import frc.robot.Commands.TurretCommand;
-import frc.robot.Commands.CommandGroups;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -65,6 +66,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Climber climber;
   private final CommandGroups commandGroups;
+  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -80,6 +82,7 @@ public class RobotContainer {
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
@@ -105,8 +108,6 @@ public class RobotContainer {
     turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
     commandGroups = new CommandGroups();
 
-
-
     initializeCamera();
 
     m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -114,15 +115,10 @@ public class RobotContainer {
     m_drive = new DriveByController(m_robotDrive, m_driverController);
     m_robotDrive.setDefaultCommand(m_drive); // Set drivetrain default command to "DriveByController"
 
-<<<<<<< HEAD
     configureButtonBindings(); /*
                                 * Configure the button bindings to commands using configureButtonBindings
                                 * function
                                 */
-=======
-    // intakeSensors.setDefaultCommand(sensorOutputCommand);//This makes sure that the status of the sensors is constantly being updated.
-  }
->>>>>>> f6fde4a (added in minimum and maximum values for the hood as well as added in)
 
     m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
@@ -185,7 +181,7 @@ public class RobotContainer {
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));
-
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
   }
 
   /**
@@ -229,6 +225,6 @@ public class RobotContainer {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.engage();
-    
+
   }
 }

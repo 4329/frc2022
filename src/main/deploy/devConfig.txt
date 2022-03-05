@@ -97,6 +97,7 @@ BackShooterFeedStop = 0
 HoodWheelID = 11
 
 # Hood Offsets (in Encoder ticks)
+hoodNeutral = 0
 hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30

@@ -4,6 +4,8 @@ package frc.robot.Subsystems;
 
 import java.util.Collections;
 
+import javax.swing.text.Position;
+
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
@@ -32,7 +34,9 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodOpen;
   private double hoodHalf;
   private double hoodClosed;
+  private double hoodNeutral;
   private static final int MAX_RANGE = 33;
+  private HoodPosition currentPosition = HoodPosition.NEUTRAL;
   // 29 is the max range the varaible hood can travel without hitting a hard limit
   // or throwing itself off the track
 
@@ -47,7 +51,7 @@ public class HoodSubsystem extends SubsystemBase {
 
     hoodPID = new PIDController(1.25, 0, 0);
     hoodwheel.setIdleMode(IdleMode.kBrake);
-    // hoodPID.setTolerance(1);
+    hoodPID.setTolerance(1.5);
 
     sparkOutput = Shuffleboard.getTab("Hood Data").add("Spark Output Percent", 0)
         .withWidget(BuiltInWidgets.kNumberSlider)
@@ -72,34 +76,41 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void HoodPeriodic() {
+System.out.println("OUTPUT PRE<--------------------------------------"+output);
     double hoodposition = hoodEncoder.getPosition();
     sparkPosition.setDouble(hoodposition);
 
-
+    System.out.println("Hood Position<-----"+ hoodposition);
     double setpoint = Math.max(3, hoodSetpoint.getDouble(0));
     double output = hoodPID.calculate(hoodposition, setpoint);
 
+    System.out.println("HOOD PERIODIC <-----------------"+setpoint);
     output = output / MAX_RANGE;
     setpointDifference = hoodSetpoint.getDouble(0) - hoodposition;
 
-    if (Math.abs(setpointDifference) > MAX_RANGE) {
-      output = hoodposition;
-      inputError.setBoolean(false);
-    }
-
+    // if (Math.abs(setpointDifference) > MAX_RANGE) {
+    //   output = hoodposition;
+    //   inputError.setBoolean(false);
+    // }
 
     hoodwheel.set(output);
+System.out.println("OUTPUT FINAL <-------------"+output);
+    // System.out.println(hoodEncoder.getPosition());
+  }
 
-    System.out.println(hoodEncoder.getPosition());
+  public boolean hoodSet() {
+    return hoodPID.atSetpoint();
   }
 
   private void DetermineHoodProfiles() {
+    hoodNeutral = Configrun.get(0, "hoodNeutral");
     hoodOpen = Configrun.get(3, "hoodOpen");
     hoodHalf = Configrun.get(15, "hoodHalf");
     hoodClosed = Configrun.get(30, "hoodClosed");
   }
 
-  public void SetPosition(HoodPosition Position) {
+  public void setPosition(HoodPosition Position) {
+    System.out.println("`````````````````````````Setting Position to"+Position+"`````````````````````````");
     if (Position.equals(HoodPosition.OPEN)) {
       hoodEncoder.setPosition(hoodOpen);
     } else if (Position.equals(HoodPosition.HALF)) {
@@ -107,10 +118,27 @@ public class HoodSubsystem extends SubsystemBase {
     } else if (Position.equals(HoodPosition.CLOSED)) {
       hoodEncoder.setPosition(hoodClosed);
     }
+    currentPosition = Position;
+  }
+
+  // may be unnecessary
+  public void CyclePosition() {
+    System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
+
+    if (currentPosition.equals(HoodPosition.NEUTRAL)) {
+      setPosition(HoodPosition.OPEN);
+    } else if (currentPosition.equals(HoodPosition.OPEN)) {
+      setPosition(HoodPosition.HALF);
+    } else if (currentPosition.equals(HoodPosition.HALF)) {
+      setPosition(HoodPosition.CLOSED);
+    } else if (currentPosition.equals(HoodPosition.CLOSED)) {
+      setPosition(HoodPosition.OPEN);
+    }
   }
 
   public enum HoodPosition {
-    OPEN, HALF, CLOSED;
+    OPEN, HALF, CLOSED, NEUTRAL;
+
   }
 
   public void hoodTestMode() {
