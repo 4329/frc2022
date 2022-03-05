@@ -1,8 +1,6 @@
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.HoodSubsystem;
 
 public class ManualHoodCommand extends CommandBase {
@@ -18,5 +16,9 @@ public class ManualHoodCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         return hoodSubsystem.hoodSet();
+    }
+    @Override
+    public void end(boolean interrupted) {
+        hoodSubsystem.stop();
     }
 }

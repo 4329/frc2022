@@ -6,6 +6,7 @@ import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -171,7 +172,8 @@ public class RobotContainer {
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+        .whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));
 
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -179,9 +181,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
 
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));
-    new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));
+    new JoystickAnalogButton(m_driverController, true)
+        .whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
+    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
+    new JoystickButton(m_driverController, Button.kBack.value).whenPressed(() -> hoodSubsystem.CyclePosition());
   }
 
   /**
