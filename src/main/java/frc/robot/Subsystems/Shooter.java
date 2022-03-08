@@ -65,9 +65,9 @@ public class Shooter {
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
 
-    Constants.ShooterPIDConstants.shooterKs,
-    Constants.ShooterPIDConstants.shooterKv,
-    Constants.ShooterPIDConstants.shooterKa);
+    Constants.ShooterConstants.shooterKs,
+    Constants.ShooterConstants.shooterKv,
+    Constants.ShooterConstants.shooterKa);
 
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
@@ -84,7 +84,7 @@ public class Shooter {
     bMin = Constants.ShooterConstants.bMin;
     cMin = Constants.ShooterConstants.cMin;
     dMin = Constants.ShooterConstants.dMin;
-    
+
     aMed = Constants.ShooterConstants.aMed;
     bMed = Constants.ShooterConstants.bMed;
     cMed = Constants.ShooterConstants.cMed;
@@ -105,7 +105,7 @@ public class Shooter {
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
     pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) *
-    Constants.ShooterPIDConstants.velocityFeedForwardMultiplier);
+    Constants.ShooterConstants.velocityFeedForwardMultiplier);
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
     // kGearRotation = 1
@@ -160,11 +160,11 @@ public class Shooter {
   }
 
   public double aim(HoodSubsystem hood, TurretSubsystem turret) { //TODO add aiming code here
-    
+
     targetDistance = turret.getDistanceFromTarget();
 
     if (targetDistance < minDistance) { // near zone
-    
+
         hood.setPosition(HoodPosition.CLOSED);
         return aMin * Math.pow(targetDistance, 3) + bMin * Math.pow(targetDistance, 2) + cMin * targetDistance + dMin;
     } else if (minDistance <= targetDistance && targetDistance <= maxDistance) { // middle zone
@@ -172,7 +172,7 @@ public class Shooter {
         hood.setPosition(HoodPosition.HALF);
         return aMed * Math.pow(targetDistance, 3) + bMed * Math.pow(targetDistance, 2) + cMed * targetDistance + dMed;
     } else if (maxDistance < targetDistance) { // far zone
-  
+
         hood.setPosition(HoodPosition.OPEN);
         return aMax * Math.pow(targetDistance, 3) + bMax * Math.pow(targetDistance, 2) + cMax * targetDistance + dMax;
     } else {
