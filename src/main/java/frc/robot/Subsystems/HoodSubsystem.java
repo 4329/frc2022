@@ -16,6 +16,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,7 +30,7 @@ public class HoodSubsystem extends SubsystemBase {
   private int output;
   private NetworkTableEntry sparkOutput;
   private NetworkTableEntry sparkPosition;
-  private NetworkTableEntry hoodSetpoint;
+  private NetworkTableEntry hoodOverrideIdleMode;
   private double setpointDifference;
   private double hoodOpen;
   private double hoodHalf;
@@ -67,14 +68,14 @@ public class HoodSubsystem extends SubsystemBase {
 
     sparkPosition = Shuffleboard.getTab("Hood Data").add("Position", hoodEncoder.getPosition())
         .withWidget(BuiltInWidgets.kTextView)
-        .withPosition(0, 1).withSize(2, 1).getEntry();
+        .withPosition(0, 1).withSize(1, 1).getEntry();
 
-    hoodSetpoint = Shuffleboard.getTab("Hood Data").add("Set Point", hoodEncoder.getPosition())
-        .withWidget(BuiltInWidgets.kTextView)
-        .withPosition(1, 0).withSize(1, 1).getEntry();
+    hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
+        .withWidget(BuiltInWidgets.kToggleButton)
+        .withSize(2, 1).getEntry();
 
     inputError = Shuffleboard.getTab("Hood Data").add("Check Input", true).withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0)
+        .withPosition(0, 0).withSize(2, 1)
         .getEntry();
 
     Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
@@ -132,6 +133,9 @@ public class HoodSubsystem extends SubsystemBase {
     // } else if (Position.equals(HoodPosition.CLOSED)) {
     // hoodEncoder.setPosition(hoodClosed);
     // }
+
+
+    
     currentPosition = Position;
   }
 
@@ -160,4 +164,22 @@ public class HoodSubsystem extends SubsystemBase {
     double hoodposition = hoodEncoder.getPosition();
     sparkPosition.setDouble(hoodposition);
   }
+
+  public void hoodOverride() {
+
+    sparkPosition.setDouble(hoodEncoder.getPosition());
+
+    if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
+
+      if (hoodOverrideIdleMode.getBoolean(true)) {
+
+        hoodwheel.setIdleMode(IdleMode.kBrake);
+      } else {
+
+        hoodwheel.setIdleMode(IdleMode.kCoast);
+
+      }
+    }
+  }
+
 }

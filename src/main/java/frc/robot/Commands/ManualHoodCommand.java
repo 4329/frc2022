@@ -9,6 +9,7 @@ public class ManualHoodCommand extends CommandBase {
     public ManualHoodCommand(HoodSubsystem hoodSubsystem) {
         this.hoodSubsystem = hoodSubsystem;
     }
+    
     public void execute() {
         hoodSubsystem.HoodPeriodic();
     }
