@@ -75,20 +75,23 @@ public class TurretSubsystem extends SubsystemBase{
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(4, 0, 0);
         turretPid.setTolerance(turretTolerance);
-        targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
-        checkTXDisplay = Shuffleboard.getTab("Limlight").add("Tx", 0).withPosition(3, 1).getEntry();
-        checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
-        checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
-        checkTVDisplay = Shuffleboard.getTab("RobotData").add("TV", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(4, 1).getEntry();
-        getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData").add("Distance", 0).withPosition(5, 0).getEntry();
-        turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
-        turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
-        turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
-        turretStop();
+
+        checkTVDisplay = Shuffleboard.getTab("RobotData2").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();
+        getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData2").add("Distance", 0).withPosition(2, 2).getEntry();
+
+        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+            targetStatus = Shuffleboard.getTab("Limlight").add("Target Acquired", false).getEntry();
+            checkTXDisplay = Shuffleboard.getTab("Limlight").add("TX", 0).withPosition(3, 1).getEntry();
+            checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
+            checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
+            turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
+            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
+            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
+        }
     }
 
     public void putValuesToShuffleboard() {
-        if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
+        if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("Target Acquired").getDouble(0) == 1) {
             tvToggle = true;
         }
         else {
@@ -97,14 +100,15 @@ public class TurretSubsystem extends SubsystemBase{
 
         checkTVDisplay.setBoolean(tvToggle);
         getDistanceFromTargetDisplay.setDouble(getDistanceFromTarget());
-        // if (Configrun.get(false, "extraShuffleBoardToggle")){
+
+        if (Configrun.get(false, "extraShuffleBoardToggle")){
             checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
             checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
             checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
             turretPos.setDouble(getPwmPosition());
             turretRotationMin.setDouble(getPwmPosition()- 307);
             turretRotationMax.setDouble(getPwmPosition()+ 307);
-        //}
+        }
     }
 
     public double getTx() {

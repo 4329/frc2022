@@ -35,8 +35,8 @@ storageIntakeID = 44
 storageIntakePower = 0.5
 
 #Digital input IDs
-shooterFeedTriggerPort = 5
-storageIntakeTriggerPort = 3
+TopSensorPort = 5
+BottomSensorPort = 3
 
 # RIP rickroll
 # NSP

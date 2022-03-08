@@ -95,4 +95,8 @@ hoodNeutral = 0
 hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
+
 extraShuffleBoardToggle = true
+
+TopSensorPort = 5
+BottomSensorPort = 3

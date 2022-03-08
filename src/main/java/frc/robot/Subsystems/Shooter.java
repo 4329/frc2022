@@ -169,10 +169,11 @@ public class Shooter {
    */
   public boolean getShooterError() {
 
-    pidErrorEntryNum.setDouble(shooterPID.getPositionError() / 2048 * 600);
-    pidSetpointErrorEntry.setDouble(shooterPID.getPositionError());
-    atSetpoint.setBoolean(shooterPID.atSetpoint());
-
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+        pidErrorEntryNum.setDouble(shooterPID.getPositionError() / 2048 * 600);
+        pidSetpointErrorEntry.setDouble(shooterPID.getPositionError());
+        atSetpoint.setBoolean(shooterPID.atSetpoint());
+    }
     return shooterPID.atSetpoint();
   }
 
