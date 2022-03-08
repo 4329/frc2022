@@ -118,13 +118,6 @@ public class HoodSubsystem extends SubsystemBase {
   public boolean hoodSet() {
     return hoodPID.atSetpoint();
   }
-  private void DetermineHoodProfiles() {
-    hoodClose = hoodEncoder.getPosition();
-    hoodMiddle = hoodEncoder.getPosition() + MAX_RANGE / 2;
-    hoodFar = hoodEncoder.getPosition() + 30;
-    // Adding 30 instead of the max 33 incase the manual zero doesn't get it to true 0
-
-  }
 
   public void stop() {
     hoodwheel.set(0);
