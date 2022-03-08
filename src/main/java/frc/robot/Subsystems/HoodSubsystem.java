@@ -70,11 +70,12 @@ public class HoodSubsystem extends SubsystemBase {
         .withWidget(BuiltInWidgets.kTextView)
         .withPosition(0, 1).withSize(2, 1).getEntry();
 
-    hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Set", true)
-        .withPosition(1, 0).withSize(1, 1).getEntry();
+    hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
+        .withWidget(BuiltInWidgets.kToggleButton)
+        .getEntry();
 
     inputError = Shuffleboard.getTab("Hood Data").add("Check Input", true).withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0)
+        .withPosition(0, 0).withSize(2, 1)
         .getEntry();
 
     Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
@@ -166,7 +167,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   public void hoodOverride() {
 
-    System.out.println(hoodEncoder.getPosition());
+    sparkPosition.setDouble(hoodEncoder.getPosition());
 
     if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
 

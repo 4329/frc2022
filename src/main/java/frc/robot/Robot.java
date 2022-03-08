@@ -127,6 +127,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    m_robotContainer.teleopPeriodic();
     // m_Solenoid.set(SmartDashboard.getBoolean("Set Solenoid", false));
     // RobotContainer.limelightSubsystem = limeputDistance();
 
