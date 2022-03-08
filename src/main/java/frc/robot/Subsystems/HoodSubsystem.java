@@ -68,11 +68,11 @@ public class HoodSubsystem extends SubsystemBase {
 
     sparkPosition = Shuffleboard.getTab("Hood Data").add("Position", hoodEncoder.getPosition())
         .withWidget(BuiltInWidgets.kTextView)
-        .withPosition(0, 1).withSize(2, 1).getEntry();
+        .withPosition(0, 1).withSize(1, 1).getEntry();
 
     hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
         .withWidget(BuiltInWidgets.kToggleButton)
-        .getEntry();
+        .withSize(2, 1).getEntry();
 
     inputError = Shuffleboard.getTab("Hood Data").add("Check Input", true).withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(0, 0).withSize(2, 1)
