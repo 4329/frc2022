@@ -11,7 +11,7 @@ public class SensorOutputCommand extends CommandBase {
         addRequirements(intakeSensors);
     }
 
-    public void execute() {// This command keeps the sensors updated for the Shuffleboard display.
+    public void execute() {
         intakeSensors.topTrigger();
         intakeSensors.bottomTrigger();
     }

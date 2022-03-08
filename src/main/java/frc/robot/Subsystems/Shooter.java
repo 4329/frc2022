@@ -56,16 +56,17 @@ public class Shooter {
     belowZero = Shuffleboard.getTab("Shooter").add("Below Zero", false).withPosition(1, 2).getEntry();
     shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
     manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", true).withPosition(5, 1).getEntry();
-    
+
     shooterPID = new PIDController(
-      Configrun.get(2.5, "ShooterP"), 
+      Configrun.get(2.5, "ShooterP"),
       Configrun.get(0.0, "ShooterI"),
       Configrun.get(0.0, "ShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
-    Constants.ShooterConstants.shooterKs, 
-    Constants.ShooterConstants.shooterKv, 
+
+    Constants.ShooterConstants.shooterKs,
+    Constants.ShooterConstants.shooterKv,
     Constants.ShooterConstants.shooterKa);
 
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
@@ -83,7 +84,7 @@ public class Shooter {
     bMin = Constants.ShooterConstants.bMin;
     cMin = Constants.ShooterConstants.cMin;
     dMin = Constants.ShooterConstants.dMin;
-    
+
     aMed = Constants.ShooterConstants.aMed;
     bMed = Constants.ShooterConstants.bMed;
     cMed = Constants.ShooterConstants.cMed;
@@ -103,7 +104,7 @@ public class Shooter {
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
+    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) *
     Constants.ShooterConstants.velocityFeedForwardMultiplier);
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
@@ -159,11 +160,11 @@ public class Shooter {
   }
 
   public double aim(HoodSubsystem hood, TurretSubsystem turret) { //TODO add aiming code here
-    
+
     targetDistance = turret.getDistanceFromTarget();
 
     if (targetDistance < minDistance) { // near zone
-    
+
         hood.setPosition(HoodPosition.CLOSED);
         return aMin * Math.pow(targetDistance, 3) + bMin * Math.pow(targetDistance, 2) + cMin * targetDistance + dMin;
     } else if (minDistance <= targetDistance && targetDistance <= maxDistance) { // middle zone
@@ -171,7 +172,7 @@ public class Shooter {
         hood.setPosition(HoodPosition.HALF);
         return aMed * Math.pow(targetDistance, 3) + bMed * Math.pow(targetDistance, 2) + cMed * targetDistance + dMed;
     } else if (maxDistance < targetDistance) { // far zone
-  
+
         hood.setPosition(HoodPosition.OPEN);
         return aMax * Math.pow(targetDistance, 3) + bMax * Math.pow(targetDistance, 2) + cMax * targetDistance + dMax;
     } else {

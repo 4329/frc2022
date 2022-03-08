@@ -10,8 +10,6 @@ import frc.robot.Configrun;
 
 public class IntakeSolenoidSubsystem extends SubsystemBase {
 
-    // private static final int SOLENOID_CHANNEL = 0;
-    // private Solenoid m_Solenoid;
     private DoubleSolenoid m_doubleSolenoid = null;
 
     boolean intakeUp;
@@ -19,22 +17,18 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
     public IntakeSolenoidSubsystem(PneumaticHub pneumaticHub) {
 
         intakeUp = Configrun.get(false, "intakeUp");
-        // m_Solenoid = pneumaticHub.makeSolenoid(SOLENOID_CHANNEL);
-        // m_Solenoid.set(Configrun.get(true, "intakeUp"));
         m_doubleSolenoid = pneumaticHub.makeDoubleSolenoid(Configrun.get(0, "intakeSolenoidID_1"), Configrun.get(1, "intakeSolenoidID_2"));
     }
 
     public void intakeUp() {
 
         intakeUp = true;
-        // m_Solenoid.set(true);
         m_doubleSolenoid.set(kReverse);
         System.out.println("intakeup");
     }
 
     public void intakeDown() {
 
-        // m_Solenoid.set(false);
         m_doubleSolenoid.set(kForward);
         intakeUp = false;
         System.out.println("intakedown");
@@ -44,12 +38,10 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
 
         if (intakeUp) {
 
-            // m_Solenoid.set(false);
             m_doubleSolenoid.set(kForward);
             intakeUp = false;
         } else {
 
-            // m_Solenoid.set(true);
             m_doubleSolenoid.set(kReverse);
             intakeUp = true;
         }
@@ -59,11 +51,4 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
 
         m_doubleSolenoid.toggle();
     }
-
-    // private static final int SOLENOID_CHANNEL = 0;
-
-    // private Solenoid m_Solenoid = null;
-
-    // boolean intakeUp;
-
 }

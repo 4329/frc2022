@@ -3,7 +3,6 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.IntakeSolenoidSubsystem;
-//import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 
@@ -23,7 +22,6 @@ public class IntakeBackwardsCommand extends CommandBase {
 
     public void initialize() {
 
-        // intakeSolenoid.intakeDown();
         intakeMotor.runIntakeOut();
         storageIntake.storageIntakeOut();
         shooterFeed.shooterFeedDown();
@@ -33,7 +31,6 @@ public class IntakeBackwardsCommand extends CommandBase {
     public void end(boolean interrupted) {
         storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
-        // intakeSolenoid.intakeUp();
         shooterFeed.shooterFeedStop();
     }
 

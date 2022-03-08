@@ -16,15 +16,11 @@ import frc.robot.RobotContainer;
 public class LimelightSubsystem extends SubsystemBase {
     SmartDashboard table;
     SmartDashboard ledSmartDashboard;
-    // default value for the limelight mode
     int defaultvalue = 1;
     PIDController limeLightPid;
-    double h1In = Configrun.get(36, "h1In");
-    // height of the limelight off of the ground "36 inches" this year
-    double h2In = Configrun.get(104, "h2In");
-    // height of the target "8ft 8inches" aka 104 inches this year
-    double a1Degree = Configrun.get(0.0, "a1Degree");
-    // angle of the front of the limelight in relation to level
+    double h1In = Configrun.get(36, "h1In"); //height limelight from ground, 36in
+    double h2In = Configrun.get(104, "h2In"); //height target, 104in
+    double a1Degree = Configrun.get(0.0, "a1Degree"); //limelight angle
     double limeLightDistance;
     int limeLightTolerance = Configrun.get(1, "limeLightTolerance");
     double limelightP = Configrun.get(1.2, "limelightP");
@@ -43,11 +39,6 @@ public class LimelightSubsystem extends SubsystemBase {
         limeLightPid = new PIDController(limelightP, limelightI, limelightD);
         taTolerance = Configrun.get(0.3, "taTolerance");
         limeLightPid.setTolerance(limeLightTolerance);
-        // targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
-        // checkTXDisplay = Shuffleboard.getTab("limlight").add("Tx", 0).withPosition(3, 1).getEntry();
-        // checkTYDisplay = Shuffleboard.getTab("limlight").add("TY", 0).withPosition(3, 0).getEntry();
-        // checkTADisplay = Shuffleboard.getTab("limlight").add("TA", 0).withPosition(4, 0).getEntry();
-        // getDistanceFromTargetDisplay = Shuffleboard.getTab("limlight").add("Distance", 0).withPosition(5, 0).getEntry();
     }
 
     public void putValuesToShuffleboard() {
@@ -84,9 +75,6 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public void putDistance() {
         limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(checkTy())));
-        // runing this math equation d = (h2-h1) / tan(a1+a2)
-        // a2 = Ty
-        // Ty = vertical offset
         // puts the distance from the limelight on smartdashboard
     }
 
@@ -94,8 +82,6 @@ public class LimelightSubsystem extends SubsystemBase {
         limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(checkTy())));
         return limeLightDistance;
     }
-    // limelight distance equation
-    // d = (h2-h1) / tan(a1+a2)
 
     public void limeLight() {
 
@@ -104,21 +90,14 @@ public class LimelightSubsystem extends SubsystemBase {
         NetworkTableEntry ty = table.getEntry("ty");
         NetworkTableEntry ta = table.getEntry("ta");
         NetworkTableEntry limeLightDistance = table.getEntry("LimeDis");
-        // NetworkTableEntry ledSmartDashboard = table.getEntry("ledSmartDashboard");
 
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").getDouble(0);
-
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").setNumber(defaultvalue);
-        // turns the limelight on using defaulvalue
-
+        
         double x = tx.getDouble(0.0);
-        // read values of tx to convert to x periodically
         double y = ty.getDouble(0.0);
-        // read values of ty to convert to y periodically
         double area = ta.getDouble(0.0);
-        // read values of ta to convert to area periodically
         double distance = limeLightDistance.getDouble(0.0);
-        // read values of ta to convert to area periodically
 
 
     }
@@ -129,13 +108,10 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public void putTargetAcquired() {
         boolean status;
-        // true or false value
         if (checkTa() >= taTolerance) {
             status = true;
-            // System.out.println("limelighttrue");
         } else {
             status = false;
-            // System.out.println("limelightfalse");
         }
         targetStatus.setBoolean(status);
     }

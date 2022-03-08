@@ -20,16 +20,12 @@ public class TurretSubsystem extends SubsystemBase{
     private volatile int lastValue = Integer.MIN_VALUE;
 
     double staticFeedforward = 0;
-    // default value for the limelight mode
     int defaultvalue = 1;
     PIDController limeLightPid;
     PIDController turretPid;
-    double h1In = Configrun.get(36, "h1In");
-    // height of the limelight off of the ground "36 inches" this year
-    double h2In = Configrun.get(104, "h2In");
-    // height of the target "8ft 8inches" aka 104 inches this year
-    double a1Degree = Configrun.get(0.0, "a1Degree");
-    // angle of the front of the limelight in relation to level
+    double h1In = Configrun.get(36, "h1In"); //limelight height, 36in
+    double h2In = Configrun.get(104, "h2In"); //target height, 104in
+    double a1Degree = Configrun.get(0.0, "a1Degree"); //limelight angle
     double limeLightDistance;
     int limeLightTolerance = 1;
     int turretTolerance = 20;
@@ -111,7 +107,6 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public double getDistanceFromTarget() {
-        // TODO use this to get distance from target (only while target is visible)
         limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
         return limeLightDistance;
     }
