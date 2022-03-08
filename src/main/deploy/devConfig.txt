@@ -32,7 +32,7 @@ PH_CAN_ID = 61
 
 # Storage Intake
 storageIntakeID = 41
-storageIntakePower = 0.5
+storageIntakePower = 0.8
 
 #Shooter Feed
 FrontShooterFeed_ID = 42

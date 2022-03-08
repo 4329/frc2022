@@ -196,12 +196,33 @@ public final class Constants {
   /**
    * Static method containing all shooterPID constants
    */
-  public static final class ShooterPIDConstants {
+  public static final class ShooterConstants {
+    
+    //PID constants
     public static final double shooterKs = 12;
     public static final double shooterKv = 0.35;
     public static final double shooterKa = 0.06;
     public static final double velocityFeedForwardMultiplier = 2.9;
-    public static final double shooterToleranceInRPMs = 10;
+    public static final double shooterToleranceInRPMs = 100;
+
+
+    public static final double minDistance = 132;
+    public static final double maxDistance = 228;
+
+    public static final double aMin = -2.26;
+    public static final double bMin = 110.86;
+    public static final double cMin = 1841.27;
+    public static final double dMin = -2966.67;
+
+    public static final double aMed = -2.26;
+    public static final double bMed = 110.86;
+    public static final double cMed = -1841.27;
+    public static final double dMed = -2966.67;
+
+    public static final double aMax = -2.26;
+    public static final double bMax = 110.86;
+    public static final double cMax = -1841.27;
+    public static final double dMax = -2966.67;
   }
 
   /**
