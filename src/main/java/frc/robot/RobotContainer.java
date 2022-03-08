@@ -47,6 +47,7 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
+import frc.robot.Commands.TowerLowCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -157,11 +158,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    // Reset drivetrain when down/up on the DPad is pressed
-    new POVButton(m_driverController, 180)
-        .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));
-    new POVButton(m_driverController, 0)
-        .whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
 
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());
 
@@ -179,17 +175,33 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kLeftBumper.value)
         .whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));
 
+      //Driving
+    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed; TODO: what does this do
+    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));//TODO: what does this do
+    new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());//toggle field dorientation
+      //Climber arm controls
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
-
-    new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));
-    new JoystickAnalogButton(m_driverController, true)
-        .whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));
-    new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));
+      //Climber motor controls
+    new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));//climb up
+    new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
+    new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));//extend & pivot arms
+      //Developer tools TODO
     new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
     new JoystickButton(m_driverController, Button.kBack.value).whenPressed(() -> hoodSubsystem.CyclePosition());
+
+
+    //Operator Controller
+      //Shoot
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));//shoot high with aimbot
+    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));//shoot high without aimbot
+    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));//shoot low
+      //Manage cargo
+    new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
+    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
   }
 
   /**
@@ -245,5 +257,5 @@ public class RobotContainer {
     hoodSubsystem.hoodTestMode();
     turretSubsystem.putValuesToShuffleboard();
   }
-  
+
 }

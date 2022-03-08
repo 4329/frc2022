@@ -56,17 +56,23 @@ public class Shooter {
     belowZero = Shuffleboard.getTab("Shooter").add("Below Zero", false).withPosition(1, 2).getEntry();
     shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
     manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", true).withPosition(5, 1).getEntry();
-    
+
     shooterPID = new PIDController(
-      Configrun.get(2.5, "ShooterP"), 
+      Configrun.get(2.5, "ShooterP"),
       Configrun.get(0.0, "ShooterI"),
       Configrun.get(0.0, "ShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
+<<<<<<< HEAD
     Constants.ShooterConstants.shooterKs, 
     Constants.ShooterConstants.shooterKv, 
     Constants.ShooterConstants.shooterKa);
+=======
+    Constants.ShooterPIDConstants.shooterKs,
+    Constants.ShooterPIDConstants.shooterKv,
+    Constants.ShooterPIDConstants.shooterKa);
+>>>>>>> 25d44cd (UNTESTED: added low shoot command, changed controls (see OneNote))
 
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
@@ -99,12 +105,17 @@ public class Shooter {
    * @param shooterSetpoint
    */
   public void shoot(double shooterSetpoint) {
-
+    //shooterSetpoint is the RPM
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
+<<<<<<< HEAD
     pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
     Constants.ShooterConstants.velocityFeedForwardMultiplier);
+=======
+    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) *
+    Constants.ShooterPIDConstants.velocityFeedForwardMultiplier);
+>>>>>>> 25d44cd (UNTESTED: added low shoot command, changed controls (see OneNote))
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
     // kGearRotation = 1
