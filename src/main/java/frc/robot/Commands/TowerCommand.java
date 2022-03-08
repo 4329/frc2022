@@ -5,31 +5,32 @@ import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
+import frc.robot.Subsystems.TurretSubsystem;
 
 public class TowerCommand extends CommandBase {
 
-    StorageIntake storageIntake;
-    ShooterFeedSubsytem shooterFeed;
-    Shooter shooter;
-    HoodSubsystem hood;
+    final StorageIntake storageIntake;
+    final ShooterFeedSubsytem shooterFeed;
+    final Shooter shooter;
+    final HoodSubsystem hood;
+    final TurretSubsystem turret;
 
     double setpoint;
 
-    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood) {
+    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
         this.shooter = shooter;
         this.hood = hood;
+        this.turret = turret;
     }
 
     @Override
     public void execute() {
 
-        setpoint = shooter.manualOverride(hood);
-        shooter.shoot(setpoint);
-        //hood.HoodPeriodic();
-        
+        setpoint = shooter.shooterManualOverride(hood, turret);
+        shooter.shoot(setpoint);        
 
         if (shooter.getShooterError()) {
 

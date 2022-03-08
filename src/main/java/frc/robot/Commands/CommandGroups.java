@@ -12,6 +12,6 @@ import frc.robot.Subsystems.TurretSubsystem;
 
 public class CommandGroups {
     public CommandBase fire(TurretSubsystem turretSubsystem, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hoodSubsystem) {
-        return new SequentialCommandGroup(new TurretCommand(turretSubsystem), new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(5), new TurretToZeroCommand(turretSubsystem));
+        return new SequentialCommandGroup(new TurretCommand(turretSubsystem), new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem).withTimeout(5), new TurretToZeroCommand(turretSubsystem));
     }
 }

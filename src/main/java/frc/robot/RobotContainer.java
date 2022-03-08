@@ -172,7 +172,7 @@ public class RobotContainer {
         .whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
 
     new JoystickButton(m_operatorController, Button.kRightBumper.value)
-        .whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));
+        .whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem));
 
     new JoystickButton(m_operatorController, Button.kB.value)
         .whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));
@@ -233,6 +233,11 @@ public class RobotContainer {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.engage();
+  }
+
+  public void teleopPeriodic() {
+
+    hoodSubsystem.hoodOverride();
   }
 
   public void test() {
