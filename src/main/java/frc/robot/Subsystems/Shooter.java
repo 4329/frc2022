@@ -64,15 +64,9 @@ public class Shooter {
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
-<<<<<<< HEAD
     Constants.ShooterConstants.shooterKs, 
     Constants.ShooterConstants.shooterKv, 
     Constants.ShooterConstants.shooterKa);
-=======
-    Constants.ShooterPIDConstants.shooterKs,
-    Constants.ShooterPIDConstants.shooterKv,
-    Constants.ShooterPIDConstants.shooterKa);
->>>>>>> 25d44cd (UNTESTED: added low shoot command, changed controls (see OneNote))
 
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
@@ -109,13 +103,8 @@ public class Shooter {
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-<<<<<<< HEAD
     pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
     Constants.ShooterConstants.velocityFeedForwardMultiplier);
-=======
-    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) *
-    Constants.ShooterPIDConstants.velocityFeedForwardMultiplier);
->>>>>>> 25d44cd (UNTESTED: added low shoot command, changed controls (see OneNote))
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
     // kGearRotation = 1
