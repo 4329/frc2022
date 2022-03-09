@@ -14,4 +14,7 @@ public class CommandGroups {
     public CommandBase fire(TurretSubsystem turretSubsystem, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hoodSubsystem) {
         return new SequentialCommandGroup(new TurretCommand(turretSubsystem), new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem).withTimeout(5), new TurretToZeroCommand(turretSubsystem));
     }
+    public CommandBase towerLow(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter) {
+        return new SequentialCommandGroup(new TowerLowCommand(storageIntake, shooterFeed, shooter).withTimeout(5));
+    }
 }
