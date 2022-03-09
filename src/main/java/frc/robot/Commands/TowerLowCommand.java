@@ -20,7 +20,7 @@ public class TowerLowCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.shoot(1000);
+        shooter.shoot(1400);
 
         storageIntake.storageIntakeIn();
         shooterFeed.shooterFeedUp();

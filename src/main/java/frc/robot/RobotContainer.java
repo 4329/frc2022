@@ -197,7 +197,7 @@ public class RobotContainer {
       //Shoot
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter));//shoot high with aimbot
     new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));//shoot high without aimbot
-    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter));//shoot low
+    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new TowerLowCommand(storageIntake, shooterFeed, shooter));//shoot low
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
