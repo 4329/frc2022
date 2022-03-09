@@ -19,11 +19,11 @@ public class LimelightSubsystem extends SubsystemBase {
     // default value for the limelight mode
     int defaultvalue = 1;
     PIDController limeLightPid;
-    double h1In = Configrun.get(36, "h1In");
+    double h1In = Configrun.get(30.5, "h1In");
     // height of the limelight off of the ground "36 inches" this year
     double h2In = Configrun.get(104, "h2In");
     // height of the target "8ft 8inches" aka 104 inches this year
-    double a1Degree = Configrun.get(0.0, "a1Degree");
+    double a1Degree = Configrun.get(25, "a1Degree");
     // angle of the front of the limelight in relation to level
     double limeLightDistance;
     int limeLightTolerance = Configrun.get(1, "limeLightTolerance");

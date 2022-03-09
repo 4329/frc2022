@@ -54,9 +54,9 @@ climbPower = 0.5
 reverseClimbPower = -0.5
 
 # Limelight
-h1In = 36
+h1In = 30.5
 h21n = 104
-a1Degree = 11
+a1Degree = 25
 taTolerance = 0.3
 
 ShooterWheel1ID = 30
