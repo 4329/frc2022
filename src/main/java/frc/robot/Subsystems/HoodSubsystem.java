@@ -31,6 +31,7 @@ public class HoodSubsystem extends SubsystemBase {
   private NetworkTableEntry sparkOutput;
   private NetworkTableEntry sparkPosition;
   private NetworkTableEntry hoodOverrideIdleMode;
+  private NetworkTableEntry overrideSetpointEntry;
   private double setpointDifference;
   private double hoodOpen;
   private double hoodHalf;
@@ -39,6 +40,7 @@ public class HoodSubsystem extends SubsystemBase {
   private static final int MAX_RANGE = 33;
   private HoodPosition currentPosition = HoodPosition.NEUTRAL;
   private double setpoint;
+  private double overrideSetpoint;
 
   // 29 is the max range the varaible hood can travel without hitting a hard limit
   // or throwing itself off the track
@@ -50,6 +52,7 @@ public class HoodSubsystem extends SubsystemBase {
     hoodNeutral = Configrun.get(0, "hoodNeutral");
     hoodOpen = Configrun.get(3, "hoodOpen");
     setpoint = hoodOpen;
+    overrideSetpoint = 3;
     hoodHalf = Configrun.get(15, "hoodHalf");
     hoodClosed = Configrun.get(30, "hoodClosed");
 
@@ -77,10 +80,13 @@ public class HoodSubsystem extends SubsystemBase {
     inputError = Shuffleboard.getTab("Hood Data").add("Check Input", true).withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(0, 0).withSize(2, 1)
         .getEntry();
+   
+    overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Setpoint", 3).getEntry();
 
     Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
         .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
-  }
+    
+      }
 
   public void HoodPeriodic() {
     System.out.println("OUTPUT PRE<--------------------------------------" + output);
@@ -91,13 +97,18 @@ public class HoodSubsystem extends SubsystemBase {
     // System.out.println("Hood Position<-----" + hoodposition);
     // double setpoint = 0; // sits at neutral position until told otherwise.
 
-    if (currentPosition.equals(HoodPosition.OPEN)) {
-      setpoint = hoodOpen;
-    } else if (currentPosition.equals(HoodPosition.HALF)) {
-      setpoint = hoodHalf;
-    } else if (currentPosition.equals(HoodPosition.CLOSED)) {
-      setpoint = hoodClosed;
-    }
+    if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
+
+      setpoint = overrideSetpoint; 
+    } else {
+      if (currentPosition.equals(HoodPosition.OPEN)) {
+        setpoint = hoodOpen;
+      } else if (currentPosition.equals(HoodPosition.HALF)) {
+        setpoint = hoodHalf;
+      } else if (currentPosition.equals(HoodPosition.CLOSED)) {
+        setpoint = hoodClosed;
+      }
+  }
 
     System.out.println("----------" + setpoint);
 
@@ -139,6 +150,20 @@ public class HoodSubsystem extends SubsystemBase {
     currentPosition = Position;
   }
 
+  public void setEncoderPosition(double position) {
+
+    if (position < 3) {
+
+      overrideSetpoint = 3;
+    } else if (position > 33) {
+
+      overrideSetpoint = 33;
+    } else {
+
+    overrideSetpoint = position;
+    }
+  }
+
   // may be unnecessary
   public void CyclePosition() {
     System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
@@ -168,9 +193,10 @@ public class HoodSubsystem extends SubsystemBase {
   public void hoodOverride() {
 
     sparkPosition.setDouble(hoodEncoder.getPosition());
-
     if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
 
+      setEncoderPosition(overrideSetpointEntry.getDouble(3));
+      HoodPeriodic();
       if (hoodOverrideIdleMode.getBoolean(true)) {
 
         hoodwheel.setIdleMode(IdleMode.kBrake);
@@ -180,6 +206,8 @@ public class HoodSubsystem extends SubsystemBase {
 
       }
     }
+
   }
 
+  
 }
