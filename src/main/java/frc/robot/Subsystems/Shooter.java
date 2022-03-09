@@ -76,23 +76,8 @@ public class Shooter {
     shooterwheel1.setNeutralMode(NeutralMode.Coast);
     shooterwheel2.setNeutralMode(NeutralMode.Coast);
 
-    minDistance = Constants.ShooterConstants.minDistance;
-    maxDistance = Constants.ShooterConstants.maxDistance;
-
-    aMin = Constants.ShooterConstants.aMin;
-    bMin = Constants.ShooterConstants.bMin;
-    cMin = Constants.ShooterConstants.cMin;
-    dMin = Constants.ShooterConstants.dMin;
-    
-    aMed = Constants.ShooterConstants.aMed;
-    bMed = Constants.ShooterConstants.bMed;
-    cMed = Constants.ShooterConstants.cMed;
-    dMed = Constants.ShooterConstants.dMed;
-
-    aMax = Constants.ShooterConstants.aMax;
-    bMax = Constants.ShooterConstants.bMax;
-    cMax = Constants.ShooterConstants.cMax;
-    dMax = Constants.ShooterConstants.dMax;
+    minDistance = 8;
+    maxDistance = 14;
   }
 
   /**
@@ -165,19 +150,14 @@ public class Shooter {
     if (targetDistance < minDistance) { // near zone
     
         hood.setPosition(HoodPosition.CLOSED);
-        return aMin * Math.pow(targetDistance, 3) + bMin * Math.pow(targetDistance, 2) + cMin * targetDistance + dMin;
     } else if (minDistance <= targetDistance && targetDistance <= maxDistance) { // middle zone
 
         hood.setPosition(HoodPosition.HALF);
-        return aMed * Math.pow(targetDistance, 3) + bMed * Math.pow(targetDistance, 2) + cMed * targetDistance + dMed;
     } else if (maxDistance < targetDistance) { // far zone
   
         hood.setPosition(HoodPosition.OPEN);
-        return aMax * Math.pow(targetDistance, 3) + bMax * Math.pow(targetDistance, 2) + cMax * targetDistance + dMax;
-    } else {
-
-      return 3500;
     }
+      return 3500;
   }
 
 }
