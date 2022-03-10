@@ -206,7 +206,7 @@ public class RobotContainer {
     twoPaths = new TwoPathsAuto(m_robotDrive);
     intakeRun = new IntakeRunAuto(m_robotDrive);
     KISSAuto = new KISSAuto(m_robotDrive);
-    ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter);
+    ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
     // Adds autos to the chooser
     m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
@@ -214,7 +214,7 @@ public class RobotContainer {
     m_chooser.addOption("TwoPathsAuto", twoPaths);
     m_chooser.addOption("IntakeRunAuto", intakeRun);
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
-    m_chooser.addOption("ComplexAuto", ComplexAuto);
+    m_chooser.addOption("TwoBallAuto", ComplexAuto);
 
 
 
