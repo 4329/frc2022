@@ -36,6 +36,7 @@ storageIntakeID = 41
 storageIntakePower = 0.5
 
 #Shooter Feed
+FrontShooterFeed_ID = 0
 BackShooterFeed_ID = 42
 
 ShooterFeedPower = 0.5
