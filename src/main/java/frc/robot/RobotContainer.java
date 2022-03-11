@@ -171,7 +171,7 @@ public class RobotContainer {
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));//extend & pivot arms
       //Developer tools TODO
-    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
+    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem, shooter));
     new JoystickButton(m_driverController, Button.kBack.value).whenPressed(() -> hoodSubsystem.CyclePosition());
 
 
