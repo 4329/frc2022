@@ -177,13 +177,13 @@ public class RobotContainer {
 
     //Operator Controller
       //Shoot
-    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot high with aimbot
-    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem));//shoot high without aimbot
+    new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot high with aimbot
+    new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem));//shoot high without aimbot
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new TowerLowCommand(storageIntake, shooterFeed, shooter));//shoot low
       //Manage cargo
-    new JoystickButton(m_operatorController, Button.kY.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
-    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
+    new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
+    new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
   }
 
   /**

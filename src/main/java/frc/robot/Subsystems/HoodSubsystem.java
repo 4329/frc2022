@@ -89,9 +89,7 @@ public class HoodSubsystem extends SubsystemBase {
       }
 
   public void HoodPeriodic() {
-    System.out.println("OUTPUT PRE<--------------------------------------" + output);
     double hoodposition = hoodEncoder.getPosition();
-    System.out.println("Hood Position" + hoodposition);
     sparkPosition.setDouble(hoodposition);
 
     // System.out.println("Hood Position<-----" + hoodposition);
@@ -110,11 +108,9 @@ public class HoodSubsystem extends SubsystemBase {
       }
   }
 
-    System.out.println("----------" + setpoint);
 
     double output = hoodPID.calculate(hoodposition, setpoint);
 
-    System.out.println("HOOD PERIODIC <-----------------" + setpoint);
     output = output / MAX_RANGE;
     // setpointDifference = hoodSetpoint.getDouble(0) - hoodposition;
 
@@ -122,7 +118,6 @@ public class HoodSubsystem extends SubsystemBase {
       output = 0;
     }
     hoodwheel.set(output);
-    System.out.println("OUTPUT FINAL <-------------" + output);
   }
 
   // System.out.println(hoodEncoder.getPosition());
