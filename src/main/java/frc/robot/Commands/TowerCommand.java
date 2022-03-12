@@ -6,6 +6,7 @@ import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
+import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
 
 public class TowerCommand extends CommandBase {
 
@@ -15,8 +16,19 @@ public class TowerCommand extends CommandBase {
     final HoodSubsystem hood;
     final TurretSubsystem turret;
 
+    private double targetDistance;
+
     double setpoint;
 
+    /**
+     * Runs the tower intake and shooter
+     * 
+     * @param storageIntake
+     * @param shooterFeed
+     * @param shooter
+     * @param hood
+     * @param turret
+     */
     public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret) {
 
         this.storageIntake = storageIntake;
@@ -27,9 +39,15 @@ public class TowerCommand extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+
+        targetDistance = turret.getDistanceFromTarget();
+    }
+
+    @Override
     public void execute() {
 
-        setpoint = shooter.shooterManualOverride(hood, turret);
+        setpoint = shooter.shooterManualOverride(hood, turret, targetDistance);
         shooter.shoot(setpoint);        
 
         if (shooter.getShooterError()) {
@@ -49,6 +67,7 @@ public class TowerCommand extends CommandBase {
         storageIntake.storageIntakeStop();
         shooterFeed.shooterFeedStop();
         shooter.holdFire();
+        hood.setPosition(HoodPosition.OPEN);
     }
 
     @Override

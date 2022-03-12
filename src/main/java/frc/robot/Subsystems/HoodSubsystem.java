@@ -2,24 +2,19 @@
 
 package frc.robot.Subsystems;
 
-import java.util.Collections;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import javax.swing.text.Position;
-
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Configrun;
 
 public class HoodSubsystem extends SubsystemBase {
@@ -27,14 +22,10 @@ public class HoodSubsystem extends SubsystemBase {
   private CANSparkMax hoodwheel;
   private RelativeEncoder hoodEncoder;
   private int output;
-  private NetworkTableEntry inputError;
-  private NetworkTableEntry sparkOutput;
   private NetworkTableEntry sparkPosition;
   private NetworkTableEntry hoodOverrideIdleMode;
   private NetworkTableEntry overrideSetpointEntry;
   private NetworkTableEntry preHood;
-  private NetworkTableEntry postHood;
-  private double setpointDifference;
   private double hoodOpen;
   private double hoodHalf;
   private double hoodClosed;
@@ -67,10 +58,6 @@ public class HoodSubsystem extends SubsystemBase {
     hoodwheel.setIdleMode(IdleMode.kBrake);
     hoodPID.setTolerance(1);
 
-    sparkOutput = Shuffleboard.getTab("Hood Data").add("Spark Output Percent", 0)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Collections.singletonMap("Block Increment", .01)).withPosition(2, 1).getEntry();
-
     sparkPosition = Shuffleboard.getTab("Hood Data").add("Position", hoodEncoder.getPosition())
         .withWidget(BuiltInWidgets.kTextView)
         .withPosition(0, 1).withSize(1, 1).getEntry();
@@ -78,32 +65,33 @@ public class HoodSubsystem extends SubsystemBase {
     hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
         .withWidget(BuiltInWidgets.kToggleButton)
         .withSize(2, 1).getEntry();
-
-    inputError = Shuffleboard.getTab("Hood Data").add("Check Input", true).withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(0, 0).withSize(2, 1)
-        .getEntry();
    
     overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Setpoint", 3).getEntry();
 
     preHood = Shuffleboard.getTab("Hood Data").add("preHood", 3).getEntry();
 
-    postHood = Shuffleboard.getTab("Hood Data").add("postHood", 3).getEntry();
-
     Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
         .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
     
-      }
+  }
 
-  public void HoodPeriodic() {
+  /**
+   * This method actually runs the hood, but can only be influenced by setPosition()
+   * and setEncoderPosition()
+   * 
+   * @param shooter
+   */
+  public void HoodPeriodic(Shooter shooter) {
+    preHood.setDouble(output);
     double hoodposition = hoodEncoder.getPosition();
     sparkPosition.setDouble(hoodposition);
 
-    // System.out.println("Hood Position<-----" + hoodposition);
+    //System.out.println("Hood Position<-----" + hoodposition);
     // double setpoint = 0; // sits at neutral position until told otherwise.
 
-    if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
+    if (shooter.manualOverride.getBoolean(true)) {
 
-      setpoint = overrideSetpoint; 
+      setpoint = overrideSetpoint;
     } else {
       if (currentPosition.equals(HoodPosition.OPEN)) {
         setpoint = hoodOpen;
@@ -111,6 +99,8 @@ public class HoodSubsystem extends SubsystemBase {
         setpoint = hoodHalf;
       } else if (currentPosition.equals(HoodPosition.CLOSED)) {
         setpoint = hoodClosed;
+      } else if (currentPosition.equals(HoodPosition.NEUTRAL)) {
+        setpoint = hoodNeutral;
       }
   }
 
@@ -118,7 +108,6 @@ public class HoodSubsystem extends SubsystemBase {
     double output = hoodPID.calculate(hoodposition, setpoint);
 
     output = output / MAX_RANGE;
-    // setpointDifference = hoodSetpoint.getDouble(0) - hoodposition;
 
     if (Math.abs(hoodposition) > MAX_RANGE) {
       output = 0;
@@ -128,14 +117,25 @@ public class HoodSubsystem extends SubsystemBase {
 
   // System.out.println(hoodEncoder.getPosition());
 
+  /**
+   * @return whether or not the hood is within tolerance
+   */
   public boolean hoodSet() {
     return hoodPID.atSetpoint();
   }
 
+  /**
+   * stops the hood
+   */
   public void stop() {
     hoodwheel.set(0);
   }
 
+  /**
+   * Sets the hood position with a HoodPosition
+   * 
+   * @param Position
+   */
   public void setPosition(HoodPosition Position) {
     System.out.println("`````````````````````````Setting Position to" + Position + "`````````````````````````");
     // if (Position.equals(HoodPosition.OPEN)) {
@@ -151,6 +151,11 @@ public class HoodSubsystem extends SubsystemBase {
     currentPosition = Position;
   }
 
+  /**
+   * Sets the hood position with a double
+   * 
+   * @param position
+   */
   public void setEncoderPosition(double position) {
 
     if (position < 3) {
@@ -165,7 +170,9 @@ public class HoodSubsystem extends SubsystemBase {
     }
   }
 
-  // may be unnecessary
+  /**
+   * May be unnecessary. Cycles through HoodPositions
+   */
   public void CyclePosition() {
     //System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
 
@@ -181,21 +188,30 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public enum HoodPosition {
-    OPEN, HALF, CLOSED, NEUTRAL;
 
+    OPEN, HALF, CLOSED, NEUTRAL;
   }
 
+  /**
+   * Code in here is called upon test mode's being enabled
+   */
   public void hoodTestMode() {
     hoodwheel.setIdleMode(IdleMode.kCoast);
     double hoodposition = hoodEncoder.getPosition();
     sparkPosition.setDouble(hoodposition);
   }
 
-  public void hoodOverride() {
+  /**
+   * Allows one to set hood position and idle mode directly through shuffleboard if 
+   * manual override is enabled
+   * 
+   * @param shooter
+   */
+  public void hoodOverride(Shooter shooter) {
 
     sparkPosition.setDouble(hoodEncoder.getPosition());
-    HoodPeriodic();
-    if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
+    HoodPeriodic(shooter);
+    if (shooter.manualOverride.getBoolean(true)) {
 
       setEncoderPosition(overrideSetpointEntry.getDouble(3));
       if (hoodOverrideIdleMode.getBoolean(true)) {

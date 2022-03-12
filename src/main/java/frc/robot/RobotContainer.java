@@ -231,7 +231,7 @@ public class RobotContainer {
 
   public void teleopPeriodic() {
     turretSubsystem.putValuesToShuffleboard();
-    hoodSubsystem.hoodOverride();
+    hoodSubsystem.hoodOverride(shooter);
   }
 
   public void test() {

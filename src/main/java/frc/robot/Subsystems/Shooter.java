@@ -181,14 +181,14 @@ public class Shooter {
    * @param turret
    * @return shooter RPM
    */
-  public double shooterManualOverride(HoodSubsystem hood, TurretSubsystem turret) {
+  public double shooterManualOverride(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {
 
     if (manualOverride.getBoolean(true)) {
 
       return shooterRPM.getDouble(3500);
     } else {
 
-      return aim(hood, turret);
+      return aim(hood, turret, targetDistance);
     }
   }
 
@@ -213,29 +213,26 @@ public class Shooter {
    * @param turret
    * @return aimed shooter RPM
    */
-  public double aim(HoodSubsystem hood, TurretSubsystem turret) {
-    
-    targetDistance = turret.getDistanceFromTarget();
-    
+  public double aim(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {    
 
     if (targetDistance < minDistance) { // Near zone
       
       hood.setPosition(HoodPosition.OPEN); // Sets hood to open
-      pleaseHelp.setDouble(0);
+      pleaseHelp.setDouble(m_openTable.getOutput(targetDistance));
       return m_openTable.getOutput(targetDistance); // Calculates our RPM for an open hood
 
 
     } else if (targetDistance >= minDistance && targetDistance <= maxDistance) { // Middle zone
 
       hood.setPosition(HoodPosition.HALF); // Sets hood to half
-      pleaseHelp.setDouble(1);
+      pleaseHelp.setDouble(m_halfTable.getOutput(targetDistance));
       return m_halfTable.getOutput(targetDistance); // Calculates our RPM for a half hood
 
 
     } else if (targetDistance > maxDistance) { // Far zone
       
       hood.setPosition(HoodPosition.CLOSED); // Sets hood to closed
-      pleaseHelp.setDouble(2);
+      pleaseHelp.setDouble(m_closedTable.getOutput(targetDistance));
       return m_closedTable.getOutput(targetDistance); // Calculates our RPM for a closed hood
 
     } else {
