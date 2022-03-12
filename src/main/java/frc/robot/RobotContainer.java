@@ -35,6 +35,7 @@ import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
+import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
@@ -87,10 +88,12 @@ public class RobotContainer {
   private Command intakeRun;
   private Command KISSAuto;
   private Command ComplexAuto;
+  private Command ComplexerAuto;
   
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+
   
   
 
@@ -215,6 +218,7 @@ public class RobotContainer {
     m_chooser.addOption("IntakeRunAuto", intakeRun);
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
     m_chooser.addOption("TwoBallAuto", ComplexAuto);
+    m_chooser.addOption("FiveBallAuto", ComplexerAuto);
 
 
 

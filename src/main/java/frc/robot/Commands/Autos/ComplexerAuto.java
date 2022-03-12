@@ -30,6 +30,8 @@ public class ComplexerAuto extends SequentialCommandGroup{
         
         final AutoFromPathPlanner firstMove = new AutoFromPathPlanner(drive, "ComplexAutoMove1", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner complexerAuto = new AutoFromPathPlanner(drive, "ComplexerAuto", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner complexerAuto1 = new AutoFromPathPlanner(drive, "ComplexerAuto1", Constants.AutoConstants.kMaxSpeed);
+
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         // Command towercCommand = new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem);
         CommandGroups groups = new CommandGroups();
@@ -40,6 +42,8 @@ public class ComplexerAuto extends SequentialCommandGroup{
             new ParallelCommandGroup(intakeRun, firstMove).withTimeout(2), 
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(4),
             new ParallelCommandGroup(intakeRun, complexerAuto).withTimeout(2),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
+            new ParallelCommandGroup(intakeRun, complexerAuto1).withTimeout(6),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(4),
             new InstantCommand(()->intakeSolenoid.intakeUp())
          );
