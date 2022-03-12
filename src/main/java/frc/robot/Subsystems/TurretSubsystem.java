@@ -62,6 +62,7 @@ public class TurretSubsystem extends SubsystemBase{
         turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
         turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
         turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
+        turretStop();
     }
 
     public void putValuesToShuffleboard() {
@@ -156,7 +157,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void turretStop(){
-        turret.set(TalonSRXControlMode.PercentOutput, Configrun.get(0, "turretStop"));
+        turret.set(TalonSRXControlMode.PercentOutput, 0);
     }
 
     public void rotateTurret(double output) {
