@@ -33,7 +33,7 @@ public class LowAuto extends SequentialCommandGroup{
       
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
-        Command lowshoot = new TowerLowCommand(storageIntake, shooterFeed, shooter);
+        Command lowshoot = new TowerLowCommand(storageIntake, shooterFeed, shooter, hoodSubsystem);
         CommandGroups groups = new CommandGroups();
 
         addCommands(
