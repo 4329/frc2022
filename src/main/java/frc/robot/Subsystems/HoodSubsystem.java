@@ -26,12 +26,14 @@ public class HoodSubsystem extends SubsystemBase {
   private PIDController hoodPID;
   private CANSparkMax hoodwheel;
   private RelativeEncoder hoodEncoder;
-  private NetworkTableEntry inputError;
   private int output;
+  private NetworkTableEntry inputError;
   private NetworkTableEntry sparkOutput;
   private NetworkTableEntry sparkPosition;
   private NetworkTableEntry hoodOverrideIdleMode;
   private NetworkTableEntry overrideSetpointEntry;
+  private NetworkTableEntry preHood;
+  private NetworkTableEntry postHood;
   private double setpointDifference;
   private double hoodOpen;
   private double hoodHalf;
@@ -82,6 +84,10 @@ public class HoodSubsystem extends SubsystemBase {
         .getEntry();
    
     overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Setpoint", 3).getEntry();
+
+    preHood = Shuffleboard.getTab("Hood Data").add("preHood", 3).getEntry();
+
+    postHood = Shuffleboard.getTab("Hood Data").add("postHood", 3).getEntry();
 
     Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
         .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
@@ -161,7 +167,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   // may be unnecessary
   public void CyclePosition() {
-    System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
+    //System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
 
     if (currentPosition.equals(HoodPosition.NEUTRAL)) {
       setPosition(HoodPosition.OPEN);
@@ -188,10 +194,10 @@ public class HoodSubsystem extends SubsystemBase {
   public void hoodOverride() {
 
     sparkPosition.setDouble(hoodEncoder.getPosition());
+    HoodPeriodic();
     if (NetworkTableInstance.getDefault().getTable("Shooter").getEntry("manualOverride").getBoolean(true)) {
 
       setEncoderPosition(overrideSetpointEntry.getDouble(3));
-      HoodPeriodic();
       if (hoodOverrideIdleMode.getBoolean(true)) {
 
         hoodwheel.setIdleMode(IdleMode.kBrake);
