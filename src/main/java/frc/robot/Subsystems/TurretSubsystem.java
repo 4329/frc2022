@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 
+import java.awt.geom.Point2D;
+import frc.robot.Utilities.LinearInterpolationTable;
+
 public class TurretSubsystem extends SubsystemBase{
 
     private static final double LIMELIGHT_RANGE = 30;
@@ -46,6 +49,23 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretRotationMin;
     private NetworkTableEntry turretRotationMax;
     NetworkTableEntry targetStatus;
+
+    private Point2D[] limlightTable = new Point2D.Double[] {
+
+        new Point2D.Double(21.8, 5 * 12),
+        new Point2D.Double(15, 6 * 12),
+        new Point2D.Double(11.21, 7 * 12),
+        new Point2D.Double(7.7, 8 * 12),
+        new Point2D.Double(3.53, 10 * 12),
+        new Point2D.Double(0, 11*12),
+        new Point2D.Double(-2.39, 12 * 12),
+        new Point2D.Double(-4.1, 13 * 12),
+        new Point2D.Double(-5.5, 14 * 12),
+        new Point2D.Double(-6.9, 15 * 12),
+        new Point2D.Double(-7.5, 16 * 12),
+        new Point2D.Double(-8.5, 17 * 12),
+    };
+    private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
     public TurretSubsystem() {
         turret = new TalonSRX (Configrun.get(41, "turretID"));
@@ -111,10 +131,12 @@ public class TurretSubsystem extends SubsystemBase{
         return y;
     }
 
+
     public double getDistanceFromTarget() {
         // TODO use this to get distance from target (only while target is visible)
-        limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
-        return limeLightDistance;
+       return m_limlightTable.getOutput(getTy());
+        //limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
+       // return limeLightDistance;
     }
 
     public void limeLightOn() {

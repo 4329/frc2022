@@ -213,9 +213,9 @@ public class HoodSubsystem extends SubsystemBase {
     HoodPeriodic(shooter);
     if (shooter.manualOverride.getBoolean(true)) {
 
-      setEncoderPosition(overrideSetpointEntry.getDouble(3));
       if (hoodOverrideIdleMode.getBoolean(true)) {
-
+        
+        setEncoderPosition(overrideSetpointEntry.getDouble(3));
         hoodwheel.setIdleMode(IdleMode.kBrake);
       } else {
 

@@ -24,7 +24,7 @@ backRightOffset = -1.8906
 
 
 Intake_ID = 40
-intakeSpeed = -0.7
+intakeSpeed = -0.95
 intakeUp = false
 intakeSolenoidID_1 = 0
 intakeSolenoidID_2 = 1
@@ -33,13 +33,13 @@ PH_CAN_ID = 61
 
 # Storage Intake
 storageIntakeID = 41
-storageIntakePower = -0.5
+storageIntakePower = -0.95
 
 #Shooter Feed
 FrontShooterFeed_ID = 0
 BackShooterFeed_ID = 42
 
-ShooterFeedPower = 0.5
+ShooterFeedPower = 0.95
 
 pivotSolenoidID_1 = 2
 shiftSolenoidID_1 = 8
@@ -55,9 +55,9 @@ climbPower = 0.5
 reverseClimbPower = -0.5
 
 # Limelight
-h1In = 36
+h1In = 32
 h21n = 104
-a1Degree = 11
+a1Degree = 25
 taTolerance = 0.3
 
 #Digital input IDs
@@ -71,12 +71,22 @@ turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 2873
-turretMin = 2259
-turretZero = 2566
-
+turretMax = 3072
+turretMin = 2458
+turretZero = 2765
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
+
+ShooterP = 1.5
+ShooterI = 12
+ShooterD = 0.06
+
+LowShooterP = 1.5
+LowShooterI = 12
+LowShooterD = 0.06
+
+#ShooterTolerance is in RPM
+ShooterToleranceInRPMs = 10
 
 FrontShooterFeedStop = 0
 BackShooterFeedStop = 0

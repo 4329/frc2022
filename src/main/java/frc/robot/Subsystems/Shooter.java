@@ -30,6 +30,7 @@ import frc.robot.Utilities.LinearInterpolationTable;
 public class Shooter {
 
   private PIDController shooterPID;
+  private PIDController lowShooterPID;
   SimpleMotorFeedforward simpleFeedForward;
 
   private TalonFX shooterwheel1;
@@ -56,25 +57,29 @@ public class Shooter {
   private Point2D[] openTable = new Point2D.Double[] { // Manually collected data for an open hood
 
     new Point2D.Double(2 * 12, 2900),
-    new Point2D.Double(4 * 12, 2900),
-    new Point2D.Double(6 * 12, 3300),
+    new Point2D.Double(5 * 12, 3100),
+    new Point2D.Double(6 * 12, 3150),
+    new Point2D.Double(7.5 * 12, 3300),
   };
   private LinearInterpolationTable m_openTable = new LinearInterpolationTable(openTable); // Creates a line of best fit for open hood
 
 
   private Point2D[] halfTable = new Point2D.Double[] { // Manually collected data for a half hood
 
-    new Point2D.Double(102, 3000),
-    new Point2D.Double(134, 3300),
-    new Point2D.Double(170, 3500),
-    new Point2D.Double(14 * 12, 3700)
+    new Point2D.Double(7.5 * 12, 2800),
+    new Point2D.Double(8 * 12, 3000),
+    new Point2D.Double(10 * 12, 3000),
+    new Point2D.Double(12 * 12, 3250),
+    new Point2D.Double(14 * 12, 3500),
+    new Point2D.Double(16 * 12, 3900),
+    new Point2D.Double(17 * 12, 3950)
   };
   private LinearInterpolationTable m_halfTable = new LinearInterpolationTable(halfTable); // Creates a line of best fit for half hood
 
 
   private Point2D[] closedTable = new Point2D.Double[] { // Manually collected data for a closed hood
     
-    new Point2D.Double(16 * 12, 3550),
+    new Point2D.Double(17 * 12, 3700),
     new Point2D.Double(18 * 12, 3800),
     new Point2D.Double(20 * 12, 4050),
     new Point2D.Double(22 * 12, 4300),
@@ -108,9 +113,14 @@ public class Shooter {
     
     // Configures PID and feedForward
     shooterPID = new PIDController(
-      Configrun.get(2.5, "ShooterP"),
-      Configrun.get(0.0, "ShooterI"),
-      Configrun.get(0.0, "ShooterD")
+      Configrun.get(1.5, "ShooterP"),
+      Configrun.get(12, "ShooterI"),
+      Configrun.get(0.06, "ShooterD")
+    );
+    lowShooterPID = new PIDController(
+      Configrun.get(1.5, "LowShooterP"),
+      Configrun.get(12, "LowShooterI"),
+      Configrun.get(0.06, "LowShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
@@ -128,8 +138,8 @@ public class Shooter {
     shooterwheel2.setNeutralMode(NeutralMode.Coast);
 
     // Configures half hood's edges
-    minDistance = 8 * 12;
-    maxDistance = 16 * 12;
+    minDistance = 90;
+    maxDistance = 204;
   }
 
   /**
@@ -143,6 +153,27 @@ public class Shooter {
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
     pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
+    Constants.ShooterConstants.velocityFeedForwardMultiplier);
+    // kMaxrpm = 6380;
+    // sensor units per rotation = 2048
+    // kGearRotation = 1
+    // maxPowerCtre = 21,777
+    maxPowerCtre = (6380 / 600) * (2048 / 1);
+    percent = pidCalculated / maxPowerCtre;
+    shooterwheel1.set(ControlMode.PercentOutput, percent);
+  }
+
+  /**
+   * Results in the shooter going at desired RPM using lowShooterPID
+   *
+   * @param shooterSetpoint
+   */
+  public void lowShoot(double shooterSetpoint) {
+    //shooterSetpoint is the RPM
+    pidVelocity = shooterwheel1.getSelectedSensorVelocity();
+    setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
+    pidCalculated = lowShooterPID.calculate(pidVelocity, setpointCTRE);
+    pidCalculated += (simpleFeedForward.calculate(lowShooterPID.getSetpoint()) * 
     Constants.ShooterConstants.velocityFeedForwardMultiplier);
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048

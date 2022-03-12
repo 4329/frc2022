@@ -2,39 +2,22 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.IntakeMotor;
-import frc.robot.Subsystems.IntakeSolenoidSubsystem;
-//import frc.robot.Subsystems.IntakeSensors;
-import frc.robot.Subsystems.ShooterFeedSubsytem;
-import frc.robot.Subsystems.StorageIntake;
 
 public class IntakeBackwardsCommand extends CommandBase {
-    private ShooterFeedSubsytem shooterFeed;
-    private StorageIntake storageIntake;
     private IntakeMotor intakeMotor;
-    private IntakeSolenoidSubsystem intakeSolenoid;
 
-    public IntakeBackwardsCommand(ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor,
-            IntakeSolenoidSubsystem intakeSolenoid) {
-        this.shooterFeed = shooterFeed;
-        this.storageIntake = storageIntake;
+    public IntakeBackwardsCommand(IntakeMotor intakeMotor) {
         this.intakeMotor = intakeMotor;
-        this.intakeSolenoid = intakeSolenoid;
     }
 
     public void initialize() {
 
-        // intakeSolenoid.intakeDown();
         intakeMotor.runIntakeOut();
-        storageIntake.storageIntakeOut();
-        shooterFeed.shooterFeedDown();
     }
 
     @Override
     public void end(boolean interrupted) {
-        storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
-        // intakeSolenoid.intakeUp();
-        shooterFeed.shooterFeedStop();
     }
 
     public boolean isFinished() {
