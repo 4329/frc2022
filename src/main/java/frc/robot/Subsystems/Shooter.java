@@ -1,24 +1,36 @@
 package frc.robot.Subsystems;
 
-import java.util.Map;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import org.opencv.core.Point;
+
+import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+
+import java.util.Map;
+
 import frc.robot.Configrun;
 import frc.robot.Constants;
-import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
+
+import java.awt.geom.Point2D;
+import frc.robot.Utilities.LinearInterpolationTable;
 
 public class Shooter {
 
   private PIDController shooterPID;
+  private PIDController lowShooterPID;
   SimpleMotorFeedforward simpleFeedForward;
 
   private TalonFX shooterwheel1;
@@ -33,34 +45,82 @@ public class Shooter {
   private NetworkTableEntry pidSetpointErrorEntry;
   private NetworkTableEntry pidErrorEntryNum;
   private NetworkTableEntry atSetpoint;
-  private NetworkTableEntry belowZero;
   private NetworkTableEntry shooterRPM;
   public NetworkTableEntry manualOverride;
+  private NetworkTableEntry pleaseHelp;
 
   double targetDistance;
 
   double minDistance;
   double maxDistance;
 
-  double aMin, bMin, cMin, dMin;
+  private Point2D[] openTable = new Point2D.Double[] { // Manually collected data for an open hood
 
-  double aMed, bMed, cMed, dMed;
+    new Point2D.Double(2 * 12, 2900),
+    new Point2D.Double(5 * 12, 3100),
+    new Point2D.Double(6 * 12, 3150),
+    new Point2D.Double(7.5 * 12, 3300),
+  };
+  private LinearInterpolationTable m_openTable = new LinearInterpolationTable(openTable); // Creates a line of best fit for open hood
 
-  double aMax, bMax, cMax, dMax;
 
+  private Point2D[] halfTable = new Point2D.Double[] { // Manually collected data for a half hood
+
+    new Point2D.Double(7.5 * 12, 2800),
+    new Point2D.Double(8 * 12, 3000),
+    new Point2D.Double(10 * 12, 3000),
+    new Point2D.Double(12 * 12, 3250),
+    new Point2D.Double(14 * 12, 3500),
+    new Point2D.Double(16 * 12, 3900),
+    new Point2D.Double(17 * 12, 3950)
+  };
+  private LinearInterpolationTable m_halfTable = new LinearInterpolationTable(halfTable); // Creates a line of best fit for half hood
+
+
+  private Point2D[] closedTable = new Point2D.Double[] { // Manually collected data for a closed hood
+    
+    new Point2D.Double(17 * 12, 3700),
+    new Point2D.Double(18 * 12, 3800),
+    new Point2D.Double(20 * 12, 4050),
+    new Point2D.Double(22 * 12, 4300),
+    new Point2D.Double(24 * 12, 4700),
+    new Point2D.Double(26 * 12, 5000),
+    new Point2D.Double(28 * 12, 5400)
+  };
+  private LinearInterpolationTable m_closedTable = new LinearInterpolationTable(closedTable); // Creates a line of best fit for closed hood
+
+
+  
+
+
+
+
+  /**
+   * Creates a shooter subsystem
+   */
   public Shooter() {
 
+    // Creates a pid setpoint error graph
     pidSetpointErrorEntry = Shuffleboard.getTab("Shooter").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -500, "Unit", "RPM")).withPosition(2, 0).getEntry();
+    // Creates a pid setpoint textbox
     pidErrorEntryNum = Shuffleboard.getTab("Shooter").add("PID Error num", 1).withPosition(1, 0).getEntry();
+    // Returns a boolean of whether or not shooter is within tolerance
     atSetpoint = Shuffleboard.getTab("Shooter").add("At Setpoint", false).withPosition(1, 1).getEntry();
-    belowZero = Shuffleboard.getTab("Shooter").add("Below Zero", false).withPosition(1, 2).getEntry();
+    // Input desired RPM whilst manual override is on
     shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
-    manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", true).withPosition(5, 1).getEntry();
-
+    manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", false).withPosition(5, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    pleaseHelp = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
+    
+    // Configures PID and feedForward
     shooterPID = new PIDController(
-      Configrun.get(2.5, "ShooterP"),
-      Configrun.get(0.0, "ShooterI"),
-      Configrun.get(0.0, "ShooterD")
+      Configrun.get(1.5, "ShooterP"),
+      Configrun.get(12, "ShooterI"),
+      Configrun.get(0.06, "ShooterD")
+    );
+    lowShooterPID = new PIDController(
+      Configrun.get(1.5, "LowShooterP"),
+      Configrun.get(12, "LowShooterI"),
+      Configrun.get(0.06, "LowShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
@@ -68,6 +128,7 @@ public class Shooter {
     Constants.ShooterConstants.shooterKv, 
     Constants.ShooterConstants.shooterKa);
 
+    // Configures the shooter's motors
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
     shooterwheel1.setInverted(true);
@@ -76,26 +137,14 @@ public class Shooter {
     shooterwheel1.setNeutralMode(NeutralMode.Coast);
     shooterwheel2.setNeutralMode(NeutralMode.Coast);
 
-    minDistance = Constants.ShooterConstants.minDistance;
-    maxDistance = Constants.ShooterConstants.maxDistance;
-
-    aMin = Constants.ShooterConstants.aMin;
-    bMin = Constants.ShooterConstants.bMin;
-    cMin = Constants.ShooterConstants.cMin;
-    dMin = Constants.ShooterConstants.dMin;
-    
-    aMed = Constants.ShooterConstants.aMed;
-    bMed = Constants.ShooterConstants.bMed;
-    cMed = Constants.ShooterConstants.cMed;
-    dMed = Constants.ShooterConstants.dMed;
-
-    aMax = Constants.ShooterConstants.aMax;
-    bMax = Constants.ShooterConstants.bMax;
-    cMax = Constants.ShooterConstants.cMax;
-    dMax = Constants.ShooterConstants.dMax;
+    // Configures half hood's edges
+    minDistance = 90;
+    maxDistance = 204;
   }
 
   /**
+   * Results in the shooter going at desired RPM
+   *
    * @param shooterSetpoint
    */
   public void shoot(double shooterSetpoint) {
@@ -114,6 +163,30 @@ public class Shooter {
     shooterwheel1.set(ControlMode.PercentOutput, percent);
   }
 
+  /**
+   * Results in the shooter going at desired RPM using lowShooterPID
+   *
+   * @param shooterSetpoint
+   */
+  public void lowShoot(double shooterSetpoint) {
+    //shooterSetpoint is the RPM
+    pidVelocity = shooterwheel1.getSelectedSensorVelocity();
+    setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
+    pidCalculated = lowShooterPID.calculate(pidVelocity, setpointCTRE);
+    pidCalculated += (simpleFeedForward.calculate(lowShooterPID.getSetpoint()) * 
+    Constants.ShooterConstants.velocityFeedForwardMultiplier);
+    // kMaxrpm = 6380;
+    // sensor units per rotation = 2048
+    // kGearRotation = 1
+    // maxPowerCtre = 21,777
+    maxPowerCtre = (6380 / 600) * (2048 / 1);
+    percent = pidCalculated / maxPowerCtre;
+    shooterwheel1.set(ControlMode.PercentOutput, percent);
+  }
+
+  /**
+   * Makes the shooter stop shooting
+   */
   public void holdFire() {
 
     shooterwheel1.set(ControlMode.PercentOutput, 0);
@@ -128,25 +201,31 @@ public class Shooter {
     pidSetpointErrorEntry.setDouble(shooterPID.getPositionError());
     atSetpoint.setBoolean(shooterPID.atSetpoint());
 
-    if (shooterPID.getPositionError() / 2048 * 600 < 0) {
-
-      belowZero.setBoolean(true);
-    }
-
     return shooterPID.atSetpoint();
   }
 
-  public double shooterManualOverride(HoodSubsystem hood, TurretSubsystem turret) {
+  /**
+   * pulls from the shuffleboard if manual override is enabled
+   * and from an aiming equation if manual override is not enabled
+   * 
+   * @param hood
+   * @param turret
+   * @return shooter RPM
+   */
+  public double shooterManualOverride(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {
 
     if (manualOverride.getBoolean(true)) {
 
       return shooterRPM.getDouble(3500);
     } else {
 
-      return aim(hood, turret);
+      return aim(hood, turret, targetDistance);
     }
   }
 
+  /**
+   * If the override is on, it will be turned off and vice versa
+   */
   public void toggleOverride() {
 
     if (manualOverride.getBoolean(true)) {
@@ -158,25 +237,38 @@ public class Shooter {
     }
   }
 
-  public double aim(HoodSubsystem hood, TurretSubsystem turret) { //TODO add aiming code here
-    
-    targetDistance = turret.getDistanceFromTarget();
+  /**
+   * Configures the RPM and hood based on distance from the target
+   * 
+   * @param hood
+   * @param turret
+   * @return aimed shooter RPM
+   */
+  public double aim(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {    
 
-    if (targetDistance < minDistance) { // near zone
-    
-        hood.setPosition(HoodPosition.CLOSED);
-        return aMin * Math.pow(targetDistance, 3) + bMin * Math.pow(targetDistance, 2) + cMin * targetDistance + dMin;
-    } else if (minDistance <= targetDistance && targetDistance <= maxDistance) { // middle zone
+    if (targetDistance < minDistance) { // Near zone
+      
+      hood.setPosition(HoodPosition.OPEN); // Sets hood to open
+      pleaseHelp.setDouble(m_openTable.getOutput(targetDistance));
+      return m_openTable.getOutput(targetDistance); // Calculates our RPM for an open hood
 
-        hood.setPosition(HoodPosition.HALF);
-        return aMed * Math.pow(targetDistance, 3) + bMed * Math.pow(targetDistance, 2) + cMed * targetDistance + dMed;
-    } else if (maxDistance < targetDistance) { // far zone
-  
-        hood.setPosition(HoodPosition.OPEN);
-        return aMax * Math.pow(targetDistance, 3) + bMax * Math.pow(targetDistance, 2) + cMax * targetDistance + dMax;
+
+    } else if (targetDistance >= minDistance && targetDistance <= maxDistance) { // Middle zone
+
+      hood.setPosition(HoodPosition.HALF); // Sets hood to half
+      pleaseHelp.setDouble(m_halfTable.getOutput(targetDistance));
+      return m_halfTable.getOutput(targetDistance); // Calculates our RPM for a half hood
+
+
+    } else if (targetDistance > maxDistance) { // Far zone
+      
+      hood.setPosition(HoodPosition.CLOSED); // Sets hood to closed
+      pleaseHelp.setDouble(m_closedTable.getOutput(targetDistance));
+      return m_closedTable.getOutput(targetDistance); // Calculates our RPM for a closed hood
+
     } else {
 
-      return 3500;
+      return 0;
     }
   }
 

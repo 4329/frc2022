@@ -64,7 +64,7 @@ ShooterWheel2ID = 31
 FrontShooterFeedStop = 0
 BackShooterFeedStop = 0
 
-ShooterP = 3
+ShooterP = 1.5
 ShooterI = 12
 ShooterD = 0.06
 #ShooterTolerance is in RPM

@@ -23,7 +23,6 @@ public class IntakeAutoCommand extends CommandBase {
     }
 
     public void initialize() {
-        // intakeSolenoid.intakeDown();
         intakeMotor.runIntakeIn();
         storageIntake.storageIntakeIn();
         shooterFeed.shooterFeedUp();
@@ -34,9 +33,14 @@ public class IntakeAutoCommand extends CommandBase {
             shooterFeed.shooterFeedStop();
 
             if (!intakeSensors.bottomTrigger()) {
+
                 storageIntake.storageIntakeStop();
                 intakeMotor.stopIntakeIn();
                 shooterFeed.shooterFeedStop();
+            } else {
+
+                intakeMotor.runIntakeIn();
+                storageIntake.storageIntakeIn();
             }
         }
     }
@@ -45,7 +49,6 @@ public class IntakeAutoCommand extends CommandBase {
     public void end(boolean interrupted) {
         storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
-        // intakeSolenoid.intakeUp();
         shooterFeed.shooterFeedStop();
     }
 

@@ -26,6 +26,7 @@ import frc.robot.Commands.CommandGroups;
 import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
+import frc.robot.Commands.AllBackwardsCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.ManualHoodCommand;
@@ -171,7 +172,7 @@ public class RobotContainer {
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));//extend & pivot arms
       //Developer tools TODO
-    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem));
+    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem, shooter));
     new JoystickButton(m_driverController, Button.kBack.value).whenPressed(() -> hoodSubsystem.CyclePosition());
 
 
@@ -179,11 +180,12 @@ public class RobotContainer {
       //Shoot
     new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot high with aimbot
     new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem));//shoot high without aimbot
-    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new TowerLowCommand(storageIntake, shooterFeed, shooter));//shoot low
+    new JoystickButton(m_operatorController, Button.kA.value).whenHeld(commandGroups.towerLow(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
     new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
-    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor));//eject
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(intakeMotor));
   }
 
   /**
@@ -231,7 +233,7 @@ public class RobotContainer {
 
   public void teleopPeriodic() {
     turretSubsystem.putValuesToShuffleboard();
-    hoodSubsystem.hoodOverride();
+    hoodSubsystem.hoodOverride(shooter);
   }
 
   public void test() {
