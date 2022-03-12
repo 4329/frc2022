@@ -17,7 +17,7 @@ public class DriveByController extends CommandBase {
   private final XboxController m_controller;
   private boolean fieldOrient = true;
 
-  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData2").add("Field Orient On", true).withPosition(2, 2).getEntry();
+  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withPosition(4, 2).getEntry();
 
   /**
    * Contructs a DriveByController object which applys the driver inputs from the

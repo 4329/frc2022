@@ -94,4 +94,4 @@ hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
 
-extraShuffleBoardToggle = true
+extraShuffleBoardToggle = false

@@ -99,16 +99,18 @@ public class Shooter {
    */
   public Shooter() {
 
-    // Creates a pid setpoint error graph
-    pidSetpointErrorEntry = Shuffleboard.getTab("Shooter").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -500, "Unit", "RPM")).withPosition(2, 0).getEntry();
-    // Creates a pid setpoint textbox
-    pidErrorEntryNum = Shuffleboard.getTab("Shooter").add("PID Error num", 1).withPosition(1, 0).getEntry();
-    // Returns a boolean of whether or not shooter is within tolerance
-    atSetpoint = Shuffleboard.getTab("Shooter").add("At Setpoint", false).withPosition(1, 1).getEntry();
-    // Input desired RPM whilst manual override is on
-    shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
-    manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", false).withPosition(5, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-    pleaseHelp = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      // Creates a pid setpoint error graph
+      pidSetpointErrorEntry = Shuffleboard.getTab("Shooter").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -500, "Unit", "RPM")).withPosition(2, 0).getEntry();
+      // Creates a pid setpoint textbox
+      pidErrorEntryNum = Shuffleboard.getTab("Shooter").add("PID Error num", 1).withPosition(1, 0).getEntry();
+      // Returns a boolean of whether or not shooter is within tolerance
+      atSetpoint = Shuffleboard.getTab("Shooter").add("At Setpoint", false).withPosition(1, 1).getEntry();
+      // Input desired RPM whilst manual override is on
+      shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
+      manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", false).withPosition(5, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+      pleaseHelp = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
+    }
     
     // Configures PID and feedForward
     shooterPID = new PIDController(
@@ -168,11 +170,10 @@ public class Shooter {
    * @return Whether or not shooterPID is within tolerance
    */
   public boolean getShooterError() {
-
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
-        pidErrorEntryNum.setDouble(shooterPID.getPositionError() / 2048 * 600);
-        pidSetpointErrorEntry.setDouble(shooterPID.getPositionError());
-        atSetpoint.setBoolean(shooterPID.atSetpoint());
+      pidErrorEntryNum.setDouble(shooterPID.getPositionError() / 2048 * 600);
+      pidSetpointErrorEntry.setDouble(shooterPID.getPositionError());
+      atSetpoint.setBoolean(shooterPID.atSetpoint());
     }
     return shooterPID.atSetpoint();
   }
@@ -200,13 +201,16 @@ public class Shooter {
    * If the override is on, it will be turned off and vice versa
    */
   public void toggleOverride() {
-
-    if (manualOverride.getBoolean(true)) {
-
-      manualOverride.setBoolean(false);
-    } else {
-
-      manualOverride.setBoolean(true);
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      if (manualOverride.getBoolean(true)) {
+        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+          manualOverride.setBoolean(false);
+        }
+      } else {
+        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+          manualOverride.setBoolean(true);
+        }
+      }
     }
   }
 

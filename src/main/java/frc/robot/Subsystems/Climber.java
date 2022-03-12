@@ -40,9 +40,9 @@ public class Climber {
         //climberNeoMotor3.follow(climberNeoMotor1);
 
         //isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
-        isPivotedShuffleboard = Shuffleboard.getTab("RobotData2").add("Climber Pivot Active", false).withPosition(2, 2).getEntry();
-        isExtendedShuffleboard = Shuffleboard.getTab("RobotData2").add("Climber Extetend Active", false).withPosition(2, 2).getEntry();
-        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData2").add("Climber Moters Active", false).withPosition(2, 2).getEntry();
+        isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot", false).withPosition(0, 3).getEntry();
+        isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Extend Climber", false).withPosition(0, 2).getEntry();
+        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withPosition(1, 2).getEntry();
     }
 
     public void pivotClimber() {

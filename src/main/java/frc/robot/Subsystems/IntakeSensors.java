@@ -20,8 +20,8 @@ public class IntakeSensors extends SubsystemBase {
         topTrigger = new DigitalInput(Configrun.get(1, "TopSensorPort"));
         bottomTrigger = new DigitalInput(Configrun.get(3, "BottomSensorPort"));
 
-        topTriggerStatus = Shuffleboard.getTab("RobotData2").add("Top Sensor", true).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-        bottomTriggerStatus = Shuffleboard.getTab("RobotData2").add("Bottom Sensor", true).withPosition(0, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        topTriggerStatus = Shuffleboard.getTab("RobotData").add("Top Sensor", true).withPosition(1, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        bottomTriggerStatus = Shuffleboard.getTab("RobotData").add("Bottom Sensor", true).withPosition(0, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
     }
 
     public boolean topTrigger() {
