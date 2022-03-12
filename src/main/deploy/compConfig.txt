@@ -78,8 +78,8 @@ ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
 ShooterP = 1.5
-ShooterI = 12
-ShooterD = 0.06
+ShooterI = 0
+ShooterD = 0
 
 LowShooterP = 1.5
 LowShooterI = 12
