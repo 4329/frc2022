@@ -72,14 +72,14 @@ public class Climber {
 
     public void extend() {
 
-        extendSolenoid.set(Value.kReverse);
+        extendSolenoid.set(Value.kForward);
         isExtendedShuffleboard.setBoolean(true);
 
     }
 
     public void retract() {
 
-        extendSolenoid.set(Value.kForward);
+        extendSolenoid.set(Value.kReverse);
         isExtendedShuffleboard.setBoolean(false);
     }
 

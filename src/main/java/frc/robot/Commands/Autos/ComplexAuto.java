@@ -32,13 +32,16 @@ public class ComplexAuto extends SequentialCommandGroup{
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         // Command towercCommand = new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem);
         CommandGroups groups = new CommandGroups();
+        Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
+        Command intakePosCommand2 = new IntakePosCommand(intakeSolenoid);
+
 
         addCommands(
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
-            new InstantCommand(()->intakeSolenoid.intakeDown()),
-            new ParallelCommandGroup(intakeRun, firstMove).withTimeout(2), 
+            intakePosCommand,
+            new ParallelCommandGroup(intakeRun, firstMove).withTimeout(3), 
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(4),
-            new InstantCommand(()->intakeSolenoid.intakeUp())
+            intakePosCommand2
          );
     }
 }

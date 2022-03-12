@@ -38,6 +38,7 @@ import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
+import frc.robot.Commands.Autos.LowAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
@@ -89,10 +90,12 @@ public class RobotContainer {
   private Command KISSAuto;
   private Command ComplexAuto;
   private Command ComplexerAuto;
+  private Command LowAuto;
   
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+
 
   
   
@@ -210,6 +213,7 @@ public class RobotContainer {
     intakeRun = new IntakeRunAuto(m_robotDrive);
     KISSAuto = new KISSAuto(m_robotDrive);
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
     // Adds autos to the chooser
     m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
@@ -219,6 +223,7 @@ public class RobotContainer {
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
     m_chooser.addOption("TwoBallAuto", ComplexAuto);
     m_chooser.addOption("FiveBallAuto", ComplexerAuto);
+    m_chooser.addOption("LowAuto", LowAuto);
 
 
 
