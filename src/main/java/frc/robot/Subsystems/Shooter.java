@@ -53,7 +53,7 @@ public class Shooter {
   double minDistance;
   double maxDistance;
 
-  private Point2D[] openTable = new Point2D.Double[] { // Manually connected data for an open hood
+  private Point2D[] openTable = new Point2D.Double[] { // Manually collected data for an open hood
 
     new Point2D.Double(2 * 12, 2900),
     new Point2D.Double(4 * 12, 2900),
@@ -64,9 +64,9 @@ public class Shooter {
 
   private Point2D[] halfTable = new Point2D.Double[] { // Manually collected data for a half hood
 
-    new Point2D.Double(8 * 12, 3000),
-    new Point2D.Double(10 * 12, 3300),
-    new Point2D.Double(12 * 12, 3500),
+    new Point2D.Double(102, 3000),
+    new Point2D.Double(134, 3300),
+    new Point2D.Double(170, 3500),
     new Point2D.Double(14 * 12, 3700)
   };
   private LinearInterpolationTable m_halfTable = new LinearInterpolationTable(halfTable); // Creates a line of best fit for half hood
