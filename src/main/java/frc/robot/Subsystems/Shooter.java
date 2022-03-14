@@ -46,7 +46,7 @@ public class Shooter {
   private NetworkTableEntry atSetpoint;
   private NetworkTableEntry shooterRPM;
   public NetworkTableEntry manualOverride;
-  private NetworkTableEntry pleaseHelp;
+  private NetworkTableEntry aimedSetpoint;
 
   double targetDistance;
 
@@ -109,7 +109,7 @@ public class Shooter {
       // Input desired RPM whilst manual override is on
       shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
       manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", false).withPosition(5, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-      pleaseHelp = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
+      aimedSetpoint = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
     }
     
     // Configures PID and feedForward
@@ -188,13 +188,17 @@ public class Shooter {
    */
   public double shooterManualOverride(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {
 
-    if (manualOverride.getBoolean(true)) {
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      if (manualOverride.getBoolean(true)) {
 
-      return shooterRPM.getDouble(3500);
-    } else {
+        return shooterRPM.getDouble(3500);
+      } 
+      else {
 
-      return aim(hood, turret, targetDistance);
+        return aim(hood, turret, targetDistance);
+      }
     }
+    return aim(hood, turret, targetDistance);
   }
 
   /**
@@ -226,21 +230,27 @@ public class Shooter {
     if (targetDistance < minDistance) { // Near zone
       
       hood.setPosition(HoodPosition.OPEN); // Sets hood to open
-      pleaseHelp.setDouble(m_openTable.getOutput(targetDistance));
+      if (Configrun.get(false, "extraShuffleBoardToggle")) {
+        aimedSetpoint.setDouble(m_openTable.getOutput(targetDistance));
+      }
       return m_openTable.getOutput(targetDistance); // Calculates our RPM for an open hood
 
 
     } else if (targetDistance >= minDistance && targetDistance <= maxDistance) { // Middle zone
 
       hood.setPosition(HoodPosition.HALF); // Sets hood to half
-      pleaseHelp.setDouble(m_halfTable.getOutput(targetDistance));
+      if (Configrun.get(false, "extraShuffleBoardToggle")) {
+        aimedSetpoint.setDouble(m_halfTable.getOutput(targetDistance));
+      }
       return m_halfTable.getOutput(targetDistance); // Calculates our RPM for a half hood
 
 
     } else if (targetDistance > maxDistance) { // Far zone
       
       hood.setPosition(HoodPosition.CLOSED); // Sets hood to closed
-      pleaseHelp.setDouble(m_closedTable.getOutput(targetDistance));
+      if (Configrun.get(false, "extraShuffleBoardToggle")) {
+        aimedSetpoint.setDouble(m_closedTable.getOutput(targetDistance));
+      }
       return m_closedTable.getOutput(targetDistance); // Calculates our RPM for a closed hood
 
     } else {
