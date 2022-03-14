@@ -26,7 +26,7 @@ public class TowerLowCommand extends CommandBase {
     @Override
     public void execute() {
         hood.setPosition(HoodPosition.HALF);
-        shooter.lowShoot(1400);
+        shooter.shoot(1400);
 
         storageIntake.storageIntakeIn();
         shooterFeed.shooterFeedUp();

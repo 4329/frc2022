@@ -81,10 +81,6 @@ ShooterP = 1.5
 ShooterI = 0
 ShooterD = 0
 
-LowShooterP = 1.5
-LowShooterI = 12
-LowShooterD = 0.06
-
 #ShooterTolerance is in RPM
 ShooterToleranceInRPMs = 10
 
