@@ -77,7 +77,7 @@ turretZero = 2765
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
-ShooterP = 1.5
+ShooterP = 2
 ShooterI = 0
 ShooterD = 0
 
