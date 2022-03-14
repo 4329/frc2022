@@ -77,13 +77,9 @@ turretZero = 2765
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
-ShooterP = 1.5
-ShooterI = 12
-ShooterD = 0.06
-
-LowShooterP = 1.5
-LowShooterI = 12
-LowShooterD = 0.06
+ShooterP = 2
+ShooterI = 0
+ShooterD = 0
 
 #ShooterTolerance is in RPM
 ShooterToleranceInRPMs = 10

@@ -30,7 +30,6 @@ import frc.robot.Utilities.LinearInterpolationTable;
 public class Shooter {
 
   private PIDController shooterPID;
-  private PIDController lowShooterPID;
   SimpleMotorFeedforward simpleFeedForward;
 
   private TalonFX shooterwheel1;
@@ -117,11 +116,6 @@ public class Shooter {
       Configrun.get(12, "ShooterI"),
       Configrun.get(0.06, "ShooterD")
     );
-    lowShooterPID = new PIDController(
-      Configrun.get(1.5, "LowShooterP"),
-      Configrun.get(12, "LowShooterI"),
-      Configrun.get(0.06, "LowShooterD")
-    );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
     Constants.ShooterConstants.shooterKs, 
@@ -152,29 +146,7 @@ public class Shooter {
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
     pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-    pidCalculated += (simpleFeedForward.calculate(shooterPID.getSetpoint()) * 
-    Constants.ShooterConstants.velocityFeedForwardMultiplier);
-    // kMaxrpm = 6380;
-    // sensor units per rotation = 2048
-    // kGearRotation = 1
-    // maxPowerCtre = 21,777
-    maxPowerCtre = (6380 / 600) * (2048 / 1);
-    percent = pidCalculated / maxPowerCtre;
-    shooterwheel1.set(ControlMode.PercentOutput, percent);
-  }
-
-  /**
-   * Results in the shooter going at desired RPM using lowShooterPID
-   *
-   * @param shooterSetpoint
-   */
-  public void lowShoot(double shooterSetpoint) {
-    //shooterSetpoint is the RPM
-    pidVelocity = shooterwheel1.getSelectedSensorVelocity();
-    setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
-    pidCalculated = lowShooterPID.calculate(pidVelocity, setpointCTRE);
-    pidCalculated += (simpleFeedForward.calculate(lowShooterPID.getSetpoint()) * 
-    Constants.ShooterConstants.velocityFeedForwardMultiplier);
+    pidCalculated += simpleFeedForward.calculate(shooterPID.getSetpoint()) * Constants.ShooterConstants.feedForwardMultiplier;
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
     // kGearRotation = 1
