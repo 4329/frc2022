@@ -30,7 +30,6 @@ import frc.robot.Utilities.LinearInterpolationTable;
 public class Shooter {
 
   private PIDController shooterPID;
-  private PIDController lowShooterPID;
   SimpleMotorFeedforward simpleFeedForward;
 
   private TalonFX shooterwheel1;
@@ -116,11 +115,6 @@ public class Shooter {
       Configrun.get(1.5, "ShooterP"),
       Configrun.get(12, "ShooterI"),
       Configrun.get(0.06, "ShooterD")
-    );
-    lowShooterPID = new PIDController(
-      Configrun.get(1.5, "LowShooterP"),
-      Configrun.get(12, "LowShooterI"),
-      Configrun.get(0.06, "LowShooterD")
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
