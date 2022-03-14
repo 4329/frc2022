@@ -58,20 +58,23 @@ public class HoodSubsystem extends SubsystemBase {
     hoodwheel.setIdleMode(IdleMode.kBrake);
     hoodPID.setTolerance(1);
 
-    sparkPosition = Shuffleboard.getTab("Hood Data").add("Position", hoodEncoder.getPosition())
-        .withWidget(BuiltInWidgets.kTextView)
-        .withPosition(0, 1).withSize(1, 1).getEntry();
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      sparkPosition = Shuffleboard.getTab("Hood Data").add("Position", hoodEncoder.getPosition())
+          .withWidget(BuiltInWidgets.kTextView)
+          .withPosition(0, 1).withSize(1, 1).getEntry();
 
-    hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
-        .withWidget(BuiltInWidgets.kToggleButton)
-        .withSize(2, 1).getEntry();
-   
-    overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Setpoint", 3).getEntry();
+      hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
+          .withWidget(BuiltInWidgets.kToggleButton)
+          .withSize(2, 1).getEntry();
+    
+      overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Setpoint", 3).getEntry();
 
-    preHood = Shuffleboard.getTab("Hood Data").add("preHood", 3).getEntry();
+      preHood = Shuffleboard.getTab("Hood Data").add("preHood", 3).getEntry();
 
-    Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
-        .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
+      Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
+          .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
+    }
+
     
   }
 
@@ -82,17 +85,25 @@ public class HoodSubsystem extends SubsystemBase {
    * @param shooter
    */
   public void HoodPeriodic(Shooter shooter) {
-    preHood.setDouble(output);
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      preHood.setDouble(output);
+    }
     double hoodposition = hoodEncoder.getPosition();
-    sparkPosition.setDouble(hoodposition);
+    //System.out.println("Hood Position" + hoodposition);
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      sparkPosition.setDouble(hoodposition);
+    }
 
     //System.out.println("Hood Position<-----" + hoodposition);
     // double setpoint = 0; // sits at neutral position until told otherwise.
 
-    if (shooter.manualOverride.getBoolean(true)) {
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+        if (shooter.manualOverride.getBoolean(true)) {
 
-      setpoint = overrideSetpoint;
-    } else {
+        setpoint = overrideSetpoint;
+      } 
+   }
+    else {
       if (currentPosition.equals(HoodPosition.OPEN)) {
         setpoint = hoodOpen;
       } else if (currentPosition.equals(HoodPosition.HALF)) {
@@ -198,7 +209,9 @@ public class HoodSubsystem extends SubsystemBase {
   public void hoodTestMode() {
     hoodwheel.setIdleMode(IdleMode.kCoast);
     double hoodposition = hoodEncoder.getPosition();
-    sparkPosition.setDouble(hoodposition);
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      sparkPosition.setDouble(hoodposition);
+    }
   }
 
   /**
@@ -208,23 +221,23 @@ public class HoodSubsystem extends SubsystemBase {
    * @param shooter
    */
   public void hoodOverride(Shooter shooter) {
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      sparkPosition.setDouble(hoodEncoder.getPosition());
+      HoodPeriodic(shooter);
+      if (shooter.manualOverride.getBoolean(true)) {
 
-    sparkPosition.setDouble(hoodEncoder.getPosition());
-    HoodPeriodic(shooter);
-    if (shooter.manualOverride.getBoolean(true)) {
-
-      if (hoodOverrideIdleMode.getBoolean(true)) {
-        
-        setEncoderPosition(overrideSetpointEntry.getDouble(3));
-        hoodwheel.setIdleMode(IdleMode.kBrake);
-      } else {
+        if (hoodOverrideIdleMode.getBoolean(true)) {
+          
+          setEncoderPosition(overrideSetpointEntry.getDouble(3));
+          hoodwheel.setIdleMode(IdleMode.kBrake);
+        } 
+      else {
 
         hoodwheel.setIdleMode(IdleMode.kCoast);
 
+        }
       }
+
     }
-
   }
-
-  
 }

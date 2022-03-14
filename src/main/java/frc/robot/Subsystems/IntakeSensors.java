@@ -17,12 +17,11 @@ public class IntakeSensors extends SubsystemBase {
 
     public IntakeSensors() {
 
-        topTrigger = new DigitalInput(Configrun.get(1, "topTriggerPort"));
-        bottomTrigger = new DigitalInput(Configrun.get(3, "bottomTriggerPort"));
-        topTriggerStatus = Shuffleboard.getTab("Competition Info").add("Top Trigger", true)
-                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-        bottomTriggerStatus = Shuffleboard.getTab("Competition Info").add("Bottom Trigger", true).withPosition(0, 1)
-                .withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        topTrigger = new DigitalInput(Configrun.get(3, "TopSensorPort"));
+        bottomTrigger = new DigitalInput(Configrun.get(1, "BottomSensorPort"));
+
+        topTriggerStatus = Shuffleboard.getTab("RobotData").add("Top Sensor", true).withPosition(0, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        bottomTriggerStatus = Shuffleboard.getTab("RobotData").add("Bottom Sensor", true).withPosition(1, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
     }
 
     public boolean topTrigger() {

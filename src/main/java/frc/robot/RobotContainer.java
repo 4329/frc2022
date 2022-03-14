@@ -140,13 +140,13 @@ public class RobotContainer {
     VideoSource[] enumerateSources = VideoSource.enumerateSources();
 
     if (enumerateSources.length > 0 && enumerateSources[0].getName().contains("USB")) {
-      Shuffleboard.getTab("RobotData").add("Camera 1", enumerateSources[0]).withPosition(5, 0).withSize(4, 4)
+      Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
           .withWidget(BuiltInWidgets.kCameraStream);
     }
     HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
     CameraServer.startAutomaticCapture(limelight);
 
-    Shuffleboard.getTab("RobotData").add("Limelight Baby", limelight).withPosition(2, 0).withSize(2, 2)
+    Shuffleboard.getTab("RobotData").add("Limelight Camera", limelight).withPosition(2, 0).withSize(2, 2)
         .withWidget(BuiltInWidgets.kCameraStream);
   }
 
@@ -205,10 +205,12 @@ public class RobotContainer {
     m_chooser.addOption("IntakeRunAuto", intakeRun);
 
     // Puts autos on Shuffleboard
-    Shuffleboard.getTab("Autonomous").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(3, 1);
-    Shuffleboard.getTab("Autonomous").add("Documentation",
-        "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29")
-        .withPosition(2, 2).withSize(4, 1);
+    Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(0, 0);
+    if (Configrun.get(false, "extraShuffleBoardToggle")) {
+      Shuffleboard.getTab("Autonomous").add("Documentation",
+          "Autonomous Modes at https://stem2u.sharepoint.com/sites/frc-4329/_layouts/15/Doc.aspx?sourcedoc={91263377-8ca5-46e1-a764-b9456a3213cf}&action=edit&wd=target%28Creating%20an%20Autonomous%20With%20Pathplanner%7Cb37e1a20-51ec-9d4d-87f9-886aa67fcb57%2F%29")
+          .withPosition(2, 2).withSize(4, 1);
+    }
   }
 
   /**

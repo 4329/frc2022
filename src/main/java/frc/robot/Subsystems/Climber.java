@@ -23,7 +23,7 @@ public class Climber {
     private boolean pivoted = false;
     private boolean shifted = false;
 
-    private final NetworkTableEntry isShiftedShuffleboard;
+    //rivate final NetworkTableEntry isShiftedShuffleboard;
     private final NetworkTableEntry isPivotedShuffleboard;
     private final NetworkTableEntry isExtendedShuffleboard;
     private final NetworkTableEntry isMoterActiveShuffleboard;
@@ -39,10 +39,10 @@ public class Climber {
         climberNeoMotor2.follow(climberNeoMotor1);
         //climberNeoMotor3.follow(climberNeoMotor1);
 
-        isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
-        isPivotedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Pivot Active", false).getEntry();
-        isExtendedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Extetend Active", false).getEntry();
-        isMoterActiveShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Moters Active", false).getEntry();
+        //isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
+        isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot", false).withPosition(0, 3).getEntry();
+        isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Extend Climber", false).withPosition(0, 2).getEntry();
+        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withPosition(1, 2).getEntry();
     }
 
     public void pivotClimber() {
@@ -60,14 +60,14 @@ public class Climber {
 
         shiftSolenoid.set(Value.kForward);
         shifted = true;
-        isShiftedShuffleboard.setBoolean(true);
+        //isShiftedShuffleboard.setBoolean(true);
     }
 
     public void neutral() {//neutral or engage
 
         shiftSolenoid.set(Value.kReverse);
         shifted = false;
-        isShiftedShuffleboard.setBoolean(false);
+        //isShiftedShuffleboard.setBoolean(false);
     }
 
     public void extend() {

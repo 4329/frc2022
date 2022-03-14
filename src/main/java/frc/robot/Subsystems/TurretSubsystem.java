@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
@@ -48,6 +49,7 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretPos;
     private NetworkTableEntry turretRotationMin;
     private NetworkTableEntry turretRotationMax;
+    private boolean tvToggle;
     NetworkTableEntry targetStatus;
 
     private Point2D[] limlightTable = new Point2D.Double[] {
@@ -73,27 +75,40 @@ public class TurretSubsystem extends SubsystemBase{
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(4, 0, 0);
         turretPid.setTolerance(turretTolerance);
-        targetStatus = Shuffleboard.getTab("RobotData").add("Target Acquired", false).getEntry();
-        checkTXDisplay = Shuffleboard.getTab("Limlight").add("Tx", 0).withPosition(3, 1).getEntry();
-        checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
-        checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
-        checkTVDisplay = Shuffleboard.getTab("Limlight").add("TV", 0).withPosition(4, 1).getEntry();
-        getDistanceFromTargetDisplay = Shuffleboard.getTab("Limlight").add("Distance", 0).withPosition(5, 0).getEntry();
-        turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
-        turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
-        turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
-        turretStop();
+
+        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();
+        getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData").add("Distance", 0).withPosition(2, 2).getEntry();
+
+        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+            targetStatus = Shuffleboard.getTab("Limlight").add("Target Acquired", false).getEntry();
+            checkTXDisplay = Shuffleboard.getTab("Limlight").add("TX", 0).withPosition(3, 1).getEntry();
+            checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
+            checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
+            turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
+            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
+            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
+        }
     }
 
     public void putValuesToShuffleboard() {
-        checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
-        checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
-        checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
-        checkTVDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0));
+        if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("Target Acquired").getDouble(0) == 1) {
+            tvToggle = true;
+        }
+        else {
+            tvToggle = false;
+        }
+
+        checkTVDisplay.setBoolean(tvToggle);
         getDistanceFromTargetDisplay.setDouble(getDistanceFromTarget());
-        turretPos.setDouble(getPwmPosition());
-        turretRotationMin.setDouble(getPwmPosition()- 307);
-        turretRotationMax.setDouble(getPwmPosition()+ 307);
+
+        if (Configrun.get(false, "extraShuffleBoardToggle")){
+            checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
+            checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
+            checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
+            turretPos.setDouble(getPwmPosition());
+            turretRotationMin.setDouble(getPwmPosition()- 307);
+            turretRotationMax.setDouble(getPwmPosition()+ 307);
+        }
     }
 
     public double getTx() {

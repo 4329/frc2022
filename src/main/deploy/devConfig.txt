@@ -71,8 +71,8 @@ ShooterD = 0
 ShooterToleranceInRPMs = 10
 
 #Digital input IDs
-topTriggerPort = 5
-bottomTriggerPort = 3
+TopSensorPort = 5
+BottomSensorPort = 3
 
 # Turret
 turretID = 44
@@ -93,3 +93,5 @@ hoodNeutral = 0
 hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
+
+extraShuffleBoardToggle = false
