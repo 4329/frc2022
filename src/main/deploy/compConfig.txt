@@ -17,7 +17,7 @@ backLeftTurningEncoderPort = 2
 backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
-frontLeftOffset = -4.8687
+frontLeftOffset = -4.683
 frontRightOffset = -1.1167
 backLeftOffset = -1.06809
 backRightOffset = -1.8906
