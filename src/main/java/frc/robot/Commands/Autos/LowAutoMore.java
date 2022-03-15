@@ -30,12 +30,14 @@ public class LowAutoMore extends SequentialCommandGroup{
     public LowAutoMore(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
         
         final AutoFromPathPlanner LowAuto1 = new AutoFromPathPlanner(drive, "LowAuto1", Constants.AutoConstants.kMaxSpeed);
-        final AutoFromPathPlanner LowAuto2 = new AutoFromPathPlanner(drive, "LowAuto2", Constants.AutoConstants.kMaxSpeed);
+        // final AutoFromPathPlanner LowAuto2 = new AutoFromPathPlanner(drive, "LowAuto2", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner LowAuto3 = new AutoFromPathPlanner(drive, "LowAuto3", Constants.AutoConstants.kMaxSpeed);
 
 
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+        Command intakeRun2 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+
         Command lowshoot = new TowerLowCommand(storageIntake, shooterFeed, shooter, hoodSubsystem);
         CommandGroups groups = new CommandGroups();
         Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
@@ -47,7 +49,7 @@ public class LowAutoMore extends SequentialCommandGroup{
             intakePosCommand,
             new ParallelCommandGroup(intakeRun, LowAuto1).withTimeout(5), 
             lowshoot.withTimeout(2.5),
-            new ParallelCommandGroup(intakeRun, LowAuto3),
+            new ParallelCommandGroup(intakeRun2, LowAuto3).withTimeout(5),
             intakePosCommand2,
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
 

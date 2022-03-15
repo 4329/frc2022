@@ -33,19 +33,26 @@ public class ComplexerAuto extends SequentialCommandGroup{
         final AutoFromPathPlanner complexerAuto1 = new AutoFromPathPlanner(drive, "ComplexerAuto1", Constants.AutoConstants.kMaxSpeed);
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+        Command intakeRun2 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+        Command intakeRun3 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+        Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
+        Command intakePosCommand2 = new IntakePosCommand(intakeSolenoid);
+
+
+
         // Command towercCommand = new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem);
         CommandGroups groups = new CommandGroups();
 
         addCommands(
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
-            new InstantCommand(()->intakeSolenoid.intakeDown()),
+            intakePosCommand,
             new ParallelCommandGroup(intakeRun, firstMove).withTimeout(2), 
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new ParallelCommandGroup(intakeRun, complexerAuto).withTimeout(2),
+            new ParallelCommandGroup(intakeRun2, complexerAuto).withTimeout(2),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new ParallelCommandGroup(intakeRun, complexerAuto1).withTimeout(6),
+            new ParallelCommandGroup(intakeRun3, complexerAuto1).withTimeout(6),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new InstantCommand(()->intakeSolenoid.intakeUp())
-         );
+            intakePosCommand2
+            );
     }
 }
