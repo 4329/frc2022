@@ -45,7 +45,7 @@ public class LowAuto extends SequentialCommandGroup{
             intakePosCommand,
             new ParallelCommandGroup(intakeRun, LowAuto1).withTimeout(5), 
             intakePosCommand2,
-            lowshoot.withTimeout(3),
+            lowshoot.withTimeout(2.5),
             LowAuto2
      
         

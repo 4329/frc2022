@@ -40,11 +40,11 @@ public class ComplexerAuto extends SequentialCommandGroup{
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
             new InstantCommand(()->intakeSolenoid.intakeDown()),
             new ParallelCommandGroup(intakeRun, firstMove).withTimeout(2), 
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(4),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
             new ParallelCommandGroup(intakeRun, complexerAuto).withTimeout(2),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
             new ParallelCommandGroup(intakeRun, complexerAuto1).withTimeout(6),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(4),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
             new InstantCommand(()->intakeSolenoid.intakeUp())
          );
     }

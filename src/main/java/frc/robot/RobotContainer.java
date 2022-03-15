@@ -39,6 +39,7 @@ import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
 import frc.robot.Commands.Autos.LowAuto;
+import frc.robot.Commands.Autos.LowAutoMore;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
@@ -84,17 +85,19 @@ public class RobotContainer {
   
   private final DriveByController m_drive;
   
-  private Command moveOneMeter;
-  private Command twoPaths;
-  private Command intakeRun;
+  // private Command moveOneMeter;
+  // private Command twoPaths;
+  // private Command intakeRun;
   private Command KISSAuto;
   private Command ComplexAuto;
   private Command ComplexerAuto;
   private Command LowAuto;
+  private Command LowAutoMore;
   
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+
 
 
   
@@ -208,22 +211,25 @@ public class RobotContainer {
   private void configureAutoChooser(Drivetrain drivetrain) {
 
     // Pulls autos
-    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-    twoPaths = new TwoPathsAuto(m_robotDrive);
-    intakeRun = new IntakeRunAuto(m_robotDrive);
+    // moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+    // twoPaths = new TwoPathsAuto(m_robotDrive);
+    // intakeRun = new IntakeRunAuto(m_robotDrive);
     KISSAuto = new KISSAuto(m_robotDrive);
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
     // Adds autos to the chooser
-    m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
-    m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
-    m_chooser.addOption("TwoPathsAuto", twoPaths);
-    m_chooser.addOption("IntakeRunAuto", intakeRun);
+    // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
+    // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
+    // m_chooser.addOption("TwoPathsAuto", twoPaths);
+    // m_chooser.addOption("IntakeRunAuto", intakeRun);
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
-    m_chooser.addOption("TwoBallAuto", ComplexAuto);
-    m_chooser.addOption("FiveBallAuto", ComplexerAuto);
-    m_chooser.addOption("LowAuto", LowAuto);
+    m_chooser.addOption("TwoBallHIGHAuto", ComplexAuto);
+    m_chooser.addOption("RightFiveBallHIGHAuto", ComplexerAuto);
+    m_chooser.addOption("RightTwoBallLOW", LowAuto);
+    m_chooser.addOption("RightThreeBallLOW/HIGHAuto", LowAutoMore);
+
 
 
 
