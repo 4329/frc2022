@@ -37,7 +37,7 @@ storageIntakePower = 0.8
 #Shooter Feed
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
-ShooterFeedPower = 0.5
+ShooterFeedPower = 0.85
 
 pivotSolenoidID_1 = 5
 shiftSolenoidID_1 = 2

@@ -34,7 +34,12 @@ import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
+import frc.robot.Commands.Autos.ComplexAuto;
+import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
+import frc.robot.Commands.Autos.KISSAuto;
+import frc.robot.Commands.Autos.LowAuto;
+import frc.robot.Commands.Autos.LowAutoMore;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
@@ -51,15 +56,15 @@ import frc.robot.Utilities.JoystickAnalogButton;
 import frc.robot.Commands.TowerLowCommand;
 
 /*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here
- */
+* This class is where the bulk of the robot should be declared.  Since Command-based is a
+* "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+* periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+* (including subsystems, commands, and button mappings) should be declared here
+*/
 public class RobotContainer {
-
+  
   private final PneumaticHub pneumaticHub;
-
+  
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
   private final StorageIntake storageIntake;
@@ -75,19 +80,31 @@ public class RobotContainer {
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
-
+  
   final SendableChooser<Command> m_chooser;
-
+  
   private final DriveByController m_drive;
+  
+  // private Command moveOneMeter;
+  // private Command twoPaths;
+  // private Command intakeRun;
+  private Command KISSAuto;
+  private Command ComplexAuto;
+  private Command ComplexerAuto;
+  private Command LowAuto;
+  private Command LowAutoMore;
+  
+  private SensorOutputCommand sensorOutputCommand;
+  private TurretCommand turretCommand;
+  private TurretToZeroCommand turretToZeroCommand;
 
-  private Command moveOneMeter;
-  private Command twoPaths;
-  private Command intakeRun;
 
-  private final SensorOutputCommand sensorOutputCommand;
-  private final TurretCommand turretCommand;
-  private final TurretToZeroCommand turretToZeroCommand;
 
+  
+  
+
+  
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
@@ -158,7 +175,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-      //Driving
+      //Driver Controller
     new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed; TODO: what does this do
     new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));//TODO: what does this do
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());//toggle field dorientation
@@ -194,15 +211,28 @@ public class RobotContainer {
   private void configureAutoChooser(Drivetrain drivetrain) {
 
     // Pulls autos
-    moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-    twoPaths = new TwoPathsAuto(m_robotDrive);
-    intakeRun = new IntakeRunAuto(m_robotDrive);
+    // moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
+    // twoPaths = new TwoPathsAuto(m_robotDrive);
+    // intakeRun = new IntakeRunAuto(m_robotDrive);
+    KISSAuto = new KISSAuto(m_robotDrive);
+    ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
     // Adds autos to the chooser
-    m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
-    m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
-    m_chooser.addOption("TwoPathsAuto", twoPaths);
-    m_chooser.addOption("IntakeRunAuto", intakeRun);
+    // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
+    // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
+    // m_chooser.addOption("TwoPathsAuto", twoPaths);
+    // m_chooser.addOption("IntakeRunAuto", intakeRun);
+    m_chooser.addOption("SuperSimpleAuto", KISSAuto);
+    m_chooser.addOption("TwoBallHIGHAuto", ComplexAuto);
+    m_chooser.addOption("RightFiveBallHIGHAuto", ComplexerAuto);
+    m_chooser.addOption("RightTwoBallLOW", LowAuto);
+    m_chooser.addOption("RightThreeBallLOW/HIGHAuto", LowAutoMore);
+
+
+
 
     // Puts autos on Shuffleboard
     Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(0, 0);
@@ -231,6 +261,9 @@ public class RobotContainer {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     climber.engage();
+    climber.retract();
+    climber.reversePivotClimber();
+
   }
 
   public void teleopPeriodic() {
@@ -242,6 +275,10 @@ public class RobotContainer {
 
     hoodSubsystem.hoodTestMode();
     turretSubsystem.putValuesToShuffleboard();
+  }
+
+  public void autonomousPeriodic() {
+    hoodSubsystem.HoodPeriodic(shooter);
   }
 
 }

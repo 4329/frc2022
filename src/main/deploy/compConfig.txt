@@ -17,7 +17,7 @@ backLeftTurningEncoderPort = 2
 backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
-frontLeftOffset = -4.8687
+frontLeftOffset = -4.683
 frontRightOffset = -1.1167
 backLeftOffset = -1.06809
 backRightOffset = -1.8906
@@ -51,8 +51,8 @@ extendSolenoidID_2 = 5
 climberMotor1ID = 9
 climberMotor2ID = 10
 
-climbPower = 0.5
-reverseClimbPower = -0.5
+climbPower = 1
+reverseClimbPower = -1
 
 # Limelight
 h1In = 32
@@ -71,9 +71,9 @@ turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 3072
-turretMin = 2458
-turretZero = 2765
+turretMax = 3069
+turretMin = 2455
+turretZero = 2762
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 

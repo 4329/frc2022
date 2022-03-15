@@ -73,7 +73,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret = new TalonSRX (Configrun.get(41, "turretID"));
         limeLightPid = new PIDController(1, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
-        turretPid = new PIDController(4, 0, 0);
+        turretPid = new PIDController(5, 0, 0);
         turretPid.setTolerance(turretTolerance);
 
         checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();

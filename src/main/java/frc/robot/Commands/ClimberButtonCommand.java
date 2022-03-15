@@ -16,7 +16,7 @@ public class ClimberButtonCommand extends CommandBase {
 
     public void execute() {
         double climbPower = controller.getRightTriggerAxis();
-        climber.climb(climbPower * -1);
+        climber.climb(climbPower);
     }
 
     public void end(boolean interuppted) {
