@@ -97,11 +97,9 @@ public class HoodSubsystem extends SubsystemBase {
     //System.out.println("Hood Position<-----" + hoodposition);
     // double setpoint = 0; // sits at neutral position until told otherwise.
 
-    if (Configrun.get(false, "extraShuffleBoardToggle")) {
         if (shooter.manualOverride.getBoolean(true)) {
 
         setpoint = overrideSetpoint;
-      } 
    }
     else {
       if (currentPosition.equals(HoodPosition.OPEN)) {
@@ -223,6 +221,7 @@ public class HoodSubsystem extends SubsystemBase {
   public void hoodOverride(Shooter shooter) {
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
       sparkPosition.setDouble(hoodEncoder.getPosition());
+    }
       HoodPeriodic(shooter);
       if (shooter.manualOverride.getBoolean(true)) {
 
@@ -230,7 +229,7 @@ public class HoodSubsystem extends SubsystemBase {
           
           setEncoderPosition(overrideSetpointEntry.getDouble(3));
           hoodwheel.setIdleMode(IdleMode.kBrake);
-        } 
+        }
       else {
 
         hoodwheel.setIdleMode(IdleMode.kCoast);
@@ -239,5 +238,4 @@ public class HoodSubsystem extends SubsystemBase {
       }
 
     }
-  }
 }

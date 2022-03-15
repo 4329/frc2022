@@ -108,9 +108,9 @@ public class Shooter {
       atSetpoint = Shuffleboard.getTab("Shooter").add("At Setpoint", false).withPosition(1, 1).getEntry();
       // Input desired RPM whilst manual override is on
       shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
-      manualOverride = Shuffleboard.getTab("Shooter").add("Manual Override", false).withPosition(5, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
       aimedSetpoint = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
     }
+    manualOverride = Shuffleboard.getTab("Robot Data").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     
     // Configures PID and feedForward
     shooterPID = new PIDController(
@@ -188,16 +188,12 @@ public class Shooter {
    */
   public double shooterManualOverride(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {
 
-    if (Configrun.get(false, "extraShuffleBoardToggle")) {
       if (manualOverride.getBoolean(true)) {
 
         return shooterRPM.getDouble(3500);
-      } 
-      else {
 
-        return aim(hood, turret, targetDistance);
-      }
     }
+    
     return aim(hood, turret, targetDistance);
   }
 
@@ -205,18 +201,14 @@ public class Shooter {
    * If the override is on, it will be turned off and vice versa
    */
   public void toggleOverride() {
-    if (Configrun.get(false, "extraShuffleBoardToggle")) {
       if (manualOverride.getBoolean(true)) {
-        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+
           manualOverride.setBoolean(false);
-        }
-      } else {
-        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+        } else {
+
           manualOverride.setBoolean(true);
         }
-      }
     }
-  }
 
   /**
    * Configures the RPM and hood based on distance from the target

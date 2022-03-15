@@ -91,7 +91,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void putValuesToShuffleboard() {
-        if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("Target Acquired").getDouble(0) == 1) {
+        if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
             tvToggle = true;
         }
         else {
