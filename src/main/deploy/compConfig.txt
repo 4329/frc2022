@@ -51,8 +51,8 @@ extendSolenoidID_2 = 5
 climberMotor1ID = 9
 climberMotor2ID = 10
 
-climbPower = 0.5
-reverseClimbPower = -0.5
+climbPower = 1
+reverseClimbPower = -1
 
 # Limelight
 h1In = 32

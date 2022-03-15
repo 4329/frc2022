@@ -2,6 +2,7 @@ package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -38,12 +39,15 @@ public class Climber {
         // climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
         climberNeoMotor2.follow(climberNeoMotor1);
         //climberNeoMotor3.follow(climberNeoMotor1);
+        climberNeoMotor1.setIdleMode(IdleMode.kBrake);
+        climberNeoMotor2.setIdleMode(IdleMode.kBrake);
 
         //isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
         isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot", false).withPosition(0, 3).getEntry();
         isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Extend Climber", false).withPosition(0, 2).getEntry();
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withPosition(1, 2).getEntry();
     }
+
 
     public void pivotClimber() {
         pivotSolenoid.set(Value.kForward);
@@ -85,7 +89,7 @@ public class Climber {
 
     public void climb(double climbPower) {
         System.out.println("ClimbPower is " + climbPower);
-        if (Math.abs(climbPower) > 0 && extendSolenoid.get().equals(Value.kReverse)) {
+        if (Math.abs(climbPower) > 0.1 && extendSolenoid.get().equals(Value.kForward)) {
             retract();
         }
 
