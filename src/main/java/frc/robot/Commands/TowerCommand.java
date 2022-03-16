@@ -52,8 +52,8 @@ public class TowerCommand extends CommandBase {
 
         if (shooter.getShooterError()) {
 
-            storageIntake.storageIntakeIn();
-            shooterFeed.shooterFeedUp();
+            storageIntake.storageIntakeInSlow();
+            shooterFeed.shooterFeedUpSlow();
         } else {
 
             storageIntake.storageIntakeStop();

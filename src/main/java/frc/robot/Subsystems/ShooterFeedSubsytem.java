@@ -31,6 +31,15 @@ public class ShooterFeedSubsytem extends SubsystemBase {
         backShooterFeed.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "ShooterFeedPower"));
     }
 
+    public void shooterFeedUpSlow() {
+
+        if(Configrun.get(0, "FrontShooterFeed_ID") != 0)
+        {
+        frontShooterFeed.set(TalonSRXControlMode.PercentOutput, Configrun.get(0.5, "ShooterFeedPower") / 2);
+        }
+        backShooterFeed.set(TalonSRXControlMode.PercentOutput, -Configrun.get(0.5, "ShooterFeedPower") / 2);
+    }
+
     public void shooterFeedDown() {
 
         if(Configrun.get(0, "FrontShooterFeed_ID") != 0)

@@ -39,7 +39,7 @@ storageIntakePower = -0.95
 FrontShooterFeed_ID = 0
 BackShooterFeed_ID = 42
 
-ShooterFeedPower = 0.95
+ShooterFeedPower = 0.6
 
 pivotSolenoidID_1 = 2
 shiftSolenoidID_1 = 8
@@ -96,7 +96,7 @@ hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
 
-extraShuffleBoardToggle = false
+extraShuffleBoardToggle = true
 
 TopSensorPort = 3
 BottomSensorPort = 1

@@ -22,6 +22,14 @@ public class StorageIntake extends SubsystemBase {
         intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5, "storageIntakePower"));
     }
 
+    public void storageIntakeInSlow() {
+        intakeMotor.set(ControlMode.PercentOutput, -Configrun.get(0.5, "storageIntakePower") / 2);
+    }
+
+    public void storageIntakeOutSlow() {
+        intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5, "storageIntakePower") / 2);
+    }
+
     public void storageIntakeStop() {
         intakeMotor.set(ControlMode.PercentOutput, 0);
     }
