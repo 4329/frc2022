@@ -195,7 +195,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void turretPower(double output)
     {
-        turret.set(TalonSRXControlMode.PercentOutput, output);
+       turret.set(TalonSRXControlMode.PercentOutput, output);
     }
 
     public void turretStop(){

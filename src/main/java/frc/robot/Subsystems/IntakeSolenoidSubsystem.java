@@ -5,6 +5,7 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 
@@ -16,12 +17,12 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
 
     boolean intakeUp;
 
-    public IntakeSolenoidSubsystem(PneumaticHub pneumaticHub) {
+    public IntakeSolenoidSubsystem() {
 
         intakeUp = Configrun.get(false, "intakeUp");
         // m_Solenoid = pneumaticHub.makeSolenoid(SOLENOID_CHANNEL);
         // m_Solenoid.set(Configrun.get(true, "intakeUp"));
-        m_doubleSolenoid = pneumaticHub.makeDoubleSolenoid(Configrun.get(0, "intakeSolenoidID_1"), Configrun.get(1, "intakeSolenoidID_2"));
+        m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Configrun.get(0, "intakeSolenoidID_1"), Configrun.get(1, "intakeSolenoidID_2"));
     }
 
     public void intakeUp() {
