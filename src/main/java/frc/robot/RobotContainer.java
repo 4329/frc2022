@@ -63,7 +63,7 @@ import frc.robot.Commands.TowerLowCommand;
 */
 public class RobotContainer {
   
-  private final PneumaticHub pneumaticHub;
+  //private final PneumaticHub pneumaticHub;
   
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
@@ -113,16 +113,16 @@ public class RobotContainer {
   public RobotContainer(Drivetrain drivetrain) {
     m_robotDrive = drivetrain;
 
-    pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
+    //pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
 
     turretSubsystem = new TurretSubsystem();
     shooter = new Shooter();
     shooterFeed = new ShooterFeedSubsytem();
     storageIntake = new StorageIntake();
     intakeMotor = new IntakeMotor();
-    intakeSolenoid = new IntakeSolenoidSubsystem(pneumaticHub);
+    intakeSolenoid = new IntakeSolenoidSubsystem();
     intakeSensors = new IntakeSensors();
-    climber = new Climber(pneumaticHub);
+    climber = new Climber();
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
     hoodSubsystem = new HoodSubsystem();
@@ -183,7 +183,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
-    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
+   // new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
       //Climber motor controls
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));//climb up
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
@@ -260,7 +260,7 @@ public class RobotContainer {
   public void init() {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
-    climber.engage();
+    //climber.engage();
     climber.retract();
     climber.reversePivotClimber();
 

@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -16,7 +17,7 @@ import frc.robot.Configrun;
 
 public class Climber {
     private final DoubleSolenoid pivotSolenoid;
-    private final DoubleSolenoid shiftSolenoid;
+    //private final DoubleSolenoid shiftSolenoid;
     private final DoubleSolenoid extendSolenoid;
     private final CANSparkMax climberNeoMotor1;
     private final CANSparkMax climberNeoMotor2;
@@ -29,11 +30,11 @@ public class Climber {
     private final NetworkTableEntry isExtendedShuffleboard;
     private final NetworkTableEntry isMoterActiveShuffleboard;
 
-    public Climber(PneumaticHub hubbie) {
+    public Climber() {
 
-        pivotSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(5, "pivotSolenoidID_1"), Configrun.get(4, "pivotSolenoidID_2"));
-        shiftSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
-        extendSolenoid = hubbie.makeDoubleSolenoid(Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
+        pivotSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Configrun.get(5, "pivotSolenoidID_1"), Configrun.get(4, "pivotSolenoidID_2"));
+        //shiftSolenoid = new DoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
+        extendSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
         climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
         climberNeoMotor2 = new CANSparkMax(Configrun.get(10, "climberMotor2ID"), MotorType.kBrushless);
         // climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
@@ -62,14 +63,14 @@ public class Climber {
 
     public void engage() {//neutral or engage
 
-        shiftSolenoid.set(Value.kForward);
+        //shiftSolenoid.set(Value.kForward);
         shifted = true;
         //isShiftedShuffleboard.setBoolean(true);
     }
 
     public void neutral() {//neutral or engage
 
-        shiftSolenoid.set(Value.kReverse);
+        //shiftSolenoid.set(Value.kReverse);
         shifted = false;
         //isShiftedShuffleboard.setBoolean(false);
     }

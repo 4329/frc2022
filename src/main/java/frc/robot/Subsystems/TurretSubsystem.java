@@ -53,19 +53,18 @@ public class TurretSubsystem extends SubsystemBase{
     NetworkTableEntry targetStatus;
 
     private Point2D[] limlightTable = new Point2D.Double[] {
-
-        new Point2D.Double(21.8, 5 * 12),
-        new Point2D.Double(15, 6 * 12),
-        new Point2D.Double(11.21, 7 * 12),
-        new Point2D.Double(7.7, 8 * 12),
-        new Point2D.Double(3.53, 10 * 12),
-        new Point2D.Double(0, 11*12),
-        new Point2D.Double(-2.39, 12 * 12),
-        new Point2D.Double(-4.1, 13 * 12),
-        new Point2D.Double(-5.5, 14 * 12),
-        new Point2D.Double(-6.9, 15 * 12),
-        new Point2D.Double(-7.5, 16 * 12),
-        new Point2D.Double(-8.5, 17 * 12),
+        
+        new Point2D.Double(-3.66, 190),
+        new Point2D.Double(-1.75, 172),
+        new Point2D.Double(-0.1, 160),
+        new Point2D.Double(1.5, 148),
+        new Point2D.Double(2.5, 136),
+        new Point2D.Double(4.3, 124),
+        new Point2D.Double(7.70, 112),
+        new Point2D.Double(10.42, 100),
+        new Point2D.Double(14.51, 88),
+        new Point2D.Double(19.5, 76),
+        new Point2D.Double(24, 64.25),
     };
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
@@ -190,7 +189,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void turretPower(double output)
     {
-        turret.set(TalonSRXControlMode.PercentOutput, output);
+       turret.set(TalonSRXControlMode.PercentOutput, output);
     }
 
     public void turretStop(){

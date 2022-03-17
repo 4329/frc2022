@@ -58,7 +58,8 @@ public class Shooter {
     new Point2D.Double(2 * 12, 2900),
     new Point2D.Double(5 * 12, 3100),
     new Point2D.Double(6 * 12, 3150),
-    new Point2D.Double(7.5 * 12, 3300),
+    new Point2D.Double(7 * 12, 3200),
+    new Point2D.Double(7.5 * 12, 3300)
   };
   private LinearInterpolationTable m_openTable = new LinearInterpolationTable(openTable); // Creates a line of best fit for open hood
 
@@ -66,10 +67,14 @@ public class Shooter {
   private Point2D[] halfTable = new Point2D.Double[] { // Manually collected data for a half hood
 
     new Point2D.Double(7.5 * 12, 2800),
-    new Point2D.Double(8 * 12, 3000),
+    new Point2D.Double(8 * 12, 2850),
+    new Point2D.Double(9 * 12, 2900),
     new Point2D.Double(10 * 12, 3000),
+    new Point2D.Double(11 * 12, 3100),
     new Point2D.Double(12 * 12, 3250),
+    new Point2D.Double(13 * 12, 3300),
     new Point2D.Double(14 * 12, 3500),
+    new Point2D.Double(15 * 12, 3750),
     new Point2D.Double(16 * 12, 3900),
     new Point2D.Double(17 * 12, 3950)
   };
@@ -78,10 +83,13 @@ public class Shooter {
 
   private Point2D[] closedTable = new Point2D.Double[] { // Manually collected data for a closed hood
     
-    new Point2D.Double(17 * 12, 3700),
-    new Point2D.Double(18 * 12, 3800),
+    new Point2D.Double(17 * 12, 3550),
+    new Point2D.Double(18 * 12, 3700),
+    new Point2D.Double(19 * 12, 3750),
     new Point2D.Double(20 * 12, 4050),
+    new Point2D.Double(21 * 12, 4100),
     new Point2D.Double(22 * 12, 4300),
+    new Point2D.Double(23 * 12, 4450),
     new Point2D.Double(24 * 12, 4700),
     new Point2D.Double(26 * 12, 5000),
     new Point2D.Double(28 * 12, 5400)
