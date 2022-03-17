@@ -53,24 +53,18 @@ public class TurretSubsystem extends SubsystemBase{
     NetworkTableEntry targetStatus;
 
     private Point2D[] limlightTable = new Point2D.Double[] {
-
-        new Point2D.Double(-9.87, 22 * 12),
-        new Point2D.Double(-9.01, 21 * 12),
-        new Point2D.Double(-7.93, 20 * 12),
-        new Point2D.Double(-7.28, 19 * 12),
-        new Point2D.Double(-6.52, 18 * 12),
-        new Point2D.Double(-5.64, 17 * 12),
-        new Point2D.Double(-4.55, 16 * 12),
-        new Point2D.Double(-3.12, 15 * 12),
-        new Point2D.Double(-0.39, 14 * 12),
-        new Point2D.Double(0.00, 13 * 12),
-        new Point2D.Double(1.18, 12 * 12),
-        new Point2D.Double(3.50, 11 * 12),
-        new Point2D.Double(5.70, 10 * 12),
-        new Point2D.Double(8.28, 9 * 12),
-        new Point2D.Double(11.87, 8 * 12),
-        new Point2D.Double(16.01, 7 * 12),
-        new Point2D.Double(21.98, 6 * 12)
+        
+        new Point2D.Double(-3.66, 190),
+        new Point2D.Double(-1.75, 172),
+        new Point2D.Double(-0.1, 160),
+        new Point2D.Double(1.5, 148),
+        new Point2D.Double(2.5, 136),
+        new Point2D.Double(4.3, 124),
+        new Point2D.Double(7.70, 112),
+        new Point2D.Double(10.42, 100),
+        new Point2D.Double(14.51, 88),
+        new Point2D.Double(19.5, 76),
+        new Point2D.Double(24, 64.25),
     };
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
