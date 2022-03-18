@@ -57,6 +57,7 @@ import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
 import frc.robot.Commands.TowerLowCommand;
+import frc.robot.Commands.TowerOverrideCommand;
 
 /*
 * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -202,7 +203,7 @@ public class RobotContainer {
     //Operator Controller
       //Shoot
     new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot high with aimbot
-    new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem));//shoot high without aimbot
+    new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerOverrideCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot high without aimbot
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(commandGroups.towerLow(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
