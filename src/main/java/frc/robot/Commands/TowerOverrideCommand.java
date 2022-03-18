@@ -42,6 +42,16 @@ public class TowerOverrideCommand extends CommandBase {
 
         hood.setPosition(HoodPosition.HALF);
         shooter.shoot(3500);
+
+        if (shooter.getShooterError()) {
+
+            storageIntake.storageIntakeInSlow();
+            shooterFeed.shooterFeedUpSlow();
+        } else {
+
+            storageIntake.storageIntakeStop();
+            shooterFeed.shooterFeedStop();
+        }
     }
 
     @Override
