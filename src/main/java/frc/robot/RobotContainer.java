@@ -38,8 +38,11 @@ import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
+import frc.robot.Commands.Autos.LeftLowAuto;
+import frc.robot.Commands.Autos.LessComplexAuto;
 import frc.robot.Commands.Autos.LowAuto;
 import frc.robot.Commands.Autos.LowAutoMore;
+import frc.robot.Commands.Autos.MidLowAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
@@ -93,6 +96,9 @@ public class RobotContainer {
   private Command ComplexerAuto;
   private Command LowAuto;
   private Command LowAutoMore;
+  private Command LessComplexAuto;
+  private Command MidLowAuto;
+  private Command LeftLowAuto;
   
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
@@ -219,7 +225,9 @@ public class RobotContainer {
     LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-
+    LessComplexAuto = new LessComplexAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    MidLowAuto = new MidLowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LeftLowAuto = new LeftLowAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
@@ -228,8 +236,14 @@ public class RobotContainer {
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
     m_chooser.addOption("TwoBallHIGHAuto", ComplexAuto);
     m_chooser.addOption("RightFiveBallHIGHAuto", ComplexerAuto);
-    m_chooser.addOption("RightTwoBallLOW", LowAuto);
     m_chooser.addOption("RightThreeBallLOW/HIGHAuto", LowAutoMore);
+    m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
+    m_chooser.addOption("RightTwoBallLOW", LowAuto);
+    m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
+    m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
+
+
+
 
 
 
