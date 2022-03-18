@@ -118,7 +118,7 @@ public class Shooter {
       shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
       aimedSetpoint = Shuffleboard.getTab("Limlight").add("like actually", 1).getEntry();
     }
-    manualOverride = Shuffleboard.getTab("Robot Data").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    manualOverride = Shuffleboard.getTab("RobotData").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     
     // Configures PID and feedForward
     shooterPID = new PIDController(

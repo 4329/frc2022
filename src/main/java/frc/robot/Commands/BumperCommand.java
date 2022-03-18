@@ -7,7 +7,7 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
 
-public class TowerOverrideCommand extends CommandBase {
+public class BumperCommand extends CommandBase {
 
     final StorageIntake storageIntake;
     final ShooterFeedSubsytem shooterFeed;
@@ -24,7 +24,7 @@ public class TowerOverrideCommand extends CommandBase {
      * @param shooter
      * @param hood
      */
-    public TowerOverrideCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood) {
+    public BumperCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
@@ -35,23 +35,15 @@ public class TowerOverrideCommand extends CommandBase {
     @Override
     public void initialize() {
 
+        storageIntake.storageIntakeIn();
+        shooterFeed.shooterFeedUp();
     }
 
     @Override
     public void execute() {
 
-        hood.setPosition(HoodPosition.HALF);
-        shooter.shoot(3400);
-
-        if (shooter.getShooterError()) {
-
-            storageIntake.storageIntakeInSlow();
-            shooterFeed.shooterFeedUpSlow();
-        } else {
-
-            storageIntake.storageIntakeStop();
-            shooterFeed.shooterFeedStop();
-        }
+        hood.setPosition(HoodPosition.OPEN);
+        shooter.shoot(950);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class OpenLowAutoMore extends SequentialCommandGroup{
 
         addCommands(
             new InstantCommand(()->drive.resetOdometry(LowAuto1.getInitialPose())),
-            intakePosCommand,
+            intakePosCommand,   
             new ParallelCommandGroup(intakeRun, LowAuto1).withTimeout(5), 
             lowshoot.withTimeout(2.5),
             new ParallelCommandGroup(intakeRun2, OpenLowAutoMore).withTimeout(5),

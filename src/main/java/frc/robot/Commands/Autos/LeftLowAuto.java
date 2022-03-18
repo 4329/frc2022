@@ -42,7 +42,7 @@ public class LeftLowAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->drive.resetOdometry(LeftLowAutoPath1.getInitialPose())),
             intakePosCommand,
-            new ParallelCommandGroup(intakeRun, LeftLowAutoPath1).withTimeout(5), 
+            new ParallelCommandGroup(intakeRun, LeftLowAutoPath1).withTimeout(4), 
             intakePosCommand2,
             lowshoot.withTimeout(2.5),
             LeftLowAutoPath2.withTimeout(2)
