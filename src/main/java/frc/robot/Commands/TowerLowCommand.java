@@ -28,8 +28,15 @@ public class TowerLowCommand extends CommandBase {
         hood.setPosition(HoodPosition.HALF);
         shooter.shoot(1400);
 
-        storageIntake.storageIntakeIn();
-        shooterFeed.shooterFeedUp();
+        if (shooter.getShooterError()) {
+
+            storageIntake.storageIntakeInSlow();
+            shooterFeed.shooterFeedUpSlow();
+        } else {
+
+            storageIntake.storageIntakeStop();
+            shooterFeed.shooterFeedStop(); 
+        }
     }
 
     @Override
