@@ -74,15 +74,15 @@ taTolerance = 0.3
 limeLightTolerance = 1
 
 # Turret
-turretID = 41
+turretID = 42
 
 turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 1557
-turretMin = 943
-turretZero = 1250
+turretMax = 1739
+turretMin = 1125
+turretZero = 1432
 
 
 ShooterWheel1ID = 13
@@ -100,4 +100,4 @@ hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
 
-extraShuffleBoardToggle = false
+extraShuffleBoardToggle = true

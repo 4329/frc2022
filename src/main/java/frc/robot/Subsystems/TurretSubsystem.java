@@ -38,6 +38,10 @@ public class TurretSubsystem extends SubsystemBase{
     int limeLightTolerance = 1;
     int turretTolerance = 20;
     double taTolerance = 0.3;
+    final double TURRET_MIN = Configrun.get(2347, "turretMin");
+    final double TURRET_MAX = Configrun.get(2961, "turretMax");
+    final double TURRET_ZERO = Configrun.get(2654, "turretZero");
+
 
     public double currentDistance = 120;
 
@@ -231,19 +235,26 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void turretToZero() {
-        double output = turretPid.calculate(getPwmPosition(), Configrun.get(1250, "turretZero"));
-        //converts range to % power
-        output = output / TURRET_RANGE;
+        double encoderReading = getPwmPosition();
+        if (encoderReading < TURRET_MAX && encoderReading > TURRET_MIN) {
+        
+            double output = turretPid.calculate(encoderReading, TURRET_ZERO);
+            //converts range to % power
+            output = output / TURRET_RANGE;
 
-        if (output < 0) {
-            output = output - staticFeedforward;
+            if (output < 0) {
+                output = output - staticFeedforward;
+            }
+            else {
+                output = output + staticFeedforward;
+            }
+            turretPower(-1 * output);
+            putValuesToShuffleboard();
         }
         else {
-            output = output + staticFeedforward;
+            turretStop();
         }
-        turretPower(-1 * output);
-        putValuesToShuffleboard();
-    }
+    }   
 
     public boolean targeted() {
         return limeLightPid.atSetpoint();
