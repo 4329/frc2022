@@ -4,6 +4,7 @@ import frc.robot.Constants.*;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.MathUtils;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 //import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -16,6 +17,9 @@ public class DriveByController extends CommandBase {
   private final Drivetrain m_robotDrive;
   private final XboxController m_controller;
   private boolean fieldOrient = true;
+
+  private SlewRateLimiter slewX = new SlewRateLimiter(2.0);
+  private SlewRateLimiter slewY = new SlewRateLimiter(2.0);
 
   private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withPosition(4, 2).getEntry();
 
@@ -37,14 +41,15 @@ public class DriveByController extends CommandBase {
 
   /**
    * the execute function is overloaded with the function to drive the swerve
-   * drivetrain
+   * drivetrain;
    */
   @Override
   public void execute() {
     m_robotDrive.drive(
-        -inputTransform(m_controller.getLeftY())
+        slewX.calculate(
+            -inputTransform(m_controller.getLeftY()))
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        -inputTransform(m_controller.getLeftX())
+        slewY.calculate(-inputTransform(m_controller.getLeftX()))
             * DriveConstants.kMaxSpeedMetersPerSecond,
         -inputTransform(m_controller.getRightX())
             * DriveConstants.kMaxAngularSpeed,
