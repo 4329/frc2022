@@ -47,6 +47,9 @@ public class Shooter {
   private NetworkTableEntry shooterRPM;
   public NetworkTableEntry manualOverride;
   private NetworkTableEntry aimedSetpoint;
+  private NetworkTableEntry ks;
+  private NetworkTableEntry kv;
+  private NetworkTableEntry update;
 
   double targetDistance;
 
@@ -117,6 +120,9 @@ public class Shooter {
       // Input desired RPM whilst manual override is on
       shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
       aimedSetpoint = Shuffleboard.getTab("Limlight").add("Aimed RPM", 1).getEntry();
+      ks = Shuffleboard.getTab("Shooter").add("KS", Constants.ShooterConstants.shooterKs).getEntry();
+      kv = Shuffleboard.getTab("Shooter").add("KV", Constants.ShooterConstants.shooterKv).getEntry();
+      update = Shuffleboard.getTab("Shooter").add("Update", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
     manualOverride = Shuffleboard.getTab("RobotData").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     
@@ -128,10 +134,9 @@ public class Shooter {
     );
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(
-    Constants.ShooterConstants.shooterKs, 
-    Constants.ShooterConstants.shooterKv, 
-    Constants.ShooterConstants.shooterKa);
-
+    ks.getDouble(1),  
+    kv.getDouble(1)  
+    );
     // Configures the shooter's motors
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
@@ -152,6 +157,13 @@ public class Shooter {
    * @param shooterSetpoint
    */
   public void shoot(double shooterSetpoint) {
+
+    if (update.getBoolean(false)) {
+    simpleFeedForward = new SimpleMotorFeedforward(
+        ks.getDouble(1),
+        kv.getDouble(1)
+      );
+    }
     //shooterSetpoint is the RPM
     pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
