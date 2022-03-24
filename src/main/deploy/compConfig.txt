@@ -77,7 +77,7 @@ turretZero = 2654
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
-ShooterP = 2
+ShooterP = 0
 ShooterI = 0
 ShooterD = 0
 
@@ -96,7 +96,7 @@ hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
 
-extraShuffleBoardToggle = false
+extraShuffleBoardToggle = true
 
 TopSensorPort = 3
 BottomSensorPort = 1

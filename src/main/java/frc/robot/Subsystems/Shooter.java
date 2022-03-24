@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.Map;
 
@@ -120,28 +121,36 @@ public class Shooter {
       // Input desired RPM whilst manual override is on
       shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
       aimedSetpoint = Shuffleboard.getTab("Limlight").add("Aimed RPM", 1).getEntry();
-      ks = Shuffleboard.getTab("Shooter").add("KS", Constants.ShooterConstants.shooterKs).getEntry();
-      kv = Shuffleboard.getTab("Shooter").add("KV", Constants.ShooterConstants.shooterKv).getEntry();
+      ks = Shuffleboard.getTab("Shooter").add("KS", 12).getEntry();
+      kv = Shuffleboard.getTab("Shooter").add("KV", 0.35).getEntry();
       update = Shuffleboard.getTab("Shooter").add("Update", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
     manualOverride = Shuffleboard.getTab("RobotData").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     
     // Configures PID and feedForward
-    shooterPID = new PIDController(
+    shooterPID = new PIDController(0.000005, 0.0003, 0.000);
+    shooterPID.setIntegratorRange(-0.0075, 0.0075);
+
+/*     shooterPID = new PIDController(
       Configrun.get(1.5, "ShooterP"),
       Configrun.get(12, "ShooterI"),
       Configrun.get(0.06, "ShooterD")
-    );
+    ); */
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
-    simpleFeedForward = new SimpleMotorFeedforward(
+    simpleFeedForward = new SimpleMotorFeedforward(0.0083, 0.0001485);
+    /* simpleFeedForward = new SimpleMotorFeedforward(
     ks.getDouble(1),  
     kv.getDouble(1)  
-    );
+    ); */
     // Configures the shooter's motors
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
     shooterwheel2 = new TalonFX(Configrun.get(31, "ShooterWheel2ID"));
     shooterwheel1.setInverted(true);
     shooterwheel2.setInverted(false);
+    shooterwheel1.configVoltageCompSaturation(12.6);
+    shooterwheel1.enableVoltageCompensation(true);
+    shooterwheel2.configVoltageCompSaturation(12.6);
+    shooterwheel2.enableVoltageCompensation(true);
     shooterwheel2.follow(shooterwheel1, FollowerType.PercentOutput);
     shooterwheel1.setNeutralMode(NeutralMode.Coast);
     shooterwheel2.setNeutralMode(NeutralMode.Coast);
@@ -165,17 +174,18 @@ public class Shooter {
       );
     }
     //shooterSetpoint is the RPM
-    pidVelocity = shooterwheel1.getSelectedSensorVelocity();
-    setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
-    pidCalculated = shooterPID.calculate(pidVelocity, setpointCTRE);
-    pidCalculated += simpleFeedForward.calculate(shooterPID.getSetpoint()) * Constants.ShooterConstants.feedForwardMultiplier;
+    //pidVelocity = shooterwheel1.getSelectedSensorVelocity();
+    //setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
+    double PIDoutput = shooterPID.calculate(getVelocityRPM(), shooterSetpoint);
+    double FFOutput = simpleFeedForward.calculate(shooterSetpoint);
     // kMaxrpm = 6380;
     // sensor units per rotation = 2048
     // kGearRotation = 1
     // maxPowerCtre = 21,777
-    maxPowerCtre = (6380 / 600) * (2048 / 1);
-    percent = pidCalculated / maxPowerCtre;
-    shooterwheel1.set(ControlMode.PercentOutput, percent);
+    //maxPowerCtre = (6380 / 600) * (2048 / 1);
+    //percent = pidCalculated / maxPowerCtre;
+    shooterwheel1.set(ControlMode.PercentOutput, PIDoutput+FFOutput);
+    SmartDashboard.putNumber("Shooter RPM", getVelocityRPM());
   }
 
   /**
@@ -269,6 +279,10 @@ public class Shooter {
 
       return 0;
     }
+  }
+
+  public double getVelocityRPM(){
+    return shooterwheel1.getSelectedSensorVelocity()*600/2048;
   }
 
 }
