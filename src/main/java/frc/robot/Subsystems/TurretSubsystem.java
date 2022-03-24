@@ -41,7 +41,9 @@ public class TurretSubsystem extends SubsystemBase{
     double taTolerance = 0.3;
     final double TURRET_MIN = Configrun.get(2347, "turretMin");
     final double TURRET_MAX = Configrun.get(2961, "turretMax");
-    final double TURRET_ZERO = Configrun.get(2654, "turretZero");
+    //final double TURRET_ZERO = Configrun.get(2654, "turretZero");
+    double turretZero;
+
 
 
     public double currentDistance = 120;
@@ -78,13 +80,14 @@ public class TurretSubsystem extends SubsystemBase{
 
     public TurretSubsystem() {
         turret = new TalonSRX (Configrun.get(41, "turretID"));
+        resetZero();
         limeLightPid = new PIDController(1, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(6.5, 0, 0);
         turretPid.setTolerance(turretTolerance);
 
-        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();
-        getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData").add("Distance", 0).withPosition(2, 2).getEntry();
+        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withSize(2, 1).withPosition(2, 2).getEntry();
+        getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData").add("Distance", 0).withPosition(1, 3).getEntry();
 
         if (Configrun.get(false, "extraShuffleBoardToggle")) {
             targetStatus = Shuffleboard.getTab("Limlight").add("Target Acquired", false).getEntry();
@@ -242,7 +245,7 @@ public class TurretSubsystem extends SubsystemBase{
         double encoderReading = getPwmPosition();
         if (encoderReading < TURRET_MAX && encoderReading > TURRET_MIN) {
         
-            double output = turretPid.calculate(encoderReading, TURRET_ZERO);
+            double output = turretPid.calculate(encoderReading, turretZero);
             //converts range to % power
             output = output / TURRET_RANGE;
 
@@ -258,7 +261,11 @@ public class TurretSubsystem extends SubsystemBase{
         else {
             turretStop();
         }
-    }   
+    }  
+    
+    public void resetZero() {
+        turretZero = getPwmPosition();
+    }
 
     public boolean targeted() {
         return limeLightPid.atSetpoint();

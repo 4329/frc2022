@@ -167,7 +167,7 @@ public class RobotContainer {
     VideoSource[] enumerateSources = VideoSource.enumerateSources();
 
     if (enumerateSources.length > 0 && enumerateSources[0].getName().contains("USB")) {
-      Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
+      Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(4, 4)
           .withWidget(BuiltInWidgets.kCameraStream);
     }
     HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
@@ -267,7 +267,6 @@ public class RobotContainer {
    * @return Selected Auto
    */
   public Command getAuto() {
-
     return m_chooser.getSelected();
   }
 
@@ -278,7 +277,7 @@ public class RobotContainer {
   }
 
   public void init() {
-
+    turretSubsystem.resetZero();
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     //climber.engage();
     climber.retract();
