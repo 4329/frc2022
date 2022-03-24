@@ -91,9 +91,9 @@ public final class Constants {
 
     // NOTE: 2910 Swerve the wheels are not directly under the center of rotation
     // (Take into consideration when measuring)
-    public static final double kWheelBaseWidth = 0.5588; // Center distance in meters between right and left wheels on
+    public static final double kWheelBaseWidth = 0.5207; // Center distance in meters between right and left wheels on
                                                          // robot
-    public static final double kWheelBaseLength = 0.6446; // Center distance in meters between front and back wheels on
+    public static final double kWheelBaseLength = 0.644525; // Center distance in meters between front and back wheels on
                                                           // robot
 
     // Because the swerve modules poisition does not change, define a constant
@@ -132,7 +132,7 @@ public final class Constants {
     public static final double kMinTranslationCommand = DriveConstants.kMaxSpeedMetersPerSecond
         * Math.pow(DriveConstants.kInnerDeadband, 2);
 
-    public static final double[] kKeepAnglePID = { 0.800, 0, 0 }; // Defines the PID values for the keep angle PID
+    public static final double[] kKeepAnglePID = { 0.550, 0, 0 }; // Defines the PID values for the keep angle PID
 
   }
 
@@ -165,9 +165,9 @@ public final class Constants {
     // NOTE: You shoulds ALWAYS define a reasonable current limit when using
     // brushless motors
     // due to the extremely high stall current avaialble
-    public static final int kDriveCurrentLimit = 40; // Limits Translation Motor Current to improve efficiency and
+    public static final int kDriveCurrentLimit = 30; // Limits Translation Motor Current to improve efficiency and
                                                      // reduce voltage drop (Lower numbers will reduce acceleration)
-    public static final int kTurnCurrentLimit = 30; // Limits Rotation Motor Current, this is generally not an issue
+    public static final int kTurnCurrentLimit = 25; // Limits Rotation Motor Current, this is generally not an issue
                                                     // with NEOs/Falcons on 2910 swerve but may be if smaller brushed
                                                     // motors are used
 

@@ -48,12 +48,6 @@ public class SwerveModule {
   // "tuningVals" array where they will be set
   private final PIDController m_drivePIDController;
 
-  // Creates a SlewRateLimiter for the translation motors to reduce shock load on
-  // the tranlsation gears and to reduce wheelspin
-  // For 2910 swerve this can help reduce the wear down the teeth on the steel
-  // spur gears just before the bevel gears
-  private final SlewRateLimiter m_driveLimiter = new SlewRateLimiter(ModuleConstants.kTranslationRampRate);
-
   // Creates a SimpleMotorFeedForward for the translation motor on the swerve
   // module
   // The static and feedforward gains should be passed into the class contructor
@@ -149,7 +143,7 @@ public class SwerveModule {
     final double driveFF = driveFeedForward.calculate(state.speedMetersPerSecond);
     // Set the drive motor to the sum of the feedforward calculation and PID
     // calculation
-    final double finalDriveOutput = m_driveLimiter.calculate(driveOutput + driveFF);
+    final double finalDriveOutput = driveOutput + driveFF;
     SmartDashboard.putNumber("output" + moduleID, finalDriveOutput);
     SmartDashboard.putNumber("Desired Speed" + moduleID, state.speedMetersPerSecond);
     SmartDashboard.putNumber("Actual Speed" + moduleID, m_driveEncoder.getVelocity());
