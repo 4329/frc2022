@@ -226,13 +226,13 @@ public class RobotContainer {
     // intakeRun = new IntakeRunAuto(m_robotDrive);
     KISSAuto = new KISSAuto(m_robotDrive);
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-    LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-    LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LessComplexAuto = new LessComplexAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MidLowAuto = new MidLowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LeftLowAuto = new LeftLowAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-    OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
