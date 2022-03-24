@@ -24,6 +24,7 @@ public class TurretSubsystem extends SubsystemBase{
     private volatile int lastValue = Integer.MIN_VALUE;
 
     double staticFeedforward = 0;
+    double zeroStaticFeedforward = 0.01;
     // default value for the limelight mode
     int defaultvalue = 1;
     PIDController limeLightPid;
@@ -36,7 +37,7 @@ public class TurretSubsystem extends SubsystemBase{
     // angle of the front of the limelight in relation to level
     double limeLightDistance;
     int limeLightTolerance = 1;
-    int turretTolerance = 20;
+    int turretTolerance = 2;
     double taTolerance = 0.3;
     final double TURRET_MIN = Configrun.get(2347, "turretMin");
     final double TURRET_MAX = Configrun.get(2961, "turretMax");
@@ -76,7 +77,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret = new TalonSRX (Configrun.get(41, "turretID"));
         limeLightPid = new PIDController(1, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
-        turretPid = new PIDController(5, 0, 0);
+        turretPid = new PIDController(6.5, 0, 0);
         turretPid.setTolerance(turretTolerance);
 
         checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();
@@ -243,10 +244,10 @@ public class TurretSubsystem extends SubsystemBase{
             output = output / TURRET_RANGE;
 
             if (output < 0) {
-                output = output - staticFeedforward;
+                output = output - zeroStaticFeedforward;
             }
             else {
-                output = output + staticFeedforward;
+                output = output + zeroStaticFeedforward;
             }
             turretPower(-1 * output);
             putValuesToShuffleboard();
