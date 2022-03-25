@@ -67,7 +67,7 @@ public class HoodSubsystem extends SubsystemBase {
           .withWidget(BuiltInWidgets.kToggleButton)
           .withSize(2, 1).getEntry();
     
-      overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Setpoint", 3).getEntry();
+      overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Hood Setpoint", 3).withWidget(BuiltInWidgets.kTextView).getEntry();
 
       preHood = Shuffleboard.getTab("Hood Data").add("preHood", 3).getEntry();
 
@@ -96,8 +96,8 @@ public class HoodSubsystem extends SubsystemBase {
 
     //System.out.println("Hood Position<-----" + hoodposition);
     // double setpoint = 0; // sits at neutral position until told otherwise.
-
-        if (shooter.manualOverride.getBoolean(true)) {
+/*
+   if (shooter.manualOverride.getBoolean(true)) {
 
         setpoint = overrideSetpoint;
    }
@@ -112,7 +112,7 @@ public class HoodSubsystem extends SubsystemBase {
         setpoint = hoodNeutral;
       }
   }
-
+*/
 
     double output = hoodPID.calculate(hoodposition, setpoint);
 
@@ -166,16 +166,12 @@ public class HoodSubsystem extends SubsystemBase {
    * @param position
    */
   public void setEncoderPosition(double position) {
-
     if (position < 3) {
-
-      overrideSetpoint = 3;
+      setpoint = 3;
     } else if (position > 33) {
-
-      overrideSetpoint = 33;
+      setpoint = 33;
     } else {
-
-    overrideSetpoint = position;
+       setpoint = position;
     }
   }
 
