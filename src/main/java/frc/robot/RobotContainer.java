@@ -198,10 +198,6 @@ public class RobotContainer {
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));//climb up
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));//extend & pivot arms
-      //Developer tools TODO
-    new JoystickButton(m_driverController, Button.kStart.value).whileHeld(new ManualHoodCommand(hoodSubsystem, shooter));
-    new JoystickButton(m_driverController, Button.kBack.value).whenPressed(() -> hoodSubsystem.CyclePosition());
-
 
     //Operator Controller
       //Shoot
@@ -220,24 +216,30 @@ public class RobotContainer {
    */
   private void configureAutoChooser(Drivetrain drivetrain) {
 
-    // Pulls autos
-    // moveOneMeter = new MoveOneMeterAuto(m_robotDrive);
-    // twoPaths = new TwoPathsAuto(m_robotDrive);
-    // intakeRun = new IntakeRunAuto(m_robotDrive);
+
     KISSAuto = new KISSAuto(m_robotDrive);
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+<<<<<<< HEAD
+=======
+    LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+>>>>>>> edcc937 (deleted comments, hood works and stuff XD)
     LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LessComplexAuto = new LessComplexAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MidLowAuto = new MidLowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LeftLowAuto = new LeftLowAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+<<<<<<< HEAD
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("TwoPathsAuto", twoPaths);
     // m_chooser.addOption("IntakeRunAuto", intakeRun);
+=======
+    OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+  
+>>>>>>> edcc937 (deleted comments, hood works and stuff XD)
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
     m_chooser.addOption("TwoBallHIGHAuto", ComplexAuto);
     m_chooser.addOption("RightFiveBallHIGHAuto", ComplexerAuto);
@@ -247,12 +249,6 @@ public class RobotContainer {
     m_chooser.addOption("RightTwoBallLOW", LowAuto);
     m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
     m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
-
-
-
-
-
-
 
     // Puts autos on Shuffleboard
     Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(0, 0);

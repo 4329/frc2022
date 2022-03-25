@@ -282,36 +282,6 @@ public class Shooter {
 
     return rpmTableValue;
 
-    // if (targetDistance < minDistance) { // Near zone
-      
-    //   hood.setPosition(HoodPosition.OPEN); // Sets hood to open
-    //   if (Configrun.get(false, "extraShuffleBoardToggle")) {
-    //     aimedSetpoint.setDouble(m_openTable.getOutput(targetDistance));
-    //   }
-    //   return m_openTable.getOutput(targetDistance); // Calculates our RPM for an open hood
-
-
-    // } else if (targetDistance >= minDistance && targetDistance <= maxDistance) { // Middle zone
-
-    //   hood.setPosition(HoodPosition.HALF); // Sets hood to half
-    //   if (Configrun.get(false, "extraShuffleBoardToggle")) {
-    //     aimedSetpoint.setDouble(m_halfTable.getOutput(targetDistance));
-    //   }
-    //   return m_halfTable.getOutput(targetDistance); // Calculates our RPM for a half hood
-
-
-    // } else if (targetDistance > maxDistance) { // Far zone
-      
-    //   hood.setPosition(HoodPosition.CLOSED); // Sets hood to closed
-    //   if (Configrun.get(false, "extraShuffleBoardToggle")) {
-    //     aimedSetpoint.setDouble(m_closedTable.getOutput(targetDistance));
-    //   }
-    //   return m_closedTable.getOutput(targetDistance); // Calculates our RPM for a closed hood
-
-    // } else {
-
-    //   return 0;
-    // }
   }
 
   public double getVelocityRPM(){

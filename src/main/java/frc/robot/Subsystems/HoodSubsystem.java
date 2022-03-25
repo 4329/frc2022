@@ -31,15 +31,11 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodClosed;
   private double hoodNeutral;
   private static final int MAX_RANGE = 33;
-  private HoodPosition currentPosition = HoodPosition.NEUTRAL;
   private double setpoint;
   private double overrideSetpoint;
 
-  // 29 is the max range the varaible hood can travel without hitting a hard limit
-  // or throwing itself off the track
 
-  // Need to define values for HoodMin, HoodMiddle, and HoodFar when we implement
-  // the limit switch for zeroing
+
 
   public HoodSubsystem() {
     hoodNeutral = Configrun.get(0, "hoodNeutral");
@@ -94,25 +90,13 @@ public class HoodSubsystem extends SubsystemBase {
       sparkPosition.setDouble(hoodposition);
     }
 
-    //System.out.println("Hood Position<-----" + hoodposition);
-    // double setpoint = 0; // sits at neutral position until told otherwise.
-/*
+   
+
    if (shooter.manualOverride.getBoolean(true)) {
 
         setpoint = overrideSetpoint;
    }
-    else {
-      if (currentPosition.equals(HoodPosition.OPEN)) {
-        setpoint = hoodOpen;
-      } else if (currentPosition.equals(HoodPosition.HALF)) {
-        setpoint = hoodHalf;
-      } else if (currentPosition.equals(HoodPosition.CLOSED)) {
-        setpoint = hoodClosed;
-      } else if (currentPosition.equals(HoodPosition.NEUTRAL)) {
-        setpoint = hoodNeutral;
-      }
-  }
-*/
+   
 
     double output = hoodPID.calculate(hoodposition, setpoint);
 
@@ -145,19 +129,17 @@ public class HoodSubsystem extends SubsystemBase {
    * 
    * @param Position
    */
-  public void setPosition(HoodPosition Position) {
-    System.out.println("`````````````````````````Setting Position to" + Position + "`````````````````````````");
-    // if (Position.equals(HoodPosition.OPEN)) {
-    // hoodEncoder.setPosition(hoodOpen);
-    // } else if (Position.equals(HoodPosition.HALF)) {
-    // hoodEncoder.setPosition(hoodHalf);
-    // } else if (Position.equals(HoodPosition.CLOSED)) {
-    // hoodEncoder.setPosition(hoodClosed);
-    // }
-
-
+  public void setPosition(HoodPosition position) {  
     
-    currentPosition = Position;
+      if (position.equals(HoodPosition.OPEN)) {
+        setpoint = hoodOpen;
+      } else if (position.equals(HoodPosition.HALF)) {
+        setpoint = hoodHalf;
+      } else if (position.equals(HoodPosition.CLOSED)) {
+        setpoint = hoodClosed;
+      } else if (position.equals(HoodPosition.NEUTRAL)) {
+        setpoint = hoodNeutral;
+      }
   }
 
   /**
@@ -175,22 +157,8 @@ public class HoodSubsystem extends SubsystemBase {
     }
   }
 
-  /**
-   * May be unnecessary. Cycles through HoodPositions
-   */
-  public void CyclePosition() {
-    //System.out.println("````````````````````CYCLE POSITION CALLED````````````````````");
-
-    if (currentPosition.equals(HoodPosition.NEUTRAL)) {
-      setPosition(HoodPosition.OPEN);
-    } else if (currentPosition.equals(HoodPosition.OPEN)) {
-      setPosition(HoodPosition.HALF);
-    } else if (currentPosition.equals(HoodPosition.HALF)) {
-      setPosition(HoodPosition.CLOSED);
-    } else if (currentPosition.equals(HoodPosition.CLOSED)) {
-      setPosition(HoodPosition.OPEN);
-    }
-  }
+ 
+  
 
   public enum HoodPosition {
 
