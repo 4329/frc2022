@@ -2,6 +2,7 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.HoodSubsystem;
+import frc.robot.Subsystems.LimelightSubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
@@ -17,8 +18,10 @@ public class TowerCommand extends CommandBase {
     final TurretSubsystem turret;
 
     private double targetDistance;
+    private boolean foundTarget;
 
     double setpoint;
+    
 
     /**
      * Runs the tower intake and shooter
@@ -36,28 +39,39 @@ public class TowerCommand extends CommandBase {
         this.shooter = shooter;
         this.hood = hood;
         this.turret = turret;
+        
     }
 
     @Override
     public void initialize() {
-
-        targetDistance = turret.getDistanceFromTarget();
+        foundTarget = false;
     }
 
     @Override
     public void execute() {
 
-        setpoint = shooter.shooterManualOverride(hood, turret, targetDistance);
-        shooter.shoot(setpoint);        
+        if (foundTarget) {
+            
+            setpoint = shooter.shooterManualOverride(hood, turret, targetDistance);
+            shooter.shoot(setpoint);        
+            
+            if (shooter.getShooterError()) {
+                
+                storageIntake.storageIntakeInSlow();
+                shooterFeed.shooterFeedUpSlow();
+            } else {
+                
+                storageIntake.storageIntakeStop();
+                shooterFeed.shooterFeedStop();
+            }
+            
+        }
+        else {
+         if (turret.targetVisible()) {
+            foundTarget = true;
+            targetDistance = turret.getDistanceFromTarget();
 
-        if (shooter.getShooterError()) {
-
-            storageIntake.storageIntakeInSlow();
-            shooterFeed.shooterFeedUpSlow();
-        } else {
-
-            storageIntake.storageIntakeStop();
-            shooterFeed.shooterFeedStop();
+         }   
         }
     }
 
