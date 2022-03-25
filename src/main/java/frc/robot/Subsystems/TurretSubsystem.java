@@ -86,7 +86,7 @@ public class TurretSubsystem extends SubsystemBase{
         turretPid = new PIDController(6.5, 0, 0);
         turretPid.setTolerance(turretTolerance);
 
-        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withSize(2, 1).withPosition(2, 2).getEntry();
+        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withSize(2, 1).withPosition(3, 2).getEntry();
         getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData").add("Distance", 0).withPosition(1, 3).getEntry();
 
         if (Configrun.get(false, "extraShuffleBoardToggle")) {
