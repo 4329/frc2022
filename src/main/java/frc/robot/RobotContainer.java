@@ -220,26 +220,17 @@ public class RobotContainer {
     KISSAuto = new KISSAuto(m_robotDrive);
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-<<<<<<< HEAD
-=======
-    LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
->>>>>>> edcc937 (deleted comments, hood works and stuff XD)
     LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LessComplexAuto = new LessComplexAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LowAuto = new LowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MidLowAuto = new MidLowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LeftLowAuto = new LeftLowAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-<<<<<<< HEAD
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("TwoPathsAuto", twoPaths);
     // m_chooser.addOption("IntakeRunAuto", intakeRun);
-=======
-    OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-  
->>>>>>> edcc937 (deleted comments, hood works and stuff XD)
     m_chooser.addOption("SuperSimpleAuto", KISSAuto);
     m_chooser.addOption("TwoBallHIGHAuto", ComplexAuto);
     m_chooser.addOption("RightFiveBallHIGHAuto", ComplexerAuto);
