@@ -14,7 +14,7 @@ public class ManualHoodCommand extends CommandBase {
     }
     
     public void execute() {
-        hoodSubsystem.HoodPeriodic(shooter);
+        //hoodSubsystem.HoodPeriodic(shooter);
     }
 
     @Override

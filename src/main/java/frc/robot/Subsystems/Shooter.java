@@ -102,6 +102,7 @@ public class Shooter {
 
 
   private Point2D[] rpmTable = new  Point2D.Double[] {
+
     new Point2D.Double(67, 2500),
     new Point2D.Double(83, 2600),
     new Point2D.Double(102, 2650),
@@ -110,11 +111,20 @@ public class Shooter {
     new Point2D.Double(156, 3100),
     new Point2D.Double(174, 3220),
     new Point2D.Double(186, 3325),
-    new Point2D.Double(210, 3450)
+    new Point2D.Double(210, 3500),
+    new Point2D.Double(210, 3450),
+    new Point2D.Double(240, 3650),
+    new Point2D.Double(264, 3800),
+    new Point2D.Double(276, 3925)
+
+
+
+
   };
   private LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
 
   private Point2D[] hoodTable = new  Point2D.Double[] {
+
     new Point2D.Double(67, 3),
     new Point2D.Double(83, 5.5),
     new Point2D.Double(102, 11),
@@ -123,7 +133,13 @@ public class Shooter {
     new Point2D.Double(156, 24),
     new Point2D.Double(174, 26),
     new Point2D.Double(186, 28),
-    new Point2D.Double(210, 29)
+    new Point2D.Double(210, 28),
+    new Point2D.Double(240, 29),
+    new Point2D.Double(264, 30),
+    new Point2D.Double(276, 32)
+
+
+
   };
   private LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
 
@@ -247,10 +263,10 @@ public class Shooter {
       if (manualOverride.getBoolean(true)) {
 
         return shooterRPM.getDouble(3500);
-
-    }
+    } else {
     
-    return aim(hood, turret, targetDistance);
+      return aim(hood, turret, targetDistance);
+    }
   }
 
   /**

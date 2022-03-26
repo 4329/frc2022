@@ -24,6 +24,7 @@ import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.ClimberEngageCommand;
 import frc.robot.Commands.CommandGroups;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.HoodToOpenCommand;
 import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.AllBackwardsCommand;
@@ -282,9 +283,15 @@ public class RobotContainer {
     storageIntake.storageIntakeCoast();
   }
 
+  public void robotPeriodic() {
+
+    hoodSubsystem.HoodPeriodic(shooter);
+  }
+
   public void init() {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
+    hoodSubsystem.setDefaultCommand(new HoodToOpenCommand(hoodSubsystem, shooter));
     //climber.engage();
     climber.retract();
     climber.reversePivotClimber();
@@ -303,7 +310,7 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    hoodSubsystem.HoodPeriodic(shooter);
+
   }
 
 }

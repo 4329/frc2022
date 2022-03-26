@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Commands.CommandGroups;
 import frc.robot.Commands.IntakeAutoCommand;
@@ -35,14 +37,19 @@ public class RightThreeBallAuto extends SequentialCommandGroup{
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         Command intakeRun2 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+        Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
         CommandGroups groups = new CommandGroups();
 
         addCommands(
             new InstantCommand(()->drive.resetOdometry(ThreeBall1.getInitialPose())),
-            new ParallelCommandGroup(intakeRun, ThreeBall1).withTimeout(3), 
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new ParallelCommandGroup(intakeRun2, ThreeBall2).withTimeout(5),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
+            intakePosCommand,
+            new WaitCommand(0.25),
+            new ParallelRaceGroup(intakeRun, ThreeBall1),
+            new WaitCommand(0.35),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
+            new ParallelRaceGroup(intakeRun2, ThreeBall2),
+            new WaitCommand(0.35),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2)
 
          );
     }

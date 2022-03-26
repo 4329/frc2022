@@ -39,7 +39,8 @@ public class TowerCommand extends CommandBase {
         this.shooter = shooter;
         this.hood = hood;
         this.turret = turret;
-        
+        addRequirements(turret);
+        addRequirements(hood);
     }
 
     @Override

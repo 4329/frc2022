@@ -29,7 +29,6 @@ public class ComplexerNoIntake extends SequentialCommandGroup{
     public ComplexerNoIntake(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
         
         final AutoFromPathPlanner firstMove = new AutoFromPathPlanner(drive, "ComplexAutoMove1", Constants.AutoConstants.kMaxSpeed);
-        final AutoFromPathPlanner complexerAuto = new AutoFromPathPlanner(drive, "ComplexerAuto", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner complexerAuto1 = new AutoFromPathPlanner(drive, "ComplexerAuto1", Constants.AutoConstants.kMaxSpeed);
 
   
@@ -39,10 +38,9 @@ public class ComplexerNoIntake extends SequentialCommandGroup{
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
             firstMove,
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            complexerAuto,
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            complexerAuto1,
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
+            complexerAuto1
+            //groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
+
             );
     }
 }

@@ -21,6 +21,7 @@ public class TowerLowCommand extends CommandBase {
         this.shooterFeed = shooterFeed;
         this.shooter = shooter;
         this.hood = hood;
+        addRequirements(hood);
     }
 
     @Override
