@@ -35,15 +35,10 @@ public class MidLowAuto extends SequentialCommandGroup{
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         Command lowshoot = new TowerLowCommand(storageIntake, shooterFeed, shooter, hoodSubsystem);
-        Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
-        Command intakePosCommand2 = new IntakePosCommand(intakeSolenoid);
-
 
         addCommands(
             new InstantCommand(()->drive.resetOdometry(MidLowAutoPath1.getInitialPose())),
-            intakePosCommand,
             new ParallelCommandGroup(intakeRun, MidLowAutoPath1).withTimeout(5), 
-            intakePosCommand2,
             lowshoot.withTimeout(2.5),
             MidLowAutoPath2.withTimeout(2)
          );

@@ -40,17 +40,12 @@ public class LowAutoMore extends SequentialCommandGroup{
 
         Command lowshoot = new TowerLowCommand(storageIntake, shooterFeed, shooter, hoodSubsystem);
         CommandGroups groups = new CommandGroups();
-        Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
-        Command intakePosCommand2 = new IntakePosCommand(intakeSolenoid);
-
-
+        
         addCommands(
             new InstantCommand(()->drive.resetOdometry(LowAuto1.getInitialPose())),
-            intakePosCommand,
             new ParallelCommandGroup(intakeRun, LowAuto1).withTimeout(5), 
             lowshoot.withTimeout(2.5),
             new ParallelCommandGroup(intakeRun2, LowAuto3).withTimeout(5),
-            intakePosCommand2,
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
 
      
