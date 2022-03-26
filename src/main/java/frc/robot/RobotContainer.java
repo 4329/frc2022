@@ -46,6 +46,7 @@ import frc.robot.Commands.Autos.LowAutoMore;
 import frc.robot.Commands.Autos.MidLowAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.OpenLowAutoMore;
+import frc.robot.Commands.Autos.RightThreeBallAuto;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.HoodSubsystem;
@@ -107,6 +108,7 @@ public class RobotContainer {
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+  private Command RightThreeBallAuto;
 
 
 
@@ -226,20 +228,24 @@ public class RobotContainer {
     OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MidLowAuto = new MidLowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LeftLowAuto = new LeftLowAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    RightThreeBallAuto = new RightThreeBallAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("TwoPathsAuto", twoPaths);
     // m_chooser.addOption("IntakeRunAuto", intakeRun);
-    m_chooser.addOption("SuperSimpleAuto", KISSAuto);
-    m_chooser.addOption("TwoBallHIGHAuto", ComplexAuto);
-    m_chooser.addOption("RightFiveBallHIGHAuto", ComplexerAuto);
-    m_chooser.addOption("RightThreeBallLOW/HIGHAuto", LowAutoMore);
-    m_chooser.addOption("RightThreeBallOPENLOW/HIGHAuto", OpenLowAutoMore);
+    m_chooser.addOption("SuperSimple", KISSAuto);
+    m_chooser.addOption("TwoBallHIGH", ComplexAuto);
+    m_chooser.addOption("RightFiveBallHIGH", ComplexerAuto);
+    m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
+    m_chooser.addOption("RightThreeBallOPENLOW/HIGH", OpenLowAutoMore);
     m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
     m_chooser.addOption("RightTwoBallLOW", LowAuto);
     m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
     m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
+    m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
+
+    
 
     // Puts autos on Shuffleboard
     Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(0, 0);
