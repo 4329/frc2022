@@ -41,7 +41,7 @@ public class RightThreeBallAuto extends SequentialCommandGroup{
             new InstantCommand(()->drive.resetOdometry(ThreeBall1.getInitialPose())),
             new ParallelCommandGroup(intakeRun, ThreeBall1).withTimeout(3), 
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new ParallelCommandGroup(intakeRun2, ThreeBall2).withTimeout(3),
+            new ParallelCommandGroup(intakeRun2, ThreeBall2).withTimeout(5),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
 
          );

@@ -37,6 +37,7 @@ import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
+import frc.robot.Commands.Autos.ComplexerNoIntake;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
 import frc.robot.Commands.Autos.LeftLowAuto;
@@ -111,6 +112,7 @@ public class RobotContainer {
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
   private Command RightThreeBallAuto;
+  private Command ComplexerNoIntake;
 
 
 
@@ -233,6 +235,9 @@ public class RobotContainer {
     RightThreeBallAuto = new RightThreeBallAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     RejectAutoHigh = new RejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    ComplexerNoIntake = new ComplexerNoIntake(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+
+
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
@@ -241,6 +246,7 @@ public class RobotContainer {
     m_chooser.addOption("SuperSimple", KISSAuto);
     m_chooser.addOption("TwoBallHIGH", ComplexAuto);
     m_chooser.addOption("RightFiveBallHIGH", ComplexerAuto);
+    m_chooser.addOption("RightFiveBallTest", ComplexerNoIntake);
     m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
     m_chooser.addOption("RightThreeBallOPENLOW/HIGH", OpenLowAutoMore);
     m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
