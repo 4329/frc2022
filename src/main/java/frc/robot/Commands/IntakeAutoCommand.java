@@ -23,6 +23,7 @@ public class IntakeAutoCommand extends CommandBase {
     }
 
     public void initialize() {
+        intakeSolenoid.intakeDown();
         intakeMotor.runIntakeIn();
         storageIntake.storageIntakeIn();
         shooterFeed.shooterFeedUp();
@@ -47,6 +48,7 @@ public class IntakeAutoCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        intakeSolenoid.intakeUp();
         storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
         shooterFeed.shooterFeedStop();
