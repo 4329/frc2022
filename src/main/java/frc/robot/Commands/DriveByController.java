@@ -21,7 +21,7 @@ public class DriveByController extends CommandBase {
   private SlewRateLimiter slewX = new SlewRateLimiter(2.0);
   private SlewRateLimiter slewY = new SlewRateLimiter(2.0);
 
-  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withPosition(4, 2).getEntry();
+  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withPosition(4, 4).getEntry();
 
   /**
    * Contructs a DriveByController object which applys the driver inputs from the
