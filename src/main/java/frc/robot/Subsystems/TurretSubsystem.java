@@ -59,6 +59,10 @@ public class TurretSubsystem extends SubsystemBase{
 
     private Point2D[] limlightTable = new Point2D.Double[] {
 
+
+        new Point2D.Double(-14.93, 276),
+        new Point2D.Double(-14.11, 264),
+        new Point2D.Double(-12.75, 240),
         new Point2D.Double(-10.12, 210),
         new Point2D.Double(-8.37, 186),
         new Point2D.Double(-6.67, 174),
@@ -214,20 +218,26 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void targeting() {
+
         double output;
+
         if(targetVisible()) {
+
             output = limeLightPid.calculate(getTx(), 0);
             //converts range to % power
             output = output / LIMELIGHT_RANGE;
             if (output < 0) {
+
                output = output - staticFeedforward;
             }
             else {
+
                 output = output + staticFeedforward;
             }
             rotateTurret(output);
         }
         else {
+
             turretStop();
         }
 
@@ -235,6 +245,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void turretToZero() {
+
         double encoderReading = getPwmPosition();
         if (encoderReading < TURRET_MAX && encoderReading > TURRET_MIN) {
         
@@ -257,6 +268,8 @@ public class TurretSubsystem extends SubsystemBase{
     }   
 
     public boolean targeted() {
+
         return limeLightPid.atSetpoint();
     }
+
 }

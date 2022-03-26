@@ -14,6 +14,7 @@ import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.TowerCommand;
+import frc.robot.Commands.TowerLowCommand;
 import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.IntakeMotor;
 import frc.robot.Subsystems.IntakeSensors;
@@ -26,28 +27,30 @@ import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.AutoFromPathPlanner;
 
 
-public class ComplexerAuto extends SequentialCommandGroup{
+public class RightThreeBallAuto extends SequentialCommandGroup{
   
-    public ComplexerAuto(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
+    public RightThreeBallAuto(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
         
-        final AutoFromPathPlanner firstMove = new AutoFromPathPlanner(drive, "ComplexAutoMove1", Constants.AutoConstants.kMaxSpeed);
-        final AutoFromPathPlanner ComplexerAuto1 = new AutoFromPathPlanner(drive, "ComplexerAuto1", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner ThreeBall1 = new AutoFromPathPlanner(drive, "ThreeBall1", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner ThreeBall2 = new AutoFromPathPlanner(drive, "ThreeBall2", Constants.AutoConstants.kMaxSpeed);
+
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         Command intakeRun2 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
-        Command intakeposcCommand = new IntakePosCommand(intakeSolenoid);  
+        Command intakePosCommand = new IntakePosCommand(intakeSolenoid);
         CommandGroups groups = new CommandGroups();
 
         addCommands(
-            new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
-            intakeposcCommand,
-            new WaitCommand(0.2),
-            new ParallelRaceGroup(intakeRun, firstMove),
-            new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new ParallelRaceGroup(intakeRun2, ComplexerAuto1),
-            new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
-            );
+            new InstantCommand(()->drive.resetOdometry(ThreeBall1.getInitialPose())),
+            intakePosCommand,
+            new WaitCommand(0.25),
+            new ParallelRaceGroup(intakeRun, ThreeBall1),
+            new WaitCommand(0.35),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
+            new ParallelRaceGroup(intakeRun2, ThreeBall2),
+            new WaitCommand(0.35),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2)
+
+         );
     }
 }

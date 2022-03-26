@@ -24,6 +24,7 @@ import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.ClimberEngageCommand;
 import frc.robot.Commands.CommandGroups;
 import frc.robot.Commands.DriveByController;
+import frc.robot.Commands.HoodToOpenCommand;
 import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.AllBackwardsCommand;
@@ -37,6 +38,7 @@ import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
+import frc.robot.Commands.Autos.ComplexerNoIntake;
 import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
 import frc.robot.Commands.Autos.LeftLowAuto;
@@ -47,6 +49,7 @@ import frc.robot.Commands.Autos.MidLowAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.OpenLowAutoMore;
 import frc.robot.Commands.Autos.RightThreeBallAuto;
+import frc.robot.Commands.Autos.RejectAutoHigh;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.HoodSubsystem;
@@ -104,11 +107,13 @@ public class RobotContainer {
   private Command MidLowAuto;
   private Command LeftLowAuto;
   private Command OpenLowAutoMore;
+  private Command RejectAutoHigh;
   
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
   private Command RightThreeBallAuto;
+  private Command ComplexerNoIntake;
 
 
 
@@ -229,6 +234,11 @@ public class RobotContainer {
     MidLowAuto = new MidLowAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LeftLowAuto = new LeftLowAuto (m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     RightThreeBallAuto = new RightThreeBallAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    RejectAutoHigh = new RejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    ComplexerNoIntake = new ComplexerNoIntake(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+
+
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);
     // m_chooser.addOption("MoveOneMeterAuto", moveOneMeter);
@@ -237,6 +247,7 @@ public class RobotContainer {
     m_chooser.addOption("SuperSimple", KISSAuto);
     m_chooser.addOption("TwoBallHIGH", ComplexAuto);
     m_chooser.addOption("RightFiveBallHIGH", ComplexerAuto);
+    m_chooser.addOption("RightFiveBallTest", ComplexerNoIntake);
     m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
     m_chooser.addOption("RightThreeBallOPENLOW/HIGH", OpenLowAutoMore);
     m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
@@ -244,6 +255,8 @@ public class RobotContainer {
     m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
     m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
     m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
+    m_chooser.addOption("RejectHighAuto", RejectAutoHigh);
+
 
     
 
@@ -270,9 +283,15 @@ public class RobotContainer {
     storageIntake.storageIntakeCoast();
   }
 
+  public void robotPeriodic() {
+
+    hoodSubsystem.HoodPeriodic(shooter);
+  }
+
   public void init() {
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
+    hoodSubsystem.setDefaultCommand(new HoodToOpenCommand(hoodSubsystem, shooter));
     //climber.engage();
     climber.retract();
     climber.reversePivotClimber();
@@ -291,7 +310,7 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    hoodSubsystem.HoodPeriodic(shooter);
+
   }
 
 }
