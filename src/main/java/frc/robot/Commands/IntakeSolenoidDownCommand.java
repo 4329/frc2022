@@ -6,7 +6,7 @@ import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 
 public class IntakeSolenoidDownCommand extends StartEndCommand {
   public IntakeSolenoidDownCommand(IntakeSolenoidSubsystem intakeSolenoid) {
-    super(intakeSolenoid::intakeDown, intakeSolenoid::intakeUp);
+    super(intakeSolenoid::intakeUp, intakeSolenoid::intakeDown);
 
   }
 

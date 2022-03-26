@@ -25,7 +25,7 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
         m_doubleSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Configrun.get(0, "intakeSolenoidID_1"), Configrun.get(1, "intakeSolenoidID_2"));
     }
 
-    public void intakeUp() {
+    public void intakeDown() {
 
         intakeUp = true;
         // m_Solenoid.set(true);
@@ -33,7 +33,7 @@ public class IntakeSolenoidSubsystem extends SubsystemBase {
         System.out.println("intakeup");
     }
 
-    public void intakeDown() {
+    public void intakeUp() {
 
         // m_Solenoid.set(false);
         m_doubleSolenoid.set(kForward);
