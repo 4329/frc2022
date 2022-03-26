@@ -11,15 +11,17 @@ public class AllBackwardsCommand extends CommandBase {
     private ShooterFeedSubsytem shooterFeed;
     private StorageIntake storageIntake;
     private IntakeMotor intakeMotor;
+    private IntakeSolenoidSubsystem intakeSolenoid;
 
-    public AllBackwardsCommand(ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor) {
+    public AllBackwardsCommand(ShooterFeedSubsytem shooterFeed, StorageIntake storageIntake, IntakeMotor intakeMotor, IntakeSolenoidSubsystem intakeSolenoid) {
+        this.intakeSolenoid = intakeSolenoid;
         this.shooterFeed = shooterFeed;
         this.storageIntake = storageIntake;
         this.intakeMotor = intakeMotor;
     }
 
     public void initialize() {
-
+        intakeSolenoid.intakeDown();
         intakeMotor.runIntakeOut();
         storageIntake.storageIntakeOut();
         shooterFeed.shooterFeedDown();
@@ -27,6 +29,7 @@ public class AllBackwardsCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        intakeSolenoid.intakeUp();
         storageIntake.storageIntakeStop();
         intakeMotor.stopIntakeIn();
         shooterFeed.shooterFeedStop();

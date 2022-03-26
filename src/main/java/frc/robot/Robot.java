@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +19,8 @@ import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.SwerveAlignment;
 import frc.robot.Configrun;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -104,13 +109,22 @@ public class Robot extends TimedRobot {
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
+    
     }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+
     m_robotContainer.autonomousPeriodic();
+  }
+
+  @Override
+  public void autonomousExit() {
+  Command resetForTeliOp = new InstantCommand (()->drivetrain.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
+  resetForTeliOp.schedule();
+
   }
 
   @Override
