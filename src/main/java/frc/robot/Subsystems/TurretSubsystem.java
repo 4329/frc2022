@@ -172,6 +172,19 @@ public class TurretSubsystem extends SubsystemBase{
             }
     }
 
+    public void zeroTurret(double toZero) {
+
+        if(getPwmPosition() >= Configrun.get(943, "zeroTurretMin") && toZero > 0) {
+            turretPower(toZero);
+        }
+        else if(getPwmPosition() <= Configrun.get(1557, "zeroTurretMax") && toZero < 0) {
+            turretPower(toZero);
+        }
+        else {
+            turretStop();
+        }
+}
+
     public void targeting() {
         double output;
         if(targetVisible()) {
@@ -194,17 +207,17 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void turretToZero() {
-        double output = turretPid.calculate(getPwmPosition(), Configrun.get(1250, "turretZero"));
+        double toZero = turretPid.calculate(getPwmPosition(), Configrun.get(1250, "turretZero"));
         //converts range to % power
-        output = output / TURRET_RANGE;
+        toZero = toZero / TURRET_RANGE;
 
-        if (output < 0) {
-            output = output - staticFeedforward;
+        if (toZero < 0) {
+            toZero = toZero - staticFeedforward;
         }
         else {
-            output = output + staticFeedforward;
+            toZero = toZero + staticFeedforward;
         }
-        turretPower(-1 * output);
+        turretPower(-1 * toZero);
         putValuesToShuffleboard();
     }
 
