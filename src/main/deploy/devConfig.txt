@@ -81,9 +81,13 @@ turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 1620
-turretMin = 1006
+turretMax = 1570
+turretMin = 1056
 turretZero = 1313
+
+zeroTurretMax = 1620
+zeroTurretMin = 1006
+zeroTurretZero = 1313
 
 # Hood IDs
 HoodWheelID = 11
