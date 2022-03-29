@@ -206,15 +206,20 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void rotateTurret(double output) {
 
-            if(getPwmPosition() >= Configrun.get(943, "turretMin") + 50 && output > 0) {
-                turretPower(output);
-            }
-            else if(getPwmPosition() <= Configrun.get(1557, "turretMax") - 50 && output < 0) {
-                turretPower(output);
-            }
-            else {
-                turretStop();
-            }
+        double pwmPos = getPwmPosition();
+
+        if(pwmPos == 0) {
+            turretStop();
+        }
+        else if(pwmPos >= TURRET_MIN + 100 && output > 0) {
+            turretPower(output);
+        }
+        else if(pwmPos <= TURRET_MAX - 100 && output < 0) {
+            turretPower(output);
+        }
+        else {
+            turretStop();
+        }
     }
 
     public void targeting() {
