@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
 public class Climber {
-    private static final double MAX_CLIMBER_RANGE = 10000;
+    private static final double MAX_CLIMBER_RANGE = 127;
     private final DoubleSolenoid pivotSolenoid;
     private final DoubleSolenoid extendSolenoid;
     private final CANSparkMax climberNeoMotor1;
@@ -35,6 +35,7 @@ public class Climber {
     private PIDController climbMotorPID;
     private double winchPosition;
     private double fullClimbSetpoint;
+    private double winchZero;
 
     public Climber() {
 
@@ -52,6 +53,8 @@ public class Climber {
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withPosition(1, 2).getEntry();
         winchPositionShuffleboard = Shuffleboard.getTab("RobotData").add("Winch Position", 0).withWidget(BuiltInWidgets.kTextView).withPosition(2, 2).getEntry();
         climbMotorPID = new PIDController(2.2, 0, 0);
+        winchZero = climbEncoder.getPosition();
+        fullClimbSetpoint = winchZero + 10;
 
     }
 
@@ -68,12 +71,18 @@ public class Climber {
     }
 
     public void climbPidLoop() {
-        double output = climbMotorPID.calculate(winchPosition, fullClimbSetpoint);
+        System.out.println("my full climb" + fullClimbSetpoint);
+        System.out.println("zero is" + winchZero);
+        System.out.println("position is" + climbEncoder.getPosition());
+
+
+        double output = climbMotorPID.calculate(climbEncoder.getPosition(), fullClimbSetpoint);
 
         output = output / MAX_CLIMBER_RANGE;
     
         climberNeoMotor1.set(output);
     }
+    
 
     public boolean fullyClimbed() {
         return climbMotorPID.atSetpoint();

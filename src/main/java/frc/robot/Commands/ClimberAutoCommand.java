@@ -15,11 +15,12 @@ public class ClimberAutoCommand extends CommandBase {
     }
 
     public void initialize() {
-    
+        System.out.println("climber auto command inited");
 
     }
 
     public void execute() {
+         System.out.println("climber auto execute");
          climber.climbPidLoop();    
     
 

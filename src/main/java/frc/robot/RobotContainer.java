@@ -208,7 +208,7 @@ public class RobotContainer {
       //Climber motor controls
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));//climb up
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
-    new POVButton(m_driverController, 270).whenPressed(() -> ClimberAutoCommand());
+    new POVButton(m_driverController, 270).whenPressed(new ClimberAutoCommand(climber));
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));//extend & pivot arms
 
     //Operator Controller
