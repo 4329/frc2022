@@ -211,10 +211,10 @@ public class TurretSubsystem extends SubsystemBase{
         if(pwmPos == 0) {
             turretStop();
         }
-        else if(pwmPos >= TURRET_MIN + 100 && output > 0) {
+        else if(pwmPos >= TURRET_MIN && output > 0) {
             turretPower(output);
         }
-        else if(pwmPos <= TURRET_MAX - 100 && output < 0) {
+        else if(pwmPos <= TURRET_MAX && output < 0) {
             turretPower(output);
         }
         else {
@@ -252,7 +252,7 @@ public class TurretSubsystem extends SubsystemBase{
     public void turretToZero(/*double toZero*/) {
 
         double encoderReading = getPwmPosition();
-        if (encoderReading < TURRET_MAX && encoderReading > TURRET_MIN) {
+        if (encoderReading < TURRET_MAX + 500 && encoderReading > TURRET_MIN - 500) {
 
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
             //converts range to % power

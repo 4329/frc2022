@@ -71,9 +71,9 @@ turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 1782
-turretMin = 1215
-turretZero = 1475
+turretMax = 1672
+turretMin = 1154
+turretZero = 1413
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
