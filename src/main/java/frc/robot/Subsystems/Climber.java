@@ -2,9 +2,11 @@ package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -12,41 +14,45 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Configrun;
 
 public class Climber {
+    private static final double MAX_CLIMBER_RANGE = 10000;
     private final DoubleSolenoid pivotSolenoid;
-    //private final DoubleSolenoid shiftSolenoid;
     private final DoubleSolenoid extendSolenoid;
     private final CANSparkMax climberNeoMotor1;
     private final CANSparkMax climberNeoMotor2;
-    //private final CANSparkMax climberNeoMotor3;
+    private RelativeEncoder climbEncoder;
     private boolean pivoted = false;
     private boolean shifted = false;
 
-    //rivate final NetworkTableEntry isShiftedShuffleboard;
     private final NetworkTableEntry isPivotedShuffleboard;
     private final NetworkTableEntry isExtendedShuffleboard;
     private final NetworkTableEntry isMoterActiveShuffleboard;
+    private NetworkTableEntry winchPositionShuffleboard;
+    private PIDController climbMotorPID;
+    private double winchPosition;
+    private double fullClimbSetpoint;
 
     public Climber() {
 
         pivotSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Configrun.get(5, "pivotSolenoidID_1"), Configrun.get(4, "pivotSolenoidID_2"));
-        //shiftSolenoid = new DoubleSolenoid(Configrun.get(2, "shiftSolenoidID_1"), Configrun.get(3, "shiftSolenoidID_2"));
         extendSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Configrun.get(6, "extendSolenoidID_1"), Configrun.get(7, "extendSolenoidID_2"));
         climberNeoMotor1 = new CANSparkMax(Configrun.get(9, "climberMotor1ID"), MotorType.kBrushless);
         climberNeoMotor2 = new CANSparkMax(Configrun.get(10, "climberMotor2ID"), MotorType.kBrushless);
-        // climberNeoMotor3 = new CANSparkMax(Configrun.get(11, "climberMotor3ID"), MotorType.kBrushless);
+        climbEncoder = climberNeoMotor1.getEncoder();
         climberNeoMotor2.follow(climberNeoMotor1);
-        //climberNeoMotor3.follow(climberNeoMotor1);
         climberNeoMotor1.setIdleMode(IdleMode.kBrake);
         climberNeoMotor2.setIdleMode(IdleMode.kBrake);
 
-        //isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
         isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot", false).withPosition(0, 3).getEntry();
         isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Extend Climber", false).withPosition(0, 2).getEntry();
         isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withPosition(1, 2).getEntry();
+        winchPositionShuffleboard = Shuffleboard.getTab("RobotData").add("Winch Position", 0).withWidget(BuiltInWidgets.kTextView).withPosition(2, 2).getEntry();
+        climbMotorPID = new PIDController(2.2, 0, 0);
+
     }
 
 
@@ -61,19 +67,18 @@ public class Climber {
 
     }
 
-    public void engage() {//neutral or engage
+    public void climbPidLoop() {
+        double output = climbMotorPID.calculate(winchPosition, fullClimbSetpoint);
 
-        //shiftSolenoid.set(Value.kForward);
-        shifted = true;
-        //isShiftedShuffleboard.setBoolean(true);
+        output = output / MAX_CLIMBER_RANGE;
+    
+        climberNeoMotor1.set(output);
     }
 
-    public void neutral() {//neutral or engage
-
-        //shiftSolenoid.set(Value.kReverse);
-        shifted = false;
-        //isShiftedShuffleboard.setBoolean(false);
+    public boolean fullyClimbed() {
+        return climbMotorPID.atSetpoint();
     }
+
 
     public void extend() {
 
@@ -89,7 +94,6 @@ public class Climber {
     }
 
     public void climb(double climbPower) {
-        System.out.println("ClimbPower is " + climbPower);
         if (Math.abs(climbPower) > 0.1 && extendSolenoid.get().equals(Value.kForward)) {
             retract();
         }
@@ -107,8 +111,6 @@ public class Climber {
     }
 
     public void reverseClimb(double climbPower) {
-        System.out.println("ReverseClimbPower is " + climbPower);
-        //should we add extend or retract?!
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
     }
@@ -125,21 +127,11 @@ public class Climber {
         }
     }
 
-    public void toggleShift() {
 
-        if (shifted) {
-
-            neutral();
-        } else {
-
-            engage();
-        }
+    public void climberPeriodic() {
+        winchPosition = climbEncoder.getPosition();
+        winchPositionShuffleboard.setDouble(winchPosition);
     }
 
-    // extend -
-    // pivotcommand -- toggle
-    // shift + extend
-    // unshift + retract
 
-    // climb == while held
 }

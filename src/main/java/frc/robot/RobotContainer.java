@@ -30,6 +30,7 @@ import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakeCorrectionCommand;
 import frc.robot.Commands.AllBackwardsCommand;
 import frc.robot.Commands.BumperCommand;
+import frc.robot.Commands.ClimberAutoCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.IntakeRunCommand;
 import frc.robot.Commands.ManualHoodCommand;
@@ -207,6 +208,7 @@ public class RobotContainer {
       //Climber motor controls
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));//climb up
     new JoystickAnalogButton(m_driverController, true).whenHeld(new ClimberButtonCommandReverse(m_driverController, climber));//climb down
+    new POVButton(m_driverController, 270).whenPressed(() -> ClimberAutoCommand());
     new JoystickButton(m_driverController, Button.kLeftBumper.value).whenPressed(new ClimberEngageCommand(climber));//extend & pivot arms
 
     //Operator Controller
@@ -220,6 +222,10 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kB.value).whenReleased(new IntakeCorrectionCommand(shooterFeed, storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(intakeMotor));
+  }
+
+  private Object ClimberAutoCommand() {
+    return null;
   }
 
   /**
@@ -295,6 +301,7 @@ public class RobotContainer {
   public void robotPeriodic() {
 
     hoodSubsystem.HoodPeriodic(shooter);
+    climber.climberPeriodic();
   }
 
   public void init() {
