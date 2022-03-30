@@ -72,7 +72,7 @@ public class TurretSubsystem extends SubsystemBase{
         new Point2D.Double(7.169, 102),
         new Point2D.Double(13.8, 83),
         new Point2D.Double(21, 67)
-       
+
     };
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
@@ -206,15 +206,20 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void rotateTurret(double output) {
 
-            if(getPwmPosition() >= Configrun.get(943, "turretMin") && output > 0) {
-                turretPower(output);
-            }
-            else if(getPwmPosition() <= Configrun.get(1557, "turretMax") && output < 0) {
-                turretPower(output);
-            }
-            else {
-                turretStop();
-            }
+        double pwmPos = getPwmPosition();
+
+        if(pwmPos == 0) {
+            turretStop();
+        }
+        else if(pwmPos >= TURRET_MIN && output > 0) {
+            turretPower(output);
+        }
+        else if(pwmPos <= TURRET_MAX && output < 0) {
+            turretPower(output);
+        }
+        else {
+            turretStop();
+        }
     }
 
     public void targeting() {
@@ -247,8 +252,8 @@ public class TurretSubsystem extends SubsystemBase{
     public void turretToZero() {
 
         double encoderReading = getPwmPosition();
-        if (encoderReading < TURRET_MAX && encoderReading > TURRET_MIN) {
-        
+        if (encoderReading < TURRET_MAX + 500 && encoderReading > TURRET_MIN - 500) {
+
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
             //converts range to % power
             output = output / TURRET_RANGE;
@@ -265,7 +270,7 @@ public class TurretSubsystem extends SubsystemBase{
         else {
             turretStop();
         }
-    }   
+    }
 
     public boolean targeted() {
 
