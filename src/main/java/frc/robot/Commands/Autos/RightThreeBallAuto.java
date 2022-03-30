@@ -33,6 +33,8 @@ public class RightThreeBallAuto extends SequentialCommandGroup{
         
         final AutoFromPathPlanner ThreeBall1 = new AutoFromPathPlanner(drive, "ThreeBall1", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner ThreeBall2 = new AutoFromPathPlanner(drive, "ThreeBall2", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner ThreeBall3 = new AutoFromPathPlanner(drive, "ThreeBall3", Constants.AutoConstants.kMaxSpeed);
+
 
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
@@ -49,7 +51,8 @@ public class RightThreeBallAuto extends SequentialCommandGroup{
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
             new ParallelRaceGroup(intakeRun2, ThreeBall2),
             new WaitCommand(0.35),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2)
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
+            ThreeBall3
 
          );
     }

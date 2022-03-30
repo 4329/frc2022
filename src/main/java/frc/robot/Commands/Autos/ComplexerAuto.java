@@ -30,8 +30,10 @@ public class ComplexerAuto extends SequentialCommandGroup{
   
     public ComplexerAuto(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
         
-        final AutoFromPathPlanner firstMove = new AutoFromPathPlanner(drive, "ComplexAutoMove1", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner firstMove = new AutoFromPathPlanner(drive, "firstMove", Constants.AutoConstants.kMaxSpeed);
         final AutoFromPathPlanner ComplexerAuto1 = new AutoFromPathPlanner(drive, "ComplexerAuto1", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner ComplexAuto2 = new AutoFromPathPlanner(drive, "ComplexAuto2", Constants.AutoConstants.kMaxSpeed);
+
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         Command intakeRun2 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
@@ -47,7 +49,8 @@ public class ComplexerAuto extends SequentialCommandGroup{
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
             new ParallelRaceGroup(intakeRun2, ComplexerAuto1),
             new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
+            ComplexAuto2
             );
     }
 }

@@ -50,6 +50,7 @@ import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.OpenLowAutoMore;
 import frc.robot.Commands.Autos.RightThreeBallAuto;
 import frc.robot.Commands.Autos.RejectAutoHigh;
+import frc.robot.Commands.Autos.RejectTest;
 import frc.robot.Commands.Autos.TwoPathsAuto;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.HoodSubsystem;
@@ -108,12 +109,13 @@ public class RobotContainer {
   private Command LeftLowAuto;
   private Command OpenLowAutoMore;
   private Command RejectAutoHigh;
+  private Command RightThreeBallAuto;
+  private Command ComplexerNoIntake;
+  private Command RejectTest;
   
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
-  private Command RightThreeBallAuto;
-  private Command ComplexerNoIntake;
 
 
 
@@ -214,7 +216,7 @@ public class RobotContainer {
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
     new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
-    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor));//eject
+    new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(intakeMotor));
   }
 
@@ -237,6 +239,7 @@ public class RobotContainer {
     OpenLowAutoMore = new OpenLowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     RejectAutoHigh = new RejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerNoIntake = new ComplexerNoIntake(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    RejectTest = new RejectTest(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
 
     // Adds autos to the chooser
@@ -245,17 +248,21 @@ public class RobotContainer {
     // m_chooser.addOption("TwoPathsAuto", twoPaths);
     // m_chooser.addOption("IntakeRunAuto", intakeRun);
     m_chooser.addOption("SuperSimple", KISSAuto);
-    m_chooser.addOption("TwoBallHIGH", ComplexAuto);
-    m_chooser.addOption("RightFiveBallHIGH", ComplexerAuto);
-    m_chooser.addOption("RightFiveBallTest", ComplexerNoIntake);
-    m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
-    m_chooser.addOption("RightThreeBallOPENLOW/HIGH", OpenLowAutoMore);
     m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
-    m_chooser.addOption("RightTwoBallLOW", LowAuto);
-    m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
-    m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
+    m_chooser.addOption("TwoBallHIGH", ComplexAuto);
+    m_chooser.addOption("RightFourBallHIGH", ComplexerAuto);
     m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
     m_chooser.addOption("RejectHighAuto", RejectAutoHigh);
+    m_chooser.addOption("RejectTest", RejectTest);
+    
+    //m_chooser.addOption("RightFiveBallTest", ComplexerNoIntake);
+    //m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
+    //m_chooser.addOption("RightThreeBallOPENLOW/HIGH", OpenLowAutoMore);
+    // m_chooser.addOption("RightTwoBallLOW", LowAuto);
+    // m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
+    // m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
+
+    
 
 
     
