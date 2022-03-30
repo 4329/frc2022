@@ -27,6 +27,7 @@ import frc.robot.Commands.DriveByController;
 import frc.robot.Commands.HoodToOpenCommand;
 import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
+import frc.robot.Commands.IntakeCorrectionCommand;
 import frc.robot.Commands.AllBackwardsCommand;
 import frc.robot.Commands.BumperCommand;
 import frc.robot.Commands.IntakePosCommand;
@@ -195,8 +196,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
       //Driver Controller
-    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed; TODO: what does this do
-    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));//TODO: what does this do
+    new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed
+    new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());//toggle field dorientation
       //Climber arm controls
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
@@ -216,6 +217,7 @@ public class RobotContainer {
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
     new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
+    new JoystickButton(m_operatorController, Button.kB.value).whenReleased(new IntakeCorrectionCommand(shooterFeed, storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(intakeMotor));
   }
