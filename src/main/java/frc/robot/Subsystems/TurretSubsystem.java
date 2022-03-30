@@ -249,7 +249,7 @@ public class TurretSubsystem extends SubsystemBase{
         putValuesToShuffleboard();
     }
 
-    public void turretToZero(/*double toZero*/) {
+    public void turretToZero() {
 
         double encoderReading = getPwmPosition();
         if (encoderReading < TURRET_MAX + 500 && encoderReading > TURRET_MIN - 500) {
