@@ -181,25 +181,21 @@ public class HoodSubsystem extends SubsystemBase {
    * @param shooter
    */
   public void hoodOverride(Shooter shooter) {
-
-    
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
       sparkPosition.setDouble(hoodEncoder.getPosition());
-    }
+    
+      if (shooter.manualOverride.getBoolean(true)) {
+        setEncoderPosition(overrideSetpointEntry.getDouble(3));
+          if (hoodOverrideIdleMode.getBoolean(true)) {
+            
+            hoodwheel.setIdleMode(IdleMode.kBrake);
+          }
+        else {
 
-    if (shooter.manualOverride.getBoolean(true)) {
+          hoodwheel.setIdleMode(IdleMode.kCoast);
 
-      setEncoderPosition(overrideSetpointEntry.getDouble(3));
-        if (hoodOverrideIdleMode.getBoolean(true)) {
-          
-          hoodwheel.setIdleMode(IdleMode.kBrake);
-        }
-      else {
-
-        hoodwheel.setIdleMode(IdleMode.kCoast);
-
+          }
         }
       }
-
     }
 }
