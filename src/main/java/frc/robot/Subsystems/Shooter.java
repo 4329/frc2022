@@ -209,12 +209,12 @@ public class Shooter {
    */
   public void shoot(double shooterSetpoint) {
 
-    if (update.getBoolean(false)) {
-    simpleFeedForward = new SimpleMotorFeedforward(
-        ks.getDouble(1),
-        kv.getDouble(1)
-      );
-    }
+    // if (update.getBoolean(false)) {
+    // simpleFeedForward = new SimpleMotorFeedforward(
+    //     ks.getDouble(1),
+    //     kv.getDouble(1)
+    //   );
+    //}
     //shooterSetpoint is the RPM
     //pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     //setpointCTRE = shooterSetpoint * 2048.0 / 600.0;
