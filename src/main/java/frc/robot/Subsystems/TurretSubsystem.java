@@ -22,7 +22,7 @@ import frc.robot.Utilities.LinearInterpolationTable;
 public class TurretSubsystem extends SubsystemBase{
 
     private static final double LIMELIGHT_RANGE = 30;
-    private static final double TURRET_RANGE = 4128;
+    private static final double TURRET_RANGE = 460;
 
     private CANSparkMax turret;
     private RelativeEncoder turretEncoder;
@@ -59,6 +59,8 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretPos;
     private NetworkTableEntry turretRotationMin;
     private NetworkTableEntry turretRotationMax;
+    private NetworkTableEntry P;
+    private NetworkTableEntry Update;
     private boolean tvToggle;
     NetworkTableEntry targetStatus;
 
@@ -82,6 +84,7 @@ public class TurretSubsystem extends SubsystemBase{
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
     public TurretSubsystem() {
+
         turret = new CANSparkMax(Configrun.get(12, "TurretID"), MotorType.kBrushless);
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kCoast); //TODO set to brakeryness
@@ -102,14 +105,19 @@ public class TurretSubsystem extends SubsystemBase{
             turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getEncoderPosition()).withPosition(3, 2).getEntry();
             turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 307).withPosition(3, 3).getEntry();
             turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getEncoderPosition() + 307).withPosition(4, 2).getEntry();
+            P = Shuffleboard.getTab("Limlight").add("P", 2).getEntry();
+            Update = Shuffleboard.getTab("Limlight").add("Update", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
         }
     }
 
     public void putValuesToShuffleboard() {
+
         if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
+
             tvToggle = true;
         }
         else {
+
             tvToggle = false;
         }
 
@@ -127,6 +135,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public double getTx() {
+
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         double x = tx.getDouble(0.0);
@@ -134,6 +143,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public boolean targetVisible() {
+
         // check Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tv = table.getEntry("tv");
@@ -146,6 +156,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public double getTa() {
+
         // checks the area visible of the Target (0% of image to 100% of image)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry ta = table.getEntry("ta");
@@ -154,6 +165,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public double getTy() {
+
         // checks Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry ty = table.getEntry("ty");
@@ -163,6 +175,7 @@ public class TurretSubsystem extends SubsystemBase{
 
 
     public double getDistanceFromTarget() {
+
         // TODO use this to get distance from target (only while target is visible)
        return m_limlightTable.getOutput(getTy());
         //limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
@@ -170,25 +183,31 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void limeLightOn() {
+
         // turns the limelight on using defaulvalue
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").setNumber(defaultvalue);
     }
 
     public void limeLightStop() {
+
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").setNumber(0);
     }
 
     public void putTargetAcquired() {
+
         boolean status;
         if (getTa() >= taTolerance) {
+
             status = true;
         } else {
+
             status = false;
         }
         targetStatus.setBoolean(status);
     }
 
     public double getEncoderPosition() {
+
         // int raw = turret.getSensorCollection().getPulseWidthRiseToFallUs();
         // if (raw == 0) {
         //     int lastValue = this.lastValue;
@@ -262,7 +281,7 @@ public class TurretSubsystem extends SubsystemBase{
     public void turretToZero() {
 
         double encoderReading = getEncoderPosition();
-        if (encoderReading < TURRET_MAX + 500 && encoderReading > TURRET_MIN - 500) {
+        if (encoderReading < TURRET_MAX + 10 && encoderReading > TURRET_MIN - 10) {
 
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
             //converts range to % power
@@ -285,6 +304,12 @@ public class TurretSubsystem extends SubsystemBase{
     public boolean targeted() {
 
         return limeLightPid.atSetpoint();
+    }
+
+    @Override
+    public void periodic() {
+
+        turretPid = new PIDController(P.getDouble(1), 0, 0);
     }
 
 }
