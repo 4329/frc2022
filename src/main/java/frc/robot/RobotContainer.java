@@ -47,6 +47,7 @@ import frc.robot.Commands.Autos.LessComplexAuto;
 import frc.robot.Commands.Autos.LowAuto;
 import frc.robot.Commands.Autos.LowAutoMore;
 import frc.robot.Commands.Autos.MidLowAuto;
+import frc.robot.Commands.Autos.MostComplexifiedAuto;
 import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.OpenLowAutoMore;
 import frc.robot.Commands.Autos.RightThreeBallAuto;
@@ -117,6 +118,7 @@ public class RobotContainer {
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
+private Command MostComplexifiedAuto;
 
 
 
@@ -174,12 +176,12 @@ public class RobotContainer {
   private void initializeCamera() {
 
     CameraServer.startAutomaticCapture();
-    VideoSource[] enumerateSources = VideoSource.enumerateSources();
+    // VideoSource[] enumerateSources = VideoSource.enumerateSources();
 
-    if (enumerateSources.length > 0 && enumerateSources[0].getName().contains("USB")) {
-      Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
-          .withWidget(BuiltInWidgets.kCameraStream);
-    }
+    // if (enumerateSources.length > 0 && enumerateSources[0].getName().contains("USB")) {
+    //   Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
+    //       .withWidget(BuiltInWidgets.kCameraStream);
+    // }
     HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
     CameraServer.startAutomaticCapture(limelight);
 
@@ -242,6 +244,7 @@ public class RobotContainer {
     RejectAutoHigh = new RejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerNoIntake = new ComplexerNoIntake(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     RejectTest = new RejectTest(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    MostComplexifiedAuto = new MostComplexifiedAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
 
     // Adds autos to the chooser
@@ -253,10 +256,12 @@ public class RobotContainer {
     m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
     m_chooser.addOption("TwoBallHIGH", ComplexAuto);
     m_chooser.addOption("RightFourBallHIGH", ComplexerAuto);
+    m_chooser.addOption("RightFiveBallHIGH", MostComplexifiedAuto);
     m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
     m_chooser.addOption("RejectHighAuto", RejectAutoHigh);
-    m_chooser.addOption("RejectTest", RejectTest);
     
+    
+    //m_chooser.addOption("RejectTest", RejectTest);
     //m_chooser.addOption("RightFiveBallTest", ComplexerNoIntake);
     //m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
     //m_chooser.addOption("RightThreeBallOPENLOW/HIGH", OpenLowAutoMore);

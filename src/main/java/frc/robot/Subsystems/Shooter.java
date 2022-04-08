@@ -111,11 +111,10 @@ public class Shooter {
     new Point2D.Double(156, 3100),
     new Point2D.Double(174, 3220),
     new Point2D.Double(186, 3325),
-    new Point2D.Double(210, 3500),
-    new Point2D.Double(210, 3450),
+    new Point2D.Double(210, 3600),
     new Point2D.Double(240, 3650),
-    new Point2D.Double(264, 3800),
-    new Point2D.Double(276, 3925)
+    new Point2D.Double(264, 3900),
+    new Point2D.Double(276, 3975)
 
 
 
@@ -209,12 +208,12 @@ public class Shooter {
    */
   public void shoot(double shooterSetpoint) {
 
-    if (update.getBoolean(false)) {
-    simpleFeedForward = new SimpleMotorFeedforward(
-        ks.getDouble(1),
-        kv.getDouble(1)
-      );
-    }
+    // if (update.getBoolean(false)) {
+    // simpleFeedForward = new SimpleMotorFeedforward(
+    //     ks.getDouble(1),
+    //     kv.getDouble(1)
+    //   );
+    //}
     //shooterSetpoint is the RPM
     //pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     //setpointCTRE = shooterSetpoint * 2048.0 / 600.0;

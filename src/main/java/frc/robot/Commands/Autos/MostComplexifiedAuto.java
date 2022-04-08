@@ -26,19 +26,27 @@ import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.AutoFromPathPlanner;
 
 
-public class ComplexerAuto extends SequentialCommandGroup{
+public class MostComplexifiedAuto extends SequentialCommandGroup{
   
-    public ComplexerAuto(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
+    public MostComplexifiedAuto(Drivetrain drive, IntakeMotor intakeMotor,StorageIntake storageIntake,ShooterFeedSubsytem shooterFeed,Shooter shooter, TurretSubsystem turretSubsystem, HoodSubsystem hoodSubsystem, IntakeSolenoidSubsystem intakeSolenoid, IntakeSensors intakeSensors) {
         
         final AutoFromPathPlanner firstMove = new AutoFromPathPlanner(drive, "firstMove", Constants.AutoConstants.kMaxSpeed);
-        final AutoFromPathPlanner ComplexerAuto1 = new AutoFromPathPlanner(drive, "ComplexerAuto1", Constants.AutoConstants.kMaxSpeed);
-        final AutoFromPathPlanner ComplexerAuto1A = new AutoFromPathPlanner(drive, "ComplexerAuto1A", Constants.AutoConstants.kMaxSpeed);
-        final AutoFromPathPlanner ComplexAuto2 = new AutoFromPathPlanner(drive, "ComplexAuto2", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner mostCompexifiedPath1 = new AutoFromPathPlanner(drive, "MostComplexifiedPath1", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner mostCompexifiedPath2 = new AutoFromPathPlanner(drive, "MostComplexifiedPath2", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner mostCompexifiedPath3 = new AutoFromPathPlanner(drive, "MostComplexifiedPath3", Constants.AutoConstants.kMaxSpeed);
+        final AutoFromPathPlanner mostCompexifiedPath4 = new AutoFromPathPlanner(drive, "MostComplexifiedPath4", Constants.AutoConstants.kMaxSpeed);
+
+
+
+        // final AutoFromPathPlanner ComplexerAuto1A = new AutoFromPathPlanner(drive, "ComplexerAuto1A", Constants.AutoConstants.kMaxSpeed);
+        // final AutoFromPathPlanner ComplexAuto2 = new AutoFromPathPlanner(drive, "ComplexAuto2", Constants.AutoConstants.kMaxSpeed);
 
 
         Command intakeRun = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         Command intakeRun2 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
         Command intakeRun3 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+        Command intakeRun4 = new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid);
+
 
         Command intakeposcCommand = new IntakePosCommand(intakeSolenoid);  
         CommandGroups groups = new CommandGroups();
@@ -50,12 +58,16 @@ public class ComplexerAuto extends SequentialCommandGroup{
             new ParallelRaceGroup(intakeRun, firstMove),
             new WaitCommand(0.3),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            new ParallelRaceGroup(intakeRun2, ComplexerAuto1),
-            intakeRun3.withTimeout(0.5),
-            ComplexerAuto1A,
+            new ParallelRaceGroup(intakeRun2, mostCompexifiedPath1),
             new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
-            ComplexAuto2
-            );
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(1),
+            new ParallelRaceGroup(intakeRun3, mostCompexifiedPath2),
+            intakeRun4.withTimeout(1.75),
+            mostCompexifiedPath3,
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(1),
+            mostCompexifiedPath4
+            
+            
+        );
     }
 }
