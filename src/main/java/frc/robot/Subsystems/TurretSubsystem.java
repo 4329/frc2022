@@ -2,6 +2,10 @@ package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,7 +24,8 @@ public class TurretSubsystem extends SubsystemBase{
     private static final double LIMELIGHT_RANGE = 30;
     private static final double TURRET_RANGE = 4128;
 
-    private TalonSRX turret;
+    private CANSparkMax turret;
+    private RelativeEncoder turretEncoder;
     private volatile int lastValue = Integer.MIN_VALUE;
 
     double staticFeedforward = 0;
@@ -39,9 +44,9 @@ public class TurretSubsystem extends SubsystemBase{
     int limeLightTolerance = 1;
     int turretTolerance = 2;
     double taTolerance = 0.3;
-    final double TURRET_MIN = Configrun.get(2347, "turretMin");
-    final double TURRET_MAX = Configrun.get(2961, "turretMax");
-    final double TURRET_ZERO = Configrun.get(2654, "turretZero");
+    final double TURRET_MIN = Configrun.get(-35, "turretMin");
+    final double TURRET_MAX = Configrun.get(35, "turretMax");
+    final double TURRET_ZERO = Configrun.get(0, "turretZero");
 
 
     public double currentDistance = 120;
@@ -77,7 +82,10 @@ public class TurretSubsystem extends SubsystemBase{
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
     public TurretSubsystem() {
-        turret = new TalonSRX (Configrun.get(41, "turretID"));
+        turret = new CANSparkMax(Configrun.get(12, "TurretID"), MotorType.kBrushless);
+        turretEncoder = turret.getEncoder();
+        turret.setIdleMode(IdleMode.kCoast); //TODO set to brakeryness
+        //turretEncoder.setPosition(0);
         limeLightPid = new PIDController(1, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(6.5, 0, 0);
@@ -91,9 +99,9 @@ public class TurretSubsystem extends SubsystemBase{
             checkTXDisplay = Shuffleboard.getTab("Limlight").add("TX", 0).withPosition(3, 1).getEntry();
             checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
             checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
-            turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
-            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
-            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
+            turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getEncoderPosition()).withPosition(3, 2).getEntry();
+            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 307).withPosition(3, 3).getEntry();
+            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getEncoderPosition() + 307).withPosition(4, 2).getEntry();
         }
     }
 
@@ -112,9 +120,9 @@ public class TurretSubsystem extends SubsystemBase{
             checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
             checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
             checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
-            turretPos.setDouble(getPwmPosition());
-            turretRotationMin.setDouble(getPwmPosition()- 307);
-            turretRotationMax.setDouble(getPwmPosition()+ 307);
+            turretPos.setDouble(getEncoderPosition());
+            turretRotationMin.setDouble(getEncoderPosition()- 307);
+            turretRotationMax.setDouble(getEncoderPosition()+ 307);
         }
     }
 
@@ -180,33 +188,35 @@ public class TurretSubsystem extends SubsystemBase{
         targetStatus.setBoolean(status);
     }
 
-    public int getPwmPosition() {
-        int raw = turret.getSensorCollection().getPulseWidthRiseToFallUs();
-        if (raw == 0) {
-            int lastValue = this.lastValue;
-            if (lastValue == Integer.MIN_VALUE) {
-                return 0;
-            }
-            return lastValue;
-        }
+    public double getEncoderPosition() {
+        // int raw = turret.getSensorCollection().getPulseWidthRiseToFallUs();
+        // if (raw == 0) {
+        //     int lastValue = this.lastValue;
+        //     if (lastValue == Integer.MIN_VALUE) {
+        //         return 0;
+        //     }
+        //     return lastValue;
+        // }
 
-        int actualValue = Math.min(4128, raw );
-        lastValue = actualValue;
-        return actualValue;
+        // int actualValue = Math.min(4128, raw );
+        // lastValue = actualValue;
+        // return actualValue;
+
+        return turretEncoder.getPosition();
     }
 
     public void turretPower(double output)
     {
-       turret.set(TalonSRXControlMode.PercentOutput, output);
+       turret.set(output);
     }
 
     public void turretStop(){
-        turret.set(TalonSRXControlMode.PercentOutput, 0);
+        turret.set(0);
     }
 
     public void rotateTurret(double output) {
 
-        double pwmPos = getPwmPosition();
+        double pwmPos = getEncoderPosition();
 
         if(pwmPos == 0) {
             turretStop();
@@ -251,7 +261,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void turretToZero() {
 
-        double encoderReading = getPwmPosition();
+        double encoderReading = getEncoderPosition();
         if (encoderReading < TURRET_MAX + 500 && encoderReading > TURRET_MIN - 500) {
 
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
@@ -264,7 +274,7 @@ public class TurretSubsystem extends SubsystemBase{
             else {
                 output = output + zeroStaticFeedforward;
             }
-            turretPower(-1 * output);
+            turretPower(output);
             putValuesToShuffleboard();
         }
         else {
