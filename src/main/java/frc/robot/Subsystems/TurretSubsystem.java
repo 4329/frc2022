@@ -21,8 +21,8 @@ import frc.robot.Utilities.LinearInterpolationTable;
 
 public class TurretSubsystem extends SubsystemBase{
 
-    private static final double LIMELIGHT_RANGE = 30;
-    private static final double TURRET_RANGE = 460;
+    private static final double LIMELIGHT_RANGE = 70;
+    private static final double TURRET_RANGE = 70;
 
     private CANSparkMax turret;
     private RelativeEncoder turretEncoder;
@@ -89,7 +89,7 @@ public class TurretSubsystem extends SubsystemBase{
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kCoast); //TODO set to brakeryness
         //turretEncoder.setPosition(0);
-        limeLightPid = new PIDController(1, 0, 0);
+        limeLightPid = new PIDController(6.5, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(6.5, 0, 0);
         turretPid.setTolerance(turretTolerance);
@@ -237,16 +237,12 @@ public class TurretSubsystem extends SubsystemBase{
 
         double pwmPos = getEncoderPosition();
 
-        if(pwmPos == 0) {
-            turretStop();
-        }
-        else if(pwmPos >= TURRET_MIN && output > 0) {
+        // if(pwmPos == 0) {
+        //     turretStop();
+        // }
+       /* else*/ if(pwmPos >= TURRET_MIN && pwmPos <= TURRET_MAX) {
             turretPower(output);
-        }
-        else if(pwmPos <= TURRET_MAX && output < 0) {
-            turretPower(output);
-        }
-        else {
+        } else {
             turretStop();
         }
     }
@@ -268,7 +264,7 @@ public class TurretSubsystem extends SubsystemBase{
 
                 output = output + staticFeedforward;
             }
-            rotateTurret(output);
+            rotateTurret(-output);
         }
         else {
 
@@ -306,10 +302,12 @@ public class TurretSubsystem extends SubsystemBase{
         return limeLightPid.atSetpoint();
     }
 
-    @Override
-    public void periodic() {
+    // @Override
+    // public void periodic() {
 
-        turretPid = new PIDController(P.getDouble(1), 0, 0);
-    }
+    //     if (Update.getBoolean(false)) {
+    //         limeLightPid = new PIDController(P.getDouble(1), 0, 0);
+    //     }
+    // }
 
 }
