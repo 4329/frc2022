@@ -138,7 +138,7 @@ private Command MostComplexifiedAuto;
     //pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
 
     turretSubsystem = new TurretSubsystem();
-    shooter = new Shooter();
+    shooter = new Shooter(drivetrain);
     shooterFeed = new ShooterFeedSubsytem();
     storageIntake = new StorageIntake();
     intakeMotor = new IntakeMotor();
@@ -213,8 +213,9 @@ private Command MostComplexifiedAuto;
 
     //Operator Controller
       //Shoot
-    new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot high with aimbot
-    new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem));//shoot high without aimbot
+    new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive));//shoot high with aimbot
+    new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerOverrideCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive));//shoot high without aimbot
+    new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, m_robotDrive));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
