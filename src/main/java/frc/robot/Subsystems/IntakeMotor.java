@@ -1,24 +1,25 @@
 package frc.robot.Subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import frc.robot.Configrun;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class IntakeMotor {
 
-    private TalonSRX intakeMotor = new TalonSRX(Configrun.get(40, "Intake_ID"));
+    private CANSparkMax intakeMotor = new CANSparkMax(Configrun.get(40, "Intake_ID"), MotorType.kBrushless);
     double intakeSpeed = Configrun.get(0.2, "intakeSpeed");
 
     public void runIntakeIn() {
-        intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+        intakeMotor.set(intakeSpeed);
     }
 
     public void runIntakeOut() {
-        intakeMotor.set(ControlMode.PercentOutput, -intakeSpeed);
+        intakeMotor.set(-intakeSpeed);
     }
 
     public void stopIntakeIn() {
-        intakeMotor.set(ControlMode.PercentOutput, 0);
+        intakeMotor.set(0);
     }
 
     public boolean isFinished() {

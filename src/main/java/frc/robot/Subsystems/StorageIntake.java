@@ -1,13 +1,14 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 
 public class StorageIntake extends SubsystemBase {
-    private TalonSRX intakeMotor = new TalonSRX(Configrun.get(41, "storageIntakeID"));
+    private CANSparkMax intakeMotor = new CANSparkMax(Configrun.get(41, "storageIntakeID"), MotorType.kBrushless);
 
     public StorageIntake() {
         storageIntakeBrake();
@@ -15,31 +16,31 @@ public class StorageIntake extends SubsystemBase {
     }
 
     public void storageIntakeIn() {
-        intakeMotor.set(ControlMode.PercentOutput, -Configrun.get(0.5, "storageIntakePower"));
+        intakeMotor.set(-Configrun.get(0.5, "storageIntakePower"));
     }
 
     public void storageIntakeOut() {
-        intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5, "storageIntakePower"));
+        intakeMotor.set(Configrun.get(0.5, "storageIntakePower"));
     }
 
     public void storageIntakeInSlow() {
-        intakeMotor.set(ControlMode.PercentOutput, -Configrun.get(0.5, "storageIntakePower") / 2);
+        intakeMotor.set(-Configrun.get(0.5, "storageIntakePower") / 2);
     }
 
     public void storageIntakeOutSlow() {
-        intakeMotor.set(ControlMode.PercentOutput, Configrun.get(0.5, "storageIntakePower") / 2);
+        intakeMotor.set(Configrun.get(0.5, "storageIntakePower") / 2);
     }
 
     public void storageIntakeStop() {
-        intakeMotor.set(ControlMode.PercentOutput, 0);
+        intakeMotor.set(0);
     }
 
     public void storageIntakeBrake() {
-        intakeMotor.setNeutralMode(NeutralMode.Brake);
+        intakeMotor.setIdleMode(IdleMode.kBrake);
     }
 
     public void storageIntakeCoast() {
-        intakeMotor.setNeutralMode(NeutralMode.Coast);
+        intakeMotor.setIdleMode(IdleMode.kCoast);
     }
     
 }

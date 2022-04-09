@@ -107,7 +107,7 @@ public class Climber {
     }
 
     public void reverseClimb(double climbPower) {
-        System.out.println("ReverseClimbPower is " + climbPower);
+        //System.out.println("ReverseClimbPower is " + climbPower);
         //should we add extend or retract?!
         climberNeoMotor1.set(climbPower);
         isMoterActiveShuffleboard.setBoolean(true);
