@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import org.opencv.core.Point;
 
 import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
-
+import frc.robot.Subsystems.Swerve.Drivetrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
@@ -35,6 +35,8 @@ public class Shooter {
 
   private TalonFX shooterwheel1;
   private TalonFX shooterwheel2;
+
+  final Drivetrain drivetrain;
 
   double percent;
   double pidVelocity;
@@ -150,8 +152,9 @@ public class Shooter {
   /**
    * Creates a shooter subsystem
    */
-  public Shooter() {
+  public Shooter(Drivetrain drivetrain) {
 
+    this.drivetrain = drivetrain;
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
       // Creates a pid setpoint error graph
       pidSetpointErrorEntry = Shuffleboard.getTab("Shooter").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -500, "Unit", "RPM")).withPosition(2, 0).getEntry();
@@ -208,12 +211,7 @@ public class Shooter {
    */
   public void shoot(double shooterSetpoint) {
 
-    // if (update.getBoolean(false)) {
-    // simpleFeedForward = new SimpleMotorFeedforward(
-    //     ks.getDouble(1),
-    //     kv.getDouble(1)
-    //   );
-    //}
+    drivetrain.lock();
     //shooterSetpoint is the RPM
     //pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     //setpointCTRE = shooterSetpoint * 2048.0 / 600.0;

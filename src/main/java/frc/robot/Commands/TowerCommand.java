@@ -8,6 +8,7 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
+import frc.robot.Subsystems.Swerve.Drivetrain;
 
 public class TowerCommand extends CommandBase {
 
@@ -32,7 +33,7 @@ public class TowerCommand extends CommandBase {
      * @param hood
      * @param turret
      */
-    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret) {
+    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret, Drivetrain drivetrain) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
@@ -41,6 +42,7 @@ public class TowerCommand extends CommandBase {
         this.turret = turret;
         addRequirements(turret);
         addRequirements(hood);
+        addRequirements(drivetrain);
     }
 
     @Override

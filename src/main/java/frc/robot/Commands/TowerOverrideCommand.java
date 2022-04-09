@@ -6,6 +6,7 @@ import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
+import frc.robot.Subsystems.Swerve.Drivetrain;
 
 public class TowerOverrideCommand extends CommandBase {
 
@@ -24,13 +25,14 @@ public class TowerOverrideCommand extends CommandBase {
      * @param shooter
      * @param hood
      */
-    public TowerOverrideCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood) {
+    public TowerOverrideCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, Drivetrain drivetrain) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
         this.shooter = shooter;
         this.hood = hood;
         addRequirements(hood);
+        addRequirements(drivetrain);
     }
 
     @Override
