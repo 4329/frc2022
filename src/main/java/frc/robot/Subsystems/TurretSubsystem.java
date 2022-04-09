@@ -1,7 +1,11 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import java.awt.geom.Point2D;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,17 +15,15 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
-
-import java.awt.geom.Point2D;
 import frc.robot.Utilities.LinearInterpolationTable;
 
 public class TurretSubsystem extends SubsystemBase{
 
-    private static final double LIMELIGHT_RANGE = 30;
-    private static final double TURRET_RANGE = 4128;
+    private static final double LIMELIGHT_RANGE = 70;
+    private static final double TURRET_RANGE = 70;
 
-    private TalonSRX turret;
-    private volatile int lastValue = Integer.MIN_VALUE;
+    private CANSparkMax turret;
+    private RelativeEncoder turretEncoder;
 
     double staticFeedforward = 0;
     double zeroStaticFeedforward = 0.01;
@@ -39,9 +41,9 @@ public class TurretSubsystem extends SubsystemBase{
     int limeLightTolerance = 1;
     int turretTolerance = 2;
     double taTolerance = 0.3;
-    final double TURRET_MIN = Configrun.get(2347, "turretMin");
-    final double TURRET_MAX = Configrun.get(2961, "turretMax");
-    final double TURRET_ZERO = Configrun.get(2654, "turretZero");
+    final double TURRET_MIN = Configrun.get(-35, "turretMin");
+    final double TURRET_MAX = Configrun.get(35, "turretMax");
+    final double TURRET_ZERO = Configrun.get(0, "turretZero");
 
 
     public double currentDistance = 120;
@@ -56,6 +58,7 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretRotationMax;
     private boolean tvToggle;
     NetworkTableEntry targetStatus;
+    
 
     private Point2D[] limlightTable = new Point2D.Double[] {
 
@@ -77,8 +80,12 @@ public class TurretSubsystem extends SubsystemBase{
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
     public TurretSubsystem() {
-        turret = new TalonSRX (Configrun.get(41, "turretID"));
-        limeLightPid = new PIDController(1, 0, 0);
+
+        turret = new CANSparkMax(Configrun.get(12, "TurretID"), MotorType.kBrushless);
+        turretEncoder = turret.getEncoder();
+        turret.setIdleMode(IdleMode.kBrake);
+        turretEncoder.setPosition(0);
+        limeLightPid = new PIDController(6.5, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(6.5, 0, 0);
         turretPid.setTolerance(turretTolerance);
@@ -91,17 +98,20 @@ public class TurretSubsystem extends SubsystemBase{
             checkTXDisplay = Shuffleboard.getTab("Limlight").add("TX", 0).withPosition(3, 1).getEntry();
             checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
             checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
-            turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getPwmPosition()).withPosition(3, 2).getEntry();
-            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getPwmPosition() - 307).withPosition(3, 3).getEntry();
-            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getPwmPosition() + 307).withPosition(4, 2).getEntry();
+            turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getEncoderPosition()).withPosition(3, 2).getEntry();
+            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 307).withPosition(3, 3).getEntry();
+            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getEncoderPosition() + 307).withPosition(4, 2).getEntry();
         }
     }
 
     public void putValuesToShuffleboard() {
+
         if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
+
             tvToggle = true;
         }
         else {
+
             tvToggle = false;
         }
 
@@ -112,13 +122,14 @@ public class TurretSubsystem extends SubsystemBase{
             checkTXDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
             checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
             checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
-            turretPos.setDouble(getPwmPosition());
-            turretRotationMin.setDouble(getPwmPosition()- 307);
-            turretRotationMax.setDouble(getPwmPosition()+ 307);
+            turretPos.setDouble(getEncoderPosition());
+            turretRotationMin.setDouble(getEncoderPosition()- 35);
+            turretRotationMax.setDouble(getEncoderPosition()+ 35);
         }
     }
 
     public double getTx() {
+
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
         double x = tx.getDouble(0.0);
@@ -126,6 +137,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public boolean targetVisible() {
+
         // check Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tv = table.getEntry("tv");
@@ -138,6 +150,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public double getTa() {
+
         // checks the area visible of the Target (0% of image to 100% of image)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry ta = table.getEntry("ta");
@@ -146,6 +159,7 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public double getTy() {
+
         // checks Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry ty = table.getEntry("ty");
@@ -155,6 +169,7 @@ public class TurretSubsystem extends SubsystemBase{
 
 
     public double getDistanceFromTarget() {
+
         // TODO use this to get distance from target (only while target is visible)
        return m_limlightTable.getOutput(getTy());
         //limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
@@ -162,62 +177,51 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
     public void limeLightOn() {
+
         // turns the limelight on using defaulvalue
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").setNumber(defaultvalue);
     }
 
     public void limeLightStop() {
+
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("<variablename>").setNumber(0);
     }
 
     public void putTargetAcquired() {
+
         boolean status;
         if (getTa() >= taTolerance) {
+
             status = true;
         } else {
+
             status = false;
         }
         targetStatus.setBoolean(status);
     }
 
-    public int getPwmPosition() {
-        int raw = turret.getSensorCollection().getPulseWidthRiseToFallUs();
-        if (raw == 0) {
-            int lastValue = this.lastValue;
-            if (lastValue == Integer.MIN_VALUE) {
-                return 0;
-            }
-            return lastValue;
-        }
+    public double getEncoderPosition() {
 
-        int actualValue = Math.min(4128, raw );
-        lastValue = actualValue;
-        return actualValue;
+        return turretEncoder.getPosition();
     }
 
-    public void turretPower(double output)
-    {
-       turret.set(TalonSRXControlMode.PercentOutput, output);
+    public void turretPower(double output) {
+
+       turret.set(output);
     }
 
-    public void turretStop(){
-        turret.set(TalonSRXControlMode.PercentOutput, 0);
+    public void turretStop() {
+
+        turret.set(0);
     }
 
     public void rotateTurret(double output) {
 
-        double pwmPos = getPwmPosition();
+        double pwmPos = getEncoderPosition();
 
-        if(pwmPos == 0) {
-            turretStop();
-        }
-        else if(pwmPos >= TURRET_MIN && output > 0) {
+        if(pwmPos >= TURRET_MIN && pwmPos <= TURRET_MAX) {
             turretPower(output);
-        }
-        else if(pwmPos <= TURRET_MAX && output < 0) {
-            turretPower(output);
-        }
-        else {
+        } else {
             turretStop();
         }
     }
@@ -239,7 +243,7 @@ public class TurretSubsystem extends SubsystemBase{
 
                 output = output + staticFeedforward;
             }
-            rotateTurret(output);
+            rotateTurret(-output);
         }
         else {
 
@@ -251,8 +255,8 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void turretToZero() {
 
-        double encoderReading = getPwmPosition();
-        if (encoderReading < TURRET_MAX + 500 && encoderReading > TURRET_MIN - 500) {
+        double encoderReading = getEncoderPosition();
+        if (encoderReading < TURRET_MAX + 10 && encoderReading > TURRET_MIN - 10) {
 
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
             //converts range to % power
@@ -264,7 +268,7 @@ public class TurretSubsystem extends SubsystemBase{
             else {
                 output = output + zeroStaticFeedforward;
             }
-            turretPower(-1 * output);
+            turretPower(output);
             putValuesToShuffleboard();
         }
         else {

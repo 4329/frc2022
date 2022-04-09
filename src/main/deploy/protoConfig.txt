@@ -74,15 +74,15 @@ taTolerance = 0.3
 limeLightTolerance = 1
 
 # Turret
-turretID = 42
+turretID = 12
 
 turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 1739
-turretMin = 1125
-turretZero = 1432
+turretMax = 35
+turretMin = -35
+turretZero = 0
 
 
 ShooterWheel1ID = 13
