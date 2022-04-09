@@ -1,11 +1,11 @@
 package frc.robot.Subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import java.awt.geom.Point2D;
+
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
-
-import java.awt.geom.Point2D;
 import frc.robot.Utilities.LinearInterpolationTable;
 
 public class TurretSubsystem extends SubsystemBase{
@@ -26,7 +24,6 @@ public class TurretSubsystem extends SubsystemBase{
 
     private CANSparkMax turret;
     private RelativeEncoder turretEncoder;
-    private volatile int lastValue = Integer.MIN_VALUE;
 
     double staticFeedforward = 0;
     double zeroStaticFeedforward = 0.01;
@@ -59,10 +56,9 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretPos;
     private NetworkTableEntry turretRotationMin;
     private NetworkTableEntry turretRotationMax;
-    private NetworkTableEntry P;
-    private NetworkTableEntry Update;
     private boolean tvToggle;
     NetworkTableEntry targetStatus;
+    
 
     private Point2D[] limlightTable = new Point2D.Double[] {
 
@@ -87,7 +83,7 @@ public class TurretSubsystem extends SubsystemBase{
 
         turret = new CANSparkMax(Configrun.get(12, "TurretID"), MotorType.kBrushless);
         turretEncoder = turret.getEncoder();
-        turret.setIdleMode(IdleMode.kCoast); //TODO set to brakeryness
+        turret.setIdleMode(IdleMode.kBrake);
         //turretEncoder.setPosition(0);
         limeLightPid = new PIDController(6.5, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
@@ -105,8 +101,6 @@ public class TurretSubsystem extends SubsystemBase{
             turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getEncoderPosition()).withPosition(3, 2).getEntry();
             turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 307).withPosition(3, 3).getEntry();
             turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getEncoderPosition() + 307).withPosition(4, 2).getEntry();
-            P = Shuffleboard.getTab("Limlight").add("P", 2).getEntry();
-            Update = Shuffleboard.getTab("Limlight").add("Update", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
         }
     }
 
@@ -208,28 +202,16 @@ public class TurretSubsystem extends SubsystemBase{
 
     public double getEncoderPosition() {
 
-        // int raw = turret.getSensorCollection().getPulseWidthRiseToFallUs();
-        // if (raw == 0) {
-        //     int lastValue = this.lastValue;
-        //     if (lastValue == Integer.MIN_VALUE) {
-        //         return 0;
-        //     }
-        //     return lastValue;
-        // }
-
-        // int actualValue = Math.min(4128, raw );
-        // lastValue = actualValue;
-        // return actualValue;
-
         return turretEncoder.getPosition();
     }
 
-    public void turretPower(double output)
-    {
+    public void turretPower(double output) {
+
        turret.set(output);
     }
 
-    public void turretStop(){
+    public void turretStop() {
+
         turret.set(0);
     }
 
@@ -237,10 +219,7 @@ public class TurretSubsystem extends SubsystemBase{
 
         double pwmPos = getEncoderPosition();
 
-        // if(pwmPos == 0) {
-        //     turretStop();
-        // }
-       /* else*/ if(pwmPos >= TURRET_MIN && pwmPos <= TURRET_MAX) {
+        if(pwmPos >= TURRET_MIN && pwmPos <= TURRET_MAX) {
             turretPower(output);
         } else {
             turretStop();
@@ -301,13 +280,5 @@ public class TurretSubsystem extends SubsystemBase{
 
         return limeLightPid.atSetpoint();
     }
-
-    // @Override
-    // public void periodic() {
-
-    //     if (Update.getBoolean(false)) {
-    //         limeLightPid = new PIDController(P.getDouble(1), 0, 0);
-    //     }
-    // }
 
 }
