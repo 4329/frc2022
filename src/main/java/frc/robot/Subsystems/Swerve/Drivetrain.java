@@ -269,4 +269,17 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.coastModeModule();
     m_backRight.coastModeModule();
   }
+
+  public void lock() {
+
+    SwerveModuleState[] steve = {
+      new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+      new SwerveModuleState(1, Rotation2d.fromDegrees(45)),
+      new SwerveModuleState(1, Rotation2d.fromDegrees(225)),
+      new SwerveModuleState(1, Rotation2d.fromDegrees(315))
+    };
+
+    setModuleStates(steve);
+  }
+
 }
