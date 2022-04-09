@@ -84,7 +84,7 @@ public class TurretSubsystem extends SubsystemBase{
         turret = new CANSparkMax(Configrun.get(12, "TurretID"), MotorType.kBrushless);
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kBrake);
-        //turretEncoder.setPosition(0);
+        turretEncoder.setPosition(0);
         limeLightPid = new PIDController(6.5, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
         turretPid = new PIDController(6.5, 0, 0);
@@ -123,8 +123,8 @@ public class TurretSubsystem extends SubsystemBase{
             checkTYDisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
             checkTADisplay.setDouble(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0));
             turretPos.setDouble(getEncoderPosition());
-            turretRotationMin.setDouble(getEncoderPosition()- 307);
-            turretRotationMax.setDouble(getEncoderPosition()+ 307);
+            turretRotationMin.setDouble(getEncoderPosition()- 35);
+            turretRotationMax.setDouble(getEncoderPosition()+ 35);
         }
     }
 
