@@ -91,7 +91,7 @@ public class Shooter {
   };
   private LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
 
-  
+
 
 
 
@@ -111,14 +111,14 @@ public class Shooter {
       // Returns a boolean of whether or not shooter is within tolerance
       atSetpoint = Shuffleboard.getTab("Shooter").add("At Setpoint", false).withPosition(1, 1).getEntry();
       // Input desired RPM whilst manual override is on
-      shooterRPM = Shuffleboard.getTab("Shooter").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
+      shooterRPM = Shuffleboard.getTab("RobotData").add("Shooter RPM", 3500).withPosition(5, 0).getEntry();
       aimedSetpoint = Shuffleboard.getTab("Limlight").add("Aimed RPM", 1).getEntry();
-      ks = Shuffleboard.getTab("Shooter").add("KS", 12).getEntry();
-      kv = Shuffleboard.getTab("Shooter").add("KV", 0.35).getEntry();
+      ks = Shuffleboard.getTab("RobotData").add("KS", 12).getEntry();
+      kv = Shuffleboard.getTab("RobotData").add("KV", 0.35).getEntry();
       update = Shuffleboard.getTab("Shooter").add("Update", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
     }
     manualOverride = Shuffleboard.getTab("RobotData").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-    
+
     // Configures PID and feedForward
     shooterPID = new PIDController(0.000005, 0.0003, 0.000);
     shooterPID.setIntegratorRange(-0.0075, 0.0075);
@@ -131,8 +131,8 @@ public class Shooter {
     shooterPID.setTolerance(Constants.ShooterConstants.shooterToleranceInRPMs * 2048.0 / 600.0);
     simpleFeedForward = new SimpleMotorFeedforward(0.0083, 0.0001485);
     /* simpleFeedForward = new SimpleMotorFeedforward(
-    ks.getDouble(1),  
-    kv.getDouble(1)  
+    ks.getDouble(1),
+    kv.getDouble(1)
     ); */
     // Configures the shooter's motors
     shooterwheel1 = new TalonFX(Configrun.get(30, "ShooterWheel1ID"));
@@ -198,7 +198,7 @@ public class Shooter {
   /**
    * pulls from the shuffleboard if manual override is enabled
    * and from an aiming equation if manual override is not enabled
-   * 
+   *
    * @param hood
    * @param turret
    * @return shooter RPM
@@ -209,7 +209,7 @@ public class Shooter {
 
         return shooterRPM.getDouble(3500);
     } else {
-    
+
       return aim(hood, turret, targetDistance);
     }
   }
@@ -229,12 +229,12 @@ public class Shooter {
 
   /**
    * Configures the RPM and hood based on distance from the target
-   * 
+   *
    * @param hood
    * @param turret
    * @return aimed shooter RPM
    */
-  public double aim(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {    
+  public double aim(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {
 
     double rpmTableValue = m_rpmTable.getOutput(targetDistance);
     double hoodTableValue = m_hoodTable.getOutput(targetDistance);

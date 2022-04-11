@@ -55,6 +55,7 @@ public class HoodSubsystem extends SubsystemBase {
     hoodPID.setTolerance(1);
 
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
+
       sparkPosition = Shuffleboard.getTab("Hood Data").add("Position", hoodEncoder.getPosition())
           .withWidget(BuiltInWidgets.kTextView)
           .withPosition(0, 1).withSize(1, 1).getEntry();
@@ -62,22 +63,20 @@ public class HoodSubsystem extends SubsystemBase {
       hoodOverrideIdleMode = Shuffleboard.getTab("Hood Data").add("Override Idle Mode", true)
           .withWidget(BuiltInWidgets.kToggleButton)
           .withSize(2, 1).getEntry();
-    
-      overrideSetpointEntry = Shuffleboard.getTab("Hood Data").add("Hood Setpoint", 3).withWidget(BuiltInWidgets.kTextView).getEntry();
+
+      overrideSetpointEntry = Shuffleboard.getTab("RobotData").add("Hood Setpoint", 3).withWidget(BuiltInWidgets.kTextView).getEntry();
 
       preHood = Shuffleboard.getTab("Hood Data").add("preHood", 3).getEntry();
 
       Shuffleboard.getTab("Hood Data").add("Read Me", "If functional: Made by Ben Durbin Else: Made by Mr. Emerick")
           .withWidget(BuiltInWidgets.kTextView).withPosition(5, 0).withSize(3, 1);
     }
-
-    
   }
 
   /**
    * This method actually runs the hood, but can only be influenced by setPosition()
    * and setEncoderPosition()
-   * 
+   *
    * @param shooter
    */
   public void HoodPeriodic(Shooter shooter) {
@@ -120,11 +119,11 @@ public class HoodSubsystem extends SubsystemBase {
 
   /**
    * Sets the hood position with a HoodPosition
-   * 
+   *
    * @param Position
    */
-  public void setPosition(HoodPosition position) {  
-    
+  public void setPosition(HoodPosition position) {
+
       if (position.equals(HoodPosition.OPEN)) {
         setpoint = hoodOpen;
       } else if (position.equals(HoodPosition.HALF)) {
@@ -138,7 +137,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   /**
    * Sets the hood position with a double
-   * 
+   *
    * @param position
    */
   public void setEncoderPosition(double position) {
@@ -155,8 +154,8 @@ public class HoodSubsystem extends SubsystemBase {
     }
   }
 
- 
-  
+
+
 
   public enum HoodPosition {
 
@@ -175,19 +174,19 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   /**
-   * Allows one to set hood position and idle mode directly through shuffleboard if 
+   * Allows one to set hood position and idle mode directly through shuffleboard if
    * manual override is enabled
-   * 
+   *
    * @param shooter
    */
   public void hoodOverride(Shooter shooter) {
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
       sparkPosition.setDouble(hoodEncoder.getPosition());
-    
+
       if (shooter.manualOverride.getBoolean(true)) {
         setEncoderPosition(overrideSetpointEntry.getDouble(3));
           if (hoodOverrideIdleMode.getBoolean(true)) {
-            
+
             hoodwheel.setIdleMode(IdleMode.kBrake);
           }
         else {

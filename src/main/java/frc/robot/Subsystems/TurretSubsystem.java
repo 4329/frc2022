@@ -58,7 +58,7 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretRotationMax;
     private boolean tvToggle;
     NetworkTableEntry targetStatus;
-    
+
 
     private Point2D[] limlightTable = new Point2D.Double[] {
 
@@ -96,7 +96,7 @@ public class TurretSubsystem extends SubsystemBase{
         if (Configrun.get(false, "extraShuffleBoardToggle")) {
             targetStatus = Shuffleboard.getTab("Limlight").add("Target Acquired", false).getEntry();
             checkTXDisplay = Shuffleboard.getTab("Limlight").add("TX", 0).withPosition(3, 1).getEntry();
-            checkTYDisplay = Shuffleboard.getTab("Limlight").add("TY", 0).withPosition(3, 0).getEntry();
+            checkTYDisplay = Shuffleboard.getTab("RobotData").add("TY", 0).withPosition(3, 0).getEntry();
             checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
             turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getEncoderPosition()).withPosition(3, 2).getEntry();
             turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 307).withPosition(3, 3).getEntry();
