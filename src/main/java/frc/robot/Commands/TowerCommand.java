@@ -17,6 +17,7 @@ public class TowerCommand extends CommandBase {
     final Shooter shooter;
     final HoodSubsystem hood;
     final TurretSubsystem turret;
+    final Drivetrain drivetrain;
 
     private double targetDistance;
     private boolean foundTarget;
@@ -40,6 +41,7 @@ public class TowerCommand extends CommandBase {
         this.shooter = shooter;
         this.hood = hood;
         this.turret = turret;
+        this.drivetrain = drivetrain;
         addRequirements(turret);
         addRequirements(hood);
         addRequirements(drivetrain);
@@ -48,6 +50,7 @@ public class TowerCommand extends CommandBase {
     @Override
     public void initialize() {
         foundTarget = false;
+        drivetrain.lock();
     }
 
     @Override
@@ -85,6 +88,7 @@ public class TowerCommand extends CommandBase {
         shooterFeed.shooterFeedStop();
         shooter.holdFire();
         hood.setPosition(HoodPosition.OPEN);
+        drivetrain.unlock();
     }
 
     @Override

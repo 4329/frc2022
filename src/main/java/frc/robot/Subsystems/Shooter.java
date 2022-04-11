@@ -1,31 +1,22 @@
 package frc.robot.Subsystems;
 
+import java.awt.geom.Point2D;
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import org.opencv.core.Point;
-
-import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
-import frc.robot.Subsystems.Swerve.Drivetrain;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import java.util.Map;
-
 import frc.robot.Configrun;
 import frc.robot.Constants;
-
-import java.awt.geom.Point2D;
+import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.LinearInterpolationTable;
 
 public class Shooter {
@@ -58,50 +49,6 @@ public class Shooter {
 
   double minDistance;
   double maxDistance;
-
-  // private Point2D[] openTable = new Point2D.Double[] { // Manually collected data for an open hood
-
-  //   new Point2D.Double(2 * 12, 2900),
-  //   new Point2D.Double(5 * 12, 3100),
-  //   new Point2D.Double(6 * 12, 3150),
-  //   new Point2D.Double(7 * 12, 3200),
-  //   new Point2D.Double(7.5 * 12, 3300)
-  // };
-  // private LinearInterpolationTable m_openTable = new LinearInterpolationTable(openTable); // Creates a line of best fit for open hood
-
-
-  // private Point2D[] halfTable = new Point2D.Double[] { // Manually collected data for a half hood
-
-  //   new Point2D.Double(7.5 * 12, 2800),
-  //   new Point2D.Double(8 * 12, 2850),
-  //   new Point2D.Double(9 * 12, 2900),
-  //   new Point2D.Double(10 * 12, 3000),
-  //   new Point2D.Double(11 * 12, 3100),
-  //   new Point2D.Double(12 * 12, 3250),
-  //   new Point2D.Double(13 * 12, 3300),
-  //   new Point2D.Double(14 * 12, 3500),
-  //   new Point2D.Double(15 * 12, 3750),
-  //   new Point2D.Double(16 * 12, 3900),
-  //   new Point2D.Double(17 * 12, 3950)
-  // };
-  // private LinearInterpolationTable m_halfTable = new LinearInterpolationTable(halfTable); // Creates a line of best fit for half hood
-
-
-  // private Point2D[] closedTable = new Point2D.Double[] { // Manually collected data for a closed hood
-    
-  //   new Point2D.Double(17 * 12, 3550),
-  //   new Point2D.Double(18 * 12, 3700),
-  //   new Point2D.Double(19 * 12, 3750),
-  //   new Point2D.Double(20 * 12, 4050),
-  //   new Point2D.Double(21 * 12, 4100),
-  //   new Point2D.Double(22 * 12, 4300),
-  //   new Point2D.Double(23 * 12, 4450),
-  //   new Point2D.Double(24 * 12, 4700),
-  //   new Point2D.Double(26 * 12, 5000),
-  //   new Point2D.Double(28 * 12, 5400)
-  // };
-  // private LinearInterpolationTable m_closedTable = new LinearInterpolationTable(closedTable); // Creates a line of best fit for closed hood
-
 
   private Point2D[] rpmTable = new  Point2D.Double[] {
 
@@ -155,6 +102,7 @@ public class Shooter {
   public Shooter(Drivetrain drivetrain) {
 
     this.drivetrain = drivetrain;
+
     if (Configrun.get(false, "extraShuffleBoardToggle")) {
       // Creates a pid setpoint error graph
       pidSetpointErrorEntry = Shuffleboard.getTab("Shooter").add("PID Setpoint Error", 1).withWidget("Graph").withProperties(Map.of("Automatic bounds", false, "Upper bound", 2000, "Lower bound", -500, "Unit", "RPM")).withPosition(2, 0).getEntry();
