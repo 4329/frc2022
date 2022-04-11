@@ -48,10 +48,10 @@ public class RightThreeBallAuto extends SequentialCommandGroup{
             new WaitCommand(0.25),
             new ParallelRaceGroup(intakeRun, ThreeBall1),
             new WaitCommand(0.35),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2),
             new ParallelRaceGroup(intakeRun2, ThreeBall2),
             new WaitCommand(0.35),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2),
             ThreeBall3
 
          );
