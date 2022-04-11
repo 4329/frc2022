@@ -8,6 +8,7 @@ import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
+import frc.robot.Subsystems.Swerve.Drivetrain;
 
 public class TowerCommand extends CommandBase {
 
@@ -16,6 +17,7 @@ public class TowerCommand extends CommandBase {
     final Shooter shooter;
     final HoodSubsystem hood;
     final TurretSubsystem turret;
+    final Drivetrain drivetrain;
 
     private double targetDistance;
     private boolean foundTarget;
@@ -32,20 +34,23 @@ public class TowerCommand extends CommandBase {
      * @param hood
      * @param turret
      */
-    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret) {
+    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret, Drivetrain drivetrain) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
         this.shooter = shooter;
         this.hood = hood;
         this.turret = turret;
+        this.drivetrain = drivetrain;
         addRequirements(turret);
         addRequirements(hood);
+        addRequirements(drivetrain);
     }
 
     @Override
     public void initialize() {
         foundTarget = false;
+        drivetrain.lock();
     }
 
     @Override
@@ -83,6 +88,7 @@ public class TowerCommand extends CommandBase {
         shooterFeed.shooterFeedStop();
         shooter.holdFire();
         hood.setPosition(HoodPosition.OPEN);
+        drivetrain.unlock();
     }
 
     @Override

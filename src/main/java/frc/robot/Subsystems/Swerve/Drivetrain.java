@@ -23,6 +23,8 @@ import frc.robot.Constants.*;
  */
 public class Drivetrain extends SubsystemBase {
 
+  public boolean isLocked;
+
   // Create the PIDController for the Keep Angle PID
   private final PIDController m_keepAnglePID = new PIDController(DriveConstants.kKeepAnglePID[0],
       DriveConstants.kKeepAnglePID[1], DriveConstants.kKeepAnglePID[2]);
@@ -103,7 +105,10 @@ public class Drivetrain extends SubsystemBase {
     // velocities
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
-    setModuleStates(swerveModuleStates);
+    if (!isLocked) {
+    
+      setModuleStates(swerveModuleStates);
+    }
   }
 
   @Override
@@ -269,4 +274,23 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.coastModeModule();
     m_backRight.coastModeModule();
   }
+
+  public void lock() {
+
+    SwerveModuleState[] steve = {
+      new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
+      new SwerveModuleState(1, Rotation2d.fromDegrees(45)),
+      new SwerveModuleState(1, Rotation2d.fromDegrees(225)),
+      new SwerveModuleState(1, Rotation2d.fromDegrees(315))
+    };
+
+    setModuleStates(steve);
+    isLocked = true;
+  }
+
+  public void unlock() {
+
+    isLocked = false;
+  }
+
 }

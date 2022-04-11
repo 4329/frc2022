@@ -56,7 +56,7 @@ public class RejectAutoHigh extends SequentialCommandGroup{
             new WaitCommand(0.2),
             new ParallelRaceGroup(intakeRun, RejectHigh1),
             new WaitCommand(0.3), 
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2),
             new ParallelRaceGroup(intakeRun2, RejectHigh2),
             intakeRun3.withTimeout(1.5),
             RejectHigh3,

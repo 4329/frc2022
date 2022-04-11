@@ -46,7 +46,7 @@ public class LowAutoMore extends SequentialCommandGroup{
             new ParallelCommandGroup(intakeRun, LowAuto1).withTimeout(5), 
             lowshoot.withTimeout(2.5),
             new ParallelCommandGroup(intakeRun2, LowAuto3).withTimeout(5),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5)
 
      
         

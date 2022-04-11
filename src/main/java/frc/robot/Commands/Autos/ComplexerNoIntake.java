@@ -37,7 +37,7 @@ public class ComplexerNoIntake extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
             firstMove,
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5),
             complexerAuto1
             //groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
 

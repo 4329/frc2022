@@ -26,7 +26,7 @@ public class LessComplexAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
             firstMove.withTimeout(3), 
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(2.5)
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5)
 
          );
     }
