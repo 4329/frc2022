@@ -26,7 +26,7 @@ public class IntakeAutoCommand extends CommandBase {
         intakeSolenoid.intakeDown();
         intakeMotor.runIntakeIn();
         storageIntake.storageIntakeIn();
-        shooterFeed.shooterFeedUp();
+        shooterFeed.shooterFeedStore();
     }
 
     public void execute() {

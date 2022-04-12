@@ -37,6 +37,7 @@ import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
+import frc.robot.Commands.UnlockWheelsCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.ComplexerNoIntake;
@@ -75,9 +76,9 @@ import frc.robot.Commands.TowerOverrideCommand;
 * (including subsystems, commands, and button mappings) should be declared here
 */
 public class RobotContainer {
-  
+
   //private final PneumaticHub pneumaticHub;
-  
+
   // The robot's subsystems
   private final Drivetrain m_robotDrive;
   private final StorageIntake storageIntake;
@@ -93,11 +94,11 @@ public class RobotContainer {
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
-  
+
   final SendableChooser<Command> m_chooser;
-  
+
   private final DriveByController m_drive;
-  
+
   // private Command moveOneMeter;
   // private Command twoPaths;
   // private Command intakeRun;
@@ -114,7 +115,7 @@ public class RobotContainer {
   private Command RightThreeBallAuto;
   private Command ComplexerNoIntake;
   private Command RejectTest;
-  
+
   private SensorOutputCommand sensorOutputCommand;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
@@ -122,11 +123,11 @@ private Command MostComplexifiedAuto;
 
 
 
-  
-  
 
-  
-  
+
+
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    *
@@ -197,10 +198,11 @@ private Command MostComplexifiedAuto;
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-      //Driver Controller
+    //Driver Controller
     new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed
     new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());//toggle field dorientation
+    new JoystickButton(m_driverController, Button.kLeftStick.value).whenPressed(new UnlockWheelsCommand(m_robotDrive));
       //Climber arm controls
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -260,8 +262,8 @@ private Command MostComplexifiedAuto;
     m_chooser.addOption("RightFiveBallHIGH", MostComplexifiedAuto);
     m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
     m_chooser.addOption("RejectHighAuto", RejectAutoHigh);
-    
-    
+
+
     //m_chooser.addOption("RejectTest", RejectTest);
     //m_chooser.addOption("RightFiveBallTest", ComplexerNoIntake);
     //m_chooser.addOption("RightThreeBallLOW/HIGH", LowAutoMore);
@@ -270,10 +272,10 @@ private Command MostComplexifiedAuto;
     // m_chooser.addOption("MidTwoBallLOW", MidLowAuto);
     // m_chooser.addOption("LeftTwoBallLOW", LeftLowAuto);
 
-    
 
 
-    
+
+
 
     // Puts autos on Shuffleboard
     Shuffleboard.getTab("RobotData").add("SelectAuto", m_chooser).withSize(2, 1).withPosition(0, 0);

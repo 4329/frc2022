@@ -198,14 +198,14 @@ public final class Constants {
    */
   public static final class IntakeConstants {
 
-    public static final double backUpLength = 7;
+    public static final double backUpLength = Math.PI;
   }
 
   /**
    * Static method containing all shooterPID constants
    */
   public static final class ShooterConstants {
-    
+
     //PID constants
     public static final double shooterKs = 12;
     public static final double shooterKv = 0.35;

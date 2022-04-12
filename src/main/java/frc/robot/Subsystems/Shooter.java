@@ -159,7 +159,6 @@ public class Shooter {
    */
   public void shoot(double shooterSetpoint) {
 
-    drivetrain.lock();
     //shooterSetpoint is the RPM
     //pidVelocity = shooterwheel1.getSelectedSensorVelocity();
     //setpointCTRE = shooterSetpoint * 2048.0 / 600.0;

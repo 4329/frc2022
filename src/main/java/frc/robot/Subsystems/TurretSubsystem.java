@@ -81,7 +81,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public TurretSubsystem() {
 
-        turret = new CANSparkMax(Configrun.get(12, "TurretID"), MotorType.kBrushless);
+        turret = new CANSparkMax(Configrun.get(43/*29*/, "turretID"), MotorType.kBrushless);
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kBrake);
         turretEncoder.setPosition(0);
@@ -99,8 +99,8 @@ public class TurretSubsystem extends SubsystemBase{
             checkTYDisplay = Shuffleboard.getTab("RobotData").add("TY", 0).withPosition(3, 0).getEntry();
             checkTADisplay = Shuffleboard.getTab("Limlight").add("TA", 0).withPosition(4, 0).getEntry();
             turretPos = Shuffleboard.getTab("Limlight").add("Turret Position", getEncoderPosition()).withPosition(3, 2).getEntry();
-            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 307).withPosition(3, 3).getEntry();
-            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getEncoderPosition() + 307).withPosition(4, 2).getEntry();
+            turretRotationMin = Shuffleboard.getTab("Limlight").add("Find Turret Minimum", getEncoderPosition() - 35).withPosition(3, 3).getEntry();
+            turretRotationMax = Shuffleboard.getTab("Limlight").add("Find Turret Maximum", getEncoderPosition() + 35).withPosition(4, 2).getEntry();
         }
     }
 
@@ -207,7 +207,7 @@ public class TurretSubsystem extends SubsystemBase{
 
     public void turretPower(double output) {
 
-       turret.set(output);
+        turret.set(output);
     }
 
     public void turretStop() {
@@ -256,7 +256,7 @@ public class TurretSubsystem extends SubsystemBase{
     public void turretToZero() {
 
         double encoderReading = getEncoderPosition();
-        if (encoderReading < TURRET_MAX + 10 && encoderReading > TURRET_MIN - 10) {
+        if (encoderReading < TURRET_MAX + 15 && encoderReading > TURRET_MIN - 15) {
 
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
             //converts range to % power

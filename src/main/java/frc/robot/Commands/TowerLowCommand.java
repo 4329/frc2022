@@ -32,11 +32,11 @@ public class TowerLowCommand extends CommandBase {
         if (shooter.getShooterError()) {
 
             storageIntake.storageIntakeInSlow();
-            shooterFeed.shooterFeedUpSlow();
+            shooterFeed.shooterFeedFire();
         } else {
 
             storageIntake.storageIntakeStop();
-            shooterFeed.shooterFeedStop(); 
+            shooterFeed.shooterFeedStop();
         }
     }
 
