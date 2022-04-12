@@ -33,7 +33,7 @@ PH_CAN_ID = 61
 
 # Storage Intake
 storageIntakeID = 41
-storageIntakePower = 0.95
+storageIntakePower = 1
 
 #Shooter Feed
 FrontShooterFeed_ID = 0
@@ -71,9 +71,9 @@ turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 2008
-turretMin = 1394
-turretZero = 1701
+turretMax = 35
+turretMin = -35
+turretZero = 0
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 

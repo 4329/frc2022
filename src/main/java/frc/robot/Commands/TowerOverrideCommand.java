@@ -19,7 +19,7 @@ public class TowerOverrideCommand extends CommandBase {
 
     /**
      * Runs the tower intake and shooter
-     * 
+     *
      * @param storageIntake
      * @param shooterFeed
      * @param shooter
@@ -49,7 +49,7 @@ public class TowerOverrideCommand extends CommandBase {
         if (shooter.getShooterError()) {
 
             storageIntake.storageIntakeInSlow();
-            shooterFeed.shooterFeedUpSlow();
+            shooterFeed.shooterFeedFire();
         } else {
 
             storageIntake.storageIntakeStop();

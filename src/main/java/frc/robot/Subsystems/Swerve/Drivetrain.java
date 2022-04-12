@@ -106,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
 
     if (!isLocked) {
-    
+
       setModuleStates(swerveModuleStates);
     }
   }
@@ -153,7 +153,7 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * Function to retrieve latest robot gyro angle.
-   * 
+   *
    * @return Rotation2d object containing Gyro angle
    */
   public Rotation2d getGyro() {
@@ -163,7 +163,7 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Function created to retreieve and push the robot pose to the SmartDashboard
    * for diagnostics
-   * 
+   *
    * @return Pose2d object containing the X and Y position and the heading of the
    *         robot.
    */
@@ -188,7 +188,7 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Converts the 4 swerve module states into a chassisSpeed by making use of the
    * swerve drive kinematics.
-   * 
+   *
    * @return ChassisSpeeds object containing robot X, Y, and Angular velocity
    */
   public ChassisSpeeds getChassisSpeed() {
@@ -212,7 +212,7 @@ public class Drivetrain extends SubsystemBase {
    * A PIDController is used to attempt to maintain the robot heading to the
    * keepAngle value. This value is updated when the robot
    * is rotated manually by the driver input
-   * 
+   *
    * @return rotation command in radians/s
    * @param xSpeed is the input drive X speed command
    * @param ySpeed is the input drive Y speed command
@@ -279,9 +279,9 @@ public class Drivetrain extends SubsystemBase {
 
     SwerveModuleState[] steve = {
       new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
-      new SwerveModuleState(1, Rotation2d.fromDegrees(45)),
-      new SwerveModuleState(1, Rotation2d.fromDegrees(225)),
-      new SwerveModuleState(1, Rotation2d.fromDegrees(315))
+      new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+      new SwerveModuleState(0, Rotation2d.fromDegrees(225)),
+      new SwerveModuleState(0, Rotation2d.fromDegrees(315))
     };
 
     setModuleStates(steve);

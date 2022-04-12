@@ -23,11 +23,11 @@ public class TowerCommand extends CommandBase {
     private boolean foundTarget;
 
     double setpoint;
-    
+
 
     /**
      * Runs the tower intake and shooter
-     * 
+     *
      * @param storageIntake
      * @param shooterFeed
      * @param shooter
@@ -50,34 +50,35 @@ public class TowerCommand extends CommandBase {
     @Override
     public void initialize() {
         foundTarget = false;
-        drivetrain.lock();
     }
 
     @Override
     public void execute() {
 
         if (foundTarget) {
-            
+
+            drivetrain.lock();
+
             setpoint = shooter.shooterManualOverride(hood, turret, targetDistance);
-            shooter.shoot(setpoint);        
-            
+            shooter.shoot(setpoint);
+
             if (shooter.getShooterError()) {
-                
+
                 storageIntake.storageIntakeInSlow();
-                shooterFeed.shooterFeedUpSlow();
+                shooterFeed.shooterFeedFire();
             } else {
-                
+
                 storageIntake.storageIntakeStop();
                 shooterFeed.shooterFeedStop();
             }
-            
+
         }
         else {
          if (turret.targetVisible()) {
             foundTarget = true;
             targetDistance = turret.getDistanceFromTarget();
 
-         }   
+         }
         }
     }
 

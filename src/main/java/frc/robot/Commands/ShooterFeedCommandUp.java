@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 public class ShooterFeedCommandUp extends StartEndCommand {
     public ShooterFeedCommandUp(ShooterFeedSubsytem shooterFeedSubsytem) {
 
-        super(shooterFeedSubsytem::shooterFeedUp, shooterFeedSubsytem::shooterFeedStop,
+        super(shooterFeedSubsytem::shooterFeedStore, shooterFeedSubsytem::shooterFeedStop,
                 shooterFeedSubsytem);
     }
 }

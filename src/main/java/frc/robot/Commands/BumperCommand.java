@@ -18,7 +18,7 @@ public class BumperCommand extends CommandBase {
 
     /**
      * Runs the tower intake and shooter
-     * 
+     *
      * @param storageIntake
      * @param shooterFeed
      * @param shooter
@@ -37,7 +37,7 @@ public class BumperCommand extends CommandBase {
     public void initialize() {
 
         storageIntake.storageIntakeIn();
-        shooterFeed.shooterFeedUp();
+        shooterFeed.shooterFeedStore();
     }
 
     @Override
