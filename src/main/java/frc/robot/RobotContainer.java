@@ -1,15 +1,10 @@
 package frc.robot;
 
-import javax.print.attribute.HashPrintJobAttributeSet;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -19,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Commands.AllBackwardsCommand;
+import frc.robot.Commands.BumperCommand;
 import frc.robot.Commands.ClimberButtonCommand;
 import frc.robot.Commands.ClimberButtonCommandReverse;
 import frc.robot.Commands.ClimberEngageCommand;
@@ -28,20 +25,15 @@ import frc.robot.Commands.HoodToOpenCommand;
 import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakeCorrectionCommand;
-import frc.robot.Commands.AllBackwardsCommand;
-import frc.robot.Commands.BumperCommand;
 import frc.robot.Commands.IntakePosCommand;
-import frc.robot.Commands.IntakeRunCommand;
-import frc.robot.Commands.ManualHoodCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
+import frc.robot.Commands.TowerOverrideCommand;
 import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
-import frc.robot.Commands.UnlockWheelsCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.ComplexerNoIntake;
-import frc.robot.Commands.Autos.IntakeRunAuto;
 import frc.robot.Commands.Autos.KISSAuto;
 import frc.robot.Commands.Autos.LeftLowAuto;
 import frc.robot.Commands.Autos.LessComplexAuto;
@@ -49,12 +41,10 @@ import frc.robot.Commands.Autos.LowAuto;
 import frc.robot.Commands.Autos.LowAutoMore;
 import frc.robot.Commands.Autos.MidLowAuto;
 import frc.robot.Commands.Autos.MostComplexifiedAuto;
-import frc.robot.Commands.Autos.MoveOneMeterAuto;
 import frc.robot.Commands.Autos.OpenLowAutoMore;
-import frc.robot.Commands.Autos.RightThreeBallAuto;
 import frc.robot.Commands.Autos.RejectAutoHigh;
 import frc.robot.Commands.Autos.RejectTest;
-import frc.robot.Commands.Autos.TwoPathsAuto;
+import frc.robot.Commands.Autos.RightThreeBallAuto;
 import frc.robot.Subsystems.Climber;
 import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.IntakeMotor;
@@ -66,8 +56,6 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
-import frc.robot.Commands.TowerLowCommand;
-import frc.robot.Commands.TowerOverrideCommand;
 
 /*
 * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -202,7 +190,7 @@ private Command MostComplexifiedAuto;
     new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed
     new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());//toggle field dorientation
-    new JoystickButton(m_driverController, Button.kLeftStick.value).whenPressed(new UnlockWheelsCommand(m_robotDrive));
+    new JoystickButton(m_driverController, Button.kLeftStick.value).whenPressed(() -> m_robotDrive.unlock());
       //Climber arm controls
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -258,9 +246,9 @@ private Command MostComplexifiedAuto;
     m_chooser.addOption("SuperSimple", KISSAuto);
     m_chooser.addOption("OneBallHIGHAuto", LessComplexAuto);
     m_chooser.addOption("TwoBallHIGH", ComplexAuto);
+    m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
     m_chooser.addOption("RightFourBallHIGH", ComplexerAuto);
     m_chooser.addOption("RightFiveBallHIGH", MostComplexifiedAuto);
-    m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
     m_chooser.addOption("RejectHighAuto", RejectAutoHigh);
 
 

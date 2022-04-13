@@ -63,18 +63,18 @@ public class TurretSubsystem extends SubsystemBase{
     private Point2D[] limlightTable = new Point2D.Double[] {
 
 
-        new Point2D.Double(-15.01, 276),
-        new Point2D.Double(-14.22, 264),
-        new Point2D.Double(-12.65, 240),
-        new Point2D.Double(-10.17, 210),
-        new Point2D.Double(-7.91, 186),
-        new Point2D.Double(-6.50, 174),
-        new Point2D.Double(-3.80, 156),
-        new Point2D.Double(-0.50, 138),
-        //new Point2D.Double(, 120),
-        new Point2D.Double(8.90, 102),
-        new Point2D.Double(16.325, 83),
-        new Point2D.Double(24, 67)
+        new Point2D.Double(-14.63, 276),
+        new Point2D.Double(-13.77, 264),
+        new Point2D.Double(-12.20, 240),
+        new Point2D.Double(-10.33, 210),
+        new Point2D.Double(-8, 186),
+        new Point2D.Double(-6.6, 174),
+        new Point2D.Double(-4.15, 156),
+        new Point2D.Double(-1, 138),
+        new Point2D.Double(2.94, 120),
+        new Point2D.Double(8.50, 102),
+        new Point2D.Double(14.87, 83),
+        new Point2D.Double(22.67, 67)
 
     };
     private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);

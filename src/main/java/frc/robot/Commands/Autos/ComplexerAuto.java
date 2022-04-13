@@ -49,12 +49,12 @@ public class ComplexerAuto extends SequentialCommandGroup{
             new WaitCommand(0.2),
             new ParallelRaceGroup(intakeRun, firstMove),
             new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(1.3),
             new ParallelRaceGroup(intakeRun2, ComplexerAuto1),
             intakeRun3.withTimeout(0.5),
             ComplexerAuto1A,
             new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(1.3),
             ComplexAuto2
             );
     }

@@ -57,14 +57,14 @@ public class MostComplexifiedAuto extends SequentialCommandGroup{
             new WaitCommand(0.2),
             new ParallelRaceGroup(intakeRun, firstMove),
             new WaitCommand(0.3),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(1.3),
             new ParallelRaceGroup(intakeRun2, mostCompexifiedPath1),
             new WaitCommand(0.3),
             groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(1),
             new ParallelRaceGroup(intakeRun3, mostCompexifiedPath2),
             intakeRun4.withTimeout(1.75),
             mostCompexifiedPath3,
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(1),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(1.3),
             mostCompexifiedPath4
             
             

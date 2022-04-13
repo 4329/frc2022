@@ -56,13 +56,13 @@ public class Shooter {
     new Point2D.Double(83, 2600),
     new Point2D.Double(102, 2650),
     new Point2D.Double(120, 2800),
-    new Point2D.Double(138, 2950),
-    new Point2D.Double(156, 3100),
-    new Point2D.Double(174, 3220),
-    new Point2D.Double(186, 3325),
-    new Point2D.Double(210, 3600),
+    new Point2D.Double(138, 2900),
+    new Point2D.Double(156, 2975),
+    new Point2D.Double(174, 3195),
+    new Point2D.Double(186, 3225),
+    new Point2D.Double(210, 3400),
     new Point2D.Double(240, 3650),
-    new Point2D.Double(264, 3900),
+    new Point2D.Double(264, 3825),
     new Point2D.Double(276, 3975)
 
 
@@ -78,12 +78,12 @@ public class Shooter {
     new Point2D.Double(102, 11),
     new Point2D.Double(120, 18),
     new Point2D.Double(138, 21),
-    new Point2D.Double(156, 24),
-    new Point2D.Double(174, 26),
-    new Point2D.Double(186, 28),
-    new Point2D.Double(210, 28),
-    new Point2D.Double(240, 29),
-    new Point2D.Double(264, 30),
+    new Point2D.Double(156, 26),
+    new Point2D.Double(174, 28),
+    new Point2D.Double(186, 29),
+    new Point2D.Double(210, 30),
+    new Point2D.Double(240, 31),
+    new Point2D.Double(264, 31),
     new Point2D.Double(276, 32)
 
 
