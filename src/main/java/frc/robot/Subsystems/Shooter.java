@@ -61,13 +61,10 @@ public class Shooter {
     new Point2D.Double(174, 3195),
     new Point2D.Double(186, 3225),
     new Point2D.Double(210, 3400),
-    new Point2D.Double(240, 3650),
-    new Point2D.Double(264, 3825),
-    new Point2D.Double(276, 3975)
-
-
-
-
+    new Point2D.Double(225, 3475),
+    new Point2D.Double(240, 3610),
+    new Point2D.Double(264, 3625),
+    new Point2D.Double(276, 3715)
   };
   private LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
 
@@ -82,12 +79,10 @@ public class Shooter {
     new Point2D.Double(174, 28),
     new Point2D.Double(186, 29),
     new Point2D.Double(210, 30),
-    new Point2D.Double(240, 31),
-    new Point2D.Double(264, 31),
+    new Point2D.Double(225, 32),
+    new Point2D.Double(240, 32),
+    new Point2D.Double(264, 32),
     new Point2D.Double(276, 32)
-
-
-
   };
   private LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
 
