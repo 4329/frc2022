@@ -38,7 +38,7 @@ public class ComplexAuto extends SequentialCommandGroup{
         addCommands(
             new InstantCommand(()->drive.resetOdometry(firstMove.getInitialPose())),
             new ParallelCommandGroup(intakeRun, firstMove).withTimeout(3), 
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5)
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive, intakeSensors).withTimeout(2.5)
          );
     }
 }
