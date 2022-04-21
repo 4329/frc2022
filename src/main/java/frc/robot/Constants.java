@@ -198,7 +198,7 @@ public final class Constants {
    */
   public static final class IntakeConstants {
 
-    public static final double backUpLength = Math.PI;
+    public static final double backUpLength = 7;
   }
 
   /**

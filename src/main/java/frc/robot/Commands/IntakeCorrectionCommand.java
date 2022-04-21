@@ -29,6 +29,7 @@ public class IntakeCorrectionCommand extends CommandBase {
         time++;
 
         shooterFeed.shooterFeedDown();
+        storageIntake.storageIntakeOut();
     }
 
     @Override

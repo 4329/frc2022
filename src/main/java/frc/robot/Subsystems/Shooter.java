@@ -59,6 +59,7 @@ public class Shooter {
     new Point2D.Double(138, 2950),
     new Point2D.Double(156, 3100),
     new Point2D.Double(174, 3220),
+<<<<<<< Updated upstream
     new Point2D.Double(186, 3325),
     new Point2D.Double(210, 3600),
     new Point2D.Double(240, 3650),
@@ -68,6 +69,14 @@ public class Shooter {
 
 
 
+=======
+    new Point2D.Double(186, 3225),
+    new Point2D.Double(210, 3400),
+    new Point2D.Double(225, 3600),
+    new Point2D.Double(240, 3650),
+    new Point2D.Double(264, 3900),
+    new Point2D.Double(276, 3975)
+>>>>>>> Stashed changes
   };
   private LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
 
@@ -82,6 +91,10 @@ public class Shooter {
     new Point2D.Double(174, 26),
     new Point2D.Double(186, 28),
     new Point2D.Double(210, 28),
+<<<<<<< Updated upstream
+=======
+    new Point2D.Double(225, 28),
+>>>>>>> Stashed changes
     new Point2D.Double(240, 29),
     new Point2D.Double(264, 30),
     new Point2D.Double(276, 32)
