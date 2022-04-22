@@ -60,7 +60,7 @@ public class SingleRejectAutoHigh extends SequentialCommandGroup{
             new ParallelRaceGroup(intakeRun2, RejectHigh2A),
             intakeRun3.withTimeout(1.5),
             RejectHigh3A,
-            new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem),
+            new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(1),
             RejectHigh4A
             );
     }
