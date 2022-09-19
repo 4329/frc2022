@@ -61,8 +61,8 @@ a1Degree = 25
 taTolerance = 0.3
 
 #Digital input IDs
-topTriggerPort = 3
-bottomTriggerPort = 1
+TopSensorPort = 3
+BottomSensorPort = 1
 
 # Turret
 turretID = 43
@@ -97,6 +97,3 @@ hoodHalf = 15
 hoodClosed = 30
 
 extraShuffleBoardToggle = false
-
-TopSensorPort = 3
-BottomSensorPort = 1

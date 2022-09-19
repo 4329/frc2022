@@ -60,8 +60,8 @@ a1Degree = 25
 taTolerance = 0.3
 
 #Digital input IDs
-TopTriggerPort = 5
-BottomTriggerPort = 3
+TopSensorPort = 5
+BottomSensorPort = 3
 
 # Turret
 turretID = 44
@@ -83,6 +83,9 @@ ShooterD = 0
 #ShooterTolerance is in RPM
 ShooterToleranceInRPMs = 10
 
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0
+
 # Hood IDs
 HoodWheelID = 11
 
@@ -93,6 +96,3 @@ hoodHalf = 15
 hoodClosed = 30
 
 extraShuffleBoardToggle = false
-
-TopSensorPort = 5
-BottomSensorPort = 3
