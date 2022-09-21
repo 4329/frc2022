@@ -37,6 +37,7 @@ storageIntakePower = 0.8
 #Shooter Feed
 FrontShooterFeed_ID = 42
 BackShooterFeed_ID = 43
+
 ShooterFeedPower = 0.85
 
 pivotSolenoidID_1 = 5
@@ -48,7 +49,6 @@ extendSolenoidID_2 = 7
 
 climberMotor1ID = 9
 climberMotor2ID = 10
-#climberMotor3ID = 11
 
 climbPower = 0.5
 reverseClimbPower = -0.5
@@ -58,17 +58,6 @@ h1In = 30.5
 h21n = 104
 a1Degree = 25
 taTolerance = 0.3
-
-ShooterWheel1ID = 30
-ShooterWheel2ID = 31
-FrontShooterFeedStop = 0
-BackShooterFeedStop = 0
-
-ShooterP = 2
-ShooterI = 0
-ShooterD = 0
-#ShooterTolerance is in RPM
-ShooterToleranceInRPMs = 10
 
 #Digital input IDs
 TopSensorPort = 5
@@ -84,6 +73,18 @@ turretStop = 0
 turretMax = 1620
 turretMin = 1006
 turretZero = 1313
+ShooterWheel1ID = 30
+ShooterWheel2ID = 31
+
+ShooterP = 2
+ShooterI = 0
+ShooterD = 0
+
+#ShooterTolerance is in RPM
+ShooterToleranceInRPMs = 10
+
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0
 
 # Hood IDs
 HoodWheelID = 11
