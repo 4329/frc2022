@@ -35,8 +35,8 @@ storageIntakeID = 41
 storageIntakePower = 0.8
 
 #Shooter Feed
-FrontShooterFeed_ID = 42
-BackShooterFeed_ID = 43
+FrontShooterFeed_ID = 0
+BackShooterFeed_ID = 42
 ShooterFeedPower = 0.85
 
 pivotSolenoidID_1 = 5
@@ -71,8 +71,8 @@ ShooterD = 0
 ShooterToleranceInRPMs = 10
 
 #Digital input IDs
-TopSensorPort = 5
-BottomSensorPort = 3
+TopSensorPort = 3
+BottomSensorPort = 1
 
 # Turret
 turretID = 44
