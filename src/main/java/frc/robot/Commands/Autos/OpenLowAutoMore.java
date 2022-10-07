@@ -47,7 +47,7 @@ public class OpenLowAutoMore extends SequentialCommandGroup{
             new ParallelCommandGroup(intakeRun, LowAuto1).withTimeout(5), 
             lowshoot.withTimeout(2.5),
             new ParallelCommandGroup(intakeRun2, OpenLowAutoMore).withTimeout(5),
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2.5)
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive, intakeSensors).withTimeout(2.5)
 
      
         

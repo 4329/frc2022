@@ -60,7 +60,6 @@ h21n = 104
 a1Degree = 25
 taTolerance = 0.3
 
-
 #Digital input IDs
 TopSensorPort = 3
 BottomSensorPort = 1
@@ -86,7 +85,6 @@ ShooterD = 0
 
 #ShooterTolerance is in RPM
 ShooterToleranceInRPMs = 10
-
 
 # Hood IDs
 HoodWheelID = 11

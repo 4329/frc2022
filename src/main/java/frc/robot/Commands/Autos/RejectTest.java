@@ -52,7 +52,7 @@ public class RejectTest extends SequentialCommandGroup{
             new InstantCommand(()->drive.resetOdometry(RejectHigh1.getInitialPose())),
             RejectHigh1,
             new WaitCommand(0.3), 
-            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive).withTimeout(2),
+            groups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, drive, intakeSensors).withTimeout(2),
             RejectHigh2,
             RejectHigh3,
             intakeReverse.withTimeout(3),

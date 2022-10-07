@@ -2,6 +2,7 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Subsystems.HoodSubsystem;
+import frc.robot.Subsystems.IntakeSensors;
 import frc.robot.Subsystems.LimelightSubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
@@ -18,6 +19,7 @@ public class TowerCommand extends CommandBase {
     final HoodSubsystem hood;
     final TurretSubsystem turret;
     final Drivetrain drivetrain;
+    final IntakeSensors intakeSensors;
 
     private double targetDistance;
     private boolean foundTarget;
@@ -34,7 +36,7 @@ public class TowerCommand extends CommandBase {
      * @param hood
      * @param turret
      */
-    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret, Drivetrain drivetrain) {
+    public TowerCommand(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hood, TurretSubsystem turret, Drivetrain drivetrain, IntakeSensors intakeSensors) {
 
         this.storageIntake = storageIntake;
         this.shooterFeed = shooterFeed;
@@ -42,9 +44,10 @@ public class TowerCommand extends CommandBase {
         this.hood = hood;
         this.turret = turret;
         this.drivetrain = drivetrain;
+        this.intakeSensors = intakeSensors;
         addRequirements(turret);
         addRequirements(hood);
-        addRequirements(drivetrain);
+        //addRequirements(drivetrain);
     }
 
     @Override
@@ -56,8 +59,6 @@ public class TowerCommand extends CommandBase {
     public void execute() {
 
         if (foundTarget) {
-
-            drivetrain.lock();
 
             setpoint = shooter.shooterManualOverride(hood, turret, targetDistance);
             shooter.shoot(setpoint);
@@ -75,10 +76,17 @@ public class TowerCommand extends CommandBase {
         }
         else {
          if (turret.targetVisible()) {
+
+            //drivetrain.lock();
             foundTarget = true;
             targetDistance = turret.getDistanceFromTarget();
 
          }
+        }
+
+        if (intakeSensors.topTrigger() && intakeSensors.bottomTrigger()) {
+
+            //drivetrain.unlock();
         }
     }
 
@@ -89,7 +97,7 @@ public class TowerCommand extends CommandBase {
         shooterFeed.shooterFeedStop();
         shooter.holdFire();
         hood.setPosition(HoodPosition.OPEN);
-        drivetrain.unlock();
+        // drivetrain.unlock();
     }
 
     @Override

@@ -83,9 +83,6 @@ public class Shooter {
     new Point2D.Double(240, 29),
     new Point2D.Double(264, 30),
     new Point2D.Double(276, 32)
-
-
-
   };
   private LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
 
