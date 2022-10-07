@@ -31,6 +31,7 @@ import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TowerOverrideCommand;
 import frc.robot.Commands.TurretCommand;
 import frc.robot.Commands.TurretToZeroCommand;
+//import frc.robot.Commands.UnlockWheelsCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
 import frc.robot.Commands.Autos.ComplexerAuto;
 import frc.robot.Commands.Autos.ComplexerNoIntake;
@@ -42,6 +43,8 @@ import frc.robot.Commands.Autos.LowAutoMore;
 import frc.robot.Commands.Autos.MidLowAuto;
 import frc.robot.Commands.Autos.MostComplexifiedAuto;
 import frc.robot.Commands.Autos.OpenLowAutoMore;
+import frc.robot.Commands.Autos.RightThreeBallAuto;
+import frc.robot.Commands.Autos.SingleRejectAutoHigh;
 import frc.robot.Commands.Autos.RejectAutoHigh;
 import frc.robot.Commands.Autos.RejectTest;
 import frc.robot.Commands.Autos.RightThreeBallAuto;
@@ -56,6 +59,9 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
+import frc.robot.Utilities.SwerveAlignment;
+import frc.robot.Commands.TowerLowCommand;
+import frc.robot.Commands.TowerOverrideCommand;
 
 /*
 * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -64,6 +70,8 @@ import frc.robot.Utilities.JoystickAnalogButton;
 * (including subsystems, commands, and button mappings) should be declared here
 */
 public class RobotContainer {
+
+  private SwerveAlignment swerveAlignment;
 
   //private final PneumaticHub pneumaticHub;
 
@@ -108,6 +116,7 @@ public class RobotContainer {
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
 private Command MostComplexifiedAuto;
+private Command SingleRejectAutoHigh;
 
 
 
@@ -157,6 +166,8 @@ private Command MostComplexifiedAuto;
 
     m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
+
+    swerveAlignment = new SwerveAlignment(drivetrain);
   }
 
   /**
@@ -171,7 +182,9 @@ private Command MostComplexifiedAuto;
     //   Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
     //       .withWidget(BuiltInWidgets.kCameraStream);
     // }
-    HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
+    
+    HttpCamera limelight = new HttpCamera("Limelight", Configrun.get("http://10.43.29.11:5800", "Limelighturl"));
+    System.out.println(Configrun.get("http://10.43.29.11:5800", "Limelighturl"));
     CameraServer.startAutomaticCapture(limelight);
 
     Shuffleboard.getTab("RobotData").add("Limelight Camera", limelight).withPosition(2, 0).withSize(2, 2)
@@ -190,7 +203,8 @@ private Command MostComplexifiedAuto;
     new POVButton(m_driverController, 180).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(Math.PI))));// Reset drivetrain when down/up on the DPad is pressed
     new POVButton(m_driverController, 0).whenPressed(() -> m_robotDrive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d(0.0))));
     new JoystickButton(m_driverController, Button.kRightBumper.value).whenPressed(() -> m_drive.changeFieldOrient());//toggle field dorientation
-    new JoystickButton(m_driverController, Button.kLeftStick.value).whenPressed(() -> m_robotDrive.unlock());
+    //new JoystickButton(m_driverController, Button.kLeftStick.value).whenPressed(new UnlockWheelsCommand(m_robotDrive));
+
       //Climber arm controls
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
@@ -236,6 +250,7 @@ private Command MostComplexifiedAuto;
     ComplexerNoIntake = new ComplexerNoIntake(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     RejectTest = new RejectTest(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MostComplexifiedAuto = new MostComplexifiedAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    SingleRejectAutoHigh = new SingleRejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
 
 
     // Adds autos to the chooser
@@ -249,7 +264,8 @@ private Command MostComplexifiedAuto;
     m_chooser.addOption("RightThreeBallHigh", RightThreeBallAuto);
     m_chooser.addOption("RightFourBallHIGH", ComplexerAuto);
     m_chooser.addOption("RightFiveBallHIGH", MostComplexifiedAuto);
-    m_chooser.addOption("RejectHighAuto", RejectAutoHigh);
+    m_chooser.addOption("SingleRejectHighAuto", SingleRejectAutoHigh);
+    m_chooser.addOption("DoubleRejectHighAuto", RejectAutoHigh);
 
 
     //m_chooser.addOption("RejectTest", RejectTest);
@@ -300,12 +316,14 @@ private Command MostComplexifiedAuto;
     //climber.engage();
     climber.retract();
     climber.reversePivotClimber();
+    swerveAlignment.initSwerveAlignmentWidgets();
 
   }
 
   public void teleopPeriodic() {
     turretSubsystem.putValuesToShuffleboard();
     hoodSubsystem.hoodOverride(shooter);
+    swerveAlignment.updateSwerveAlignment();
   }
 
   public void test() {

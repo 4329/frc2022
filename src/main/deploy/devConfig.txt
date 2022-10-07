@@ -17,13 +17,14 @@ backLeftTurningEncoderPort = 2
 backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
-frontLeftOffset = 5.86115
-frontRightOffset = 10.8662
-backLeftOffset = 5.2029
-backRightOffset = 4.46259
+frontLeftOffset = 5.882
+frontRightOffset = 14.007
+backLeftOffset = 5.245
+backRightOffset = 4.42
+
 
 Intake_ID = 40
-intakeSpeed = 0.7
+intakeSpeed = -0.95
 intakeUp = false
 intakeSolenoidID_1 = 0
 intakeSolenoidID_2 = 1
@@ -32,59 +33,58 @@ PH_CAN_ID = 61
 
 # Storage Intake
 storageIntakeID = 41
-storageIntakePower = 0.8
+storageIntakePower = 1
 
 #Shooter Feed
-FrontShooterFeed_ID = 42
-BackShooterFeed_ID = 43
+FrontShooterFeed_ID = 0
+BackShooterFeed_ID = 42
 
-ShooterFeedPower = 0.85
+ShooterFeedPower = 0.6
 
-pivotSolenoidID_1 = 5
-shiftSolenoidID_1 = 2
-extendSolenoidID_1 = 6
-pivotSolenoidID_2 = 4
-shiftSolenoidID_2 = 3
-extendSolenoidID_2 = 7
+pivotSolenoidID_1 = 2
+shiftSolenoidID_1 = 8
+extendSolenoidID_1 = 4
+pivotSolenoidID_2 = 3
+shiftSolenoidID_2 = 9
+extendSolenoidID_2 = 5
 
 climberMotor1ID = 9
 climberMotor2ID = 10
 
-climbPower = 0.5
-reverseClimbPower = -0.5
+climbPower = 1
+reverseClimbPower = -1
 
 # Limelight
-h1In = 30.5
+h1In = 32
 h21n = 104
 a1Degree = 25
 taTolerance = 0.3
 
 #Digital input IDs
-TopSensorPort = 5
-BottomSensorPort = 3
+TopSensorPort = 3
+BottomSensorPort = 1
 
 # Turret
-turretID = 44
+turretID = 43
 
 turretRightPower = 0.5
 turretLeftPower = 0.5
 turretStop = 0
 
-turretMax = 1620
-turretMin = 1006
-turretZero = 1313
+turretMax = 35
+turretMin = -35
+turretZero = 0
 ShooterWheel1ID = 30
 ShooterWheel2ID = 31
 
-ShooterP = 2
+FrontShooterFeedStop = 0
+BackShooterFeedStop = 0
+ShooterP = 0
 ShooterI = 0
 ShooterD = 0
 
 #ShooterTolerance is in RPM
 ShooterToleranceInRPMs = 10
-
-FrontShooterFeedStop = 0
-BackShooterFeedStop = 0
 
 # Hood IDs
 HoodWheelID = 11
@@ -95,4 +95,6 @@ hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
 
-extraShuffleBoardToggle = false
+extraShuffleBoardToggle = true
+
+Limelighturl = http://10.99.99.11:5800
