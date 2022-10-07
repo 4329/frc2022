@@ -67,6 +67,7 @@ import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
+import frc.robot.Utilities.SwerveAlignment;
 import frc.robot.Commands.TowerLowCommand;
 import frc.robot.Commands.TowerOverrideCommand;
 
@@ -77,6 +78,8 @@ import frc.robot.Commands.TowerOverrideCommand;
 * (including subsystems, commands, and button mappings) should be declared here
 */
 public class RobotContainer {
+
+  private SwerveAlignment swerveAlignment;
 
   //private final PneumaticHub pneumaticHub;
 
@@ -171,6 +174,8 @@ private Command SingleRejectAutoHigh;
 
     m_chooser = new SendableChooser<>();
     configureAutoChooser(drivetrain);
+
+    swerveAlignment = new SwerveAlignment(drivetrain);
   }
 
   /**
@@ -185,7 +190,9 @@ private Command SingleRejectAutoHigh;
     //   Shuffleboard.getTab("RobotData").add("Camera", enumerateSources[0]).withPosition(5, 0).withSize(3, 3)
     //       .withWidget(BuiltInWidgets.kCameraStream);
     // }
-    HttpCamera limelight = new HttpCamera("Limelight", "http://10.43.29.11:5800");
+    
+    HttpCamera limelight = new HttpCamera("Limelight", Configrun.get("http://10.43.29.11:5800", "Limelighturl"));
+    System.out.println(Configrun.get("http://10.43.29.11:5800", "Limelighturl"));
     CameraServer.startAutomaticCapture(limelight);
 
     Shuffleboard.getTab("RobotData").add("Limelight Camera", limelight).withPosition(2, 0).withSize(2, 2)
@@ -316,12 +323,14 @@ private Command SingleRejectAutoHigh;
     //climber.engage();
     climber.retract();
     climber.reversePivotClimber();
+    swerveAlignment.initSwerveAlignmentWidgets();
 
   }
 
   public void teleopPeriodic() {
     turretSubsystem.putValuesToShuffleboard();
     hoodSubsystem.hoodOverride(shooter);
+    swerveAlignment.updateSwerveAlignment();
   }
 
   public void test() {

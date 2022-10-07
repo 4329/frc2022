@@ -70,6 +70,23 @@ public class Configrun {
         }
 
     }
+    
+    /**
+     * Pulls a value from teh deployed config file
+     * 
+     * @param defaultvalue
+     * @param key
+     * @return
+     */
+    public static String get(String defaultvalue, String key) {
+        if (keys.get(key) != null) {
+            return (keys.get(key));
+        } else {
+            System.err.println("No such string value/type");
+            return defaultvalue;
+        }
+
+    }
 
     public static void loadconfig() {
         BufferedReader reader;
