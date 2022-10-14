@@ -313,7 +313,7 @@ private Command SingleRejectAutoHigh;
 
     turretSubsystem.setDefaultCommand(turretToZeroCommand);
     hoodSubsystem.setDefaultCommand(new HoodToOpenCommand(hoodSubsystem, shooter));
-    //climber.engage();
+    //climber.engage();\]
     climber.retract();
     climber.reversePivotClimber();
 
