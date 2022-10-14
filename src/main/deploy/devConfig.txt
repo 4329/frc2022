@@ -18,9 +18,9 @@ backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
 frontLeftOffset = 5.882
-frontRightOffset = 14.007
+frontRightOffset = 4.58   
 backLeftOffset = 5.245
-backRightOffset = 4.42
+backRightOffset = 4.46
 
 
 Intake_ID = 40
@@ -95,6 +95,6 @@ hoodOpen = 3
 hoodHalf = 15
 hoodClosed = 30
 
-extraShuffleBoardToggle = true
+extraShuffleBoardToggle = false
 
 Limelighturl = http://10.99.99.11:5800
