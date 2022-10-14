@@ -323,14 +323,12 @@ private Command SingleRejectAutoHigh;
     //climber.engage();
     climber.retract();
     climber.reversePivotClimber();
-    swerveAlignment.initSwerveAlignmentWidgets();
 
   }
 
   public void teleopPeriodic() {
     turretSubsystem.putValuesToShuffleboard();
     hoodSubsystem.hoodOverride(shooter);
-    swerveAlignment.updateSwerveAlignment();
   }
 
   public void test() {
