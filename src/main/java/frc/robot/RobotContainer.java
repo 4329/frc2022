@@ -311,7 +311,7 @@ private Command SingleRejectAutoHigh;
 
   public void init() {
 
-    turretSubsystem.setDefaultCommand(turretToZeroCommand);
+//    turretSubsystem.setDefaultCommand(turretToZeroCommand);
     hoodSubsystem.setDefaultCommand(new HoodToOpenCommand(hoodSubsystem, shooter));
     //climber.engage();
     climber.retract();

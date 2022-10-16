@@ -14,7 +14,7 @@ import frc.robot.Subsystems.Swerve.Drivetrain;
 
 public class CommandGroups {
     public CommandBase fire(TurretSubsystem turretSubsystem, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hoodSubsystem, Drivetrain drivetrain, IntakeSensors intakeSensors) {
-        return new SequentialCommandGroup(new TurretCommand(turretSubsystem).withTimeout(1), new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, drivetrain, intakeSensors).withTimeout(5), new TurretToZeroCommand(turretSubsystem));
+        return new SequentialCommandGroup(new TurretCommand(turretSubsystem).withTimeout(1), new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, drivetrain, intakeSensors).withTimeout(5));
     }
     public CommandBase towerLow(StorageIntake storageIntake, ShooterFeedSubsytem shooterFeed, Shooter shooter, HoodSubsystem hoodSubsystem) {
         return new SequentialCommandGroup(new TowerLowCommand(storageIntake, shooterFeed, shooter, hoodSubsystem).withTimeout(5));
