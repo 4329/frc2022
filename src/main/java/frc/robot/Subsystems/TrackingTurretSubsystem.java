@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 
@@ -33,6 +34,10 @@ public class TrackingTurretSubsystem extends SubsystemBase {
         pidController.setSmartMotionMaxAccel(15000, 0);
         pidController.setSmartMotionMaxVelocity(5000, 0);
         pidController.setSmartMotionAllowedClosedLoopError(0.2, 0);
+    }
+
+    public void turretFollow(Pose2d currentPose) {
+
     }
 
 

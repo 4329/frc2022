@@ -30,6 +30,7 @@ import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TowerOverrideCommand;
 import frc.robot.Commands.TurretCommand;
+import frc.robot.Commands.TurretFollow;
 import frc.robot.Commands.TurretToZeroCommand;
 //import frc.robot.Commands.UnlockWheelsCommand;
 import frc.robot.Commands.Autos.ComplexAuto;
@@ -56,6 +57,7 @@ import frc.robot.Subsystems.IntakeSolenoidSubsystem;
 import frc.robot.Subsystems.Shooter;
 import frc.robot.Subsystems.ShooterFeedSubsytem;
 import frc.robot.Subsystems.StorageIntake;
+import frc.robot.Subsystems.TrackingTurretSubsystem;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.JoystickAnalogButton;
@@ -80,13 +82,14 @@ public class RobotContainer {
   private final StorageIntake storageIntake;
   private final IntakeSensors intakeSensors;
   private final ShooterFeedSubsytem shooterFeed;
-  private final TurretSubsystem turretSubsystem;
+//  private final TurretSubsystem turretSubsystem;
   private final IntakeSolenoidSubsystem intakeSolenoid;
   private final IntakeMotor intakeMotor;
   private final Shooter shooter;
   private final Climber climber;
   private final CommandGroups commandGroups;
   private final HoodSubsystem hoodSubsystem;
+  private final TrackingTurretSubsystem trackingTurretSubsystem;
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -113,6 +116,7 @@ public class RobotContainer {
   private Command RejectTest;
 
   private SensorOutputCommand sensorOutputCommand;
+  private TurretFollow turretFollow;
   private TurretCommand turretCommand;
   private TurretToZeroCommand turretToZeroCommand;
 private Command MostComplexifiedAuto;
@@ -135,7 +139,6 @@ private Command SingleRejectAutoHigh;
 
     //pneumaticHub = new PneumaticHub(Configrun.get(61, "PH_CAN_ID"));
 
-    turretSubsystem = new TurretSubsystem();
     shooter = new Shooter(drivetrain);
     shooterFeed = new ShooterFeedSubsytem();
     storageIntake = new StorageIntake();
@@ -146,10 +149,12 @@ private Command SingleRejectAutoHigh;
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
     hoodSubsystem = new HoodSubsystem();
+    trackingTurretSubsystem = new TrackingTurretSubsystem();
 
-    turretCommand = new TurretCommand(turretSubsystem);
-    turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
     commandGroups = new CommandGroups();
+    turretFollow = new TurretFollow(trackingTurretSubsystem, drivetrain);
+
+    trackingTurretSubsystem.setDefaultCommand(turretFollow);
 
 
     initializeCamera();
@@ -217,9 +222,10 @@ private Command SingleRejectAutoHigh;
 
     //Operator Controller
       //Shoot
-    new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
+      // TODO - we need to add shoot commands back when we have a working turret subsystem.
+   //new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
     new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerOverrideCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive));//shoot high without aimbot
-    new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
+   // new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
@@ -236,6 +242,8 @@ private Command SingleRejectAutoHigh;
 
 
     KISSAuto = new KISSAuto(m_robotDrive);
+    /*
+    //TODO pass in a turret subsystem once we have move and shoot working... 
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     LowAutoMore = new LowAutoMore(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
@@ -251,6 +259,7 @@ private Command SingleRejectAutoHigh;
     RejectTest = new RejectTest(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MostComplexifiedAuto = new MostComplexifiedAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     SingleRejectAutoHigh = new SingleRejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
+    */
 
 
     // Adds autos to the chooser
@@ -320,14 +329,12 @@ private Command SingleRejectAutoHigh;
   }
 
   public void teleopPeriodic() {
-    turretSubsystem.putValuesToShuffleboard();
     hoodSubsystem.hoodOverride(shooter);
   }
 
   public void test() {
 
     hoodSubsystem.hoodTestMode();
-    turretSubsystem.putValuesToShuffleboard();
   }
 
   public void autonomousPeriodic() {
