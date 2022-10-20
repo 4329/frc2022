@@ -197,4 +197,9 @@ public class HoodSubsystem extends SubsystemBase {
         }
       }
     }
+
+    public double getEncoderPos() {
+
+      return hoodEncoder.getPosition();
+    }
 }

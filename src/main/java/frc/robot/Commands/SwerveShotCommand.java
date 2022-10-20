@@ -50,6 +50,7 @@ public class SwerveShotCommand extends CommandBase {
            
         timer.reset();
         timer.start();
+
     }
     
     @Override
@@ -96,6 +97,17 @@ public class SwerveShotCommand extends CommandBase {
 
             Translation2d robotToMovingGoal = movingGoal.minus(drivetrain.getPose().getTranslation());
 
+            double newDistance = robotToMovingGoal.getDistance(new Translation2d()) * 39.37;
+
+            if(xboxController.getLeftTriggerAxis() > 0.5) {
+
+                hood.setEncoderPosition(Constants.TuningConstants.m_hoodTable.getOutput(newDistance));
+
+            } else {
+                hood.setPosition(HoodPosition.OPEN);
+            }
+            
+
             double targetAngle = Math.atan2(robotToMovingGoal.getY(), robotToMovingGoal.getX()) + Math.PI;
             targetAngle = MathUtils.toUnitCircAngle(targetAngle);
             double currentAngle = MathUtils.toUnitCircAngle(drivetrain.getGyro().getRadians());
@@ -110,7 +122,7 @@ public class SwerveShotCommand extends CommandBase {
         pidOutput,
         true);
         //TODO also make sure hood is not impeding the limlight
-        if (currentTime > 0.250 && TurretSubsystem.targetVisible() && TurretSubsystem.getDistanceFromTarget() >= 85.0) {
+        if (currentTime > 0.250 && TurretSubsystem.targetVisible() && TurretSubsystem.getDistanceFromTarget() >= 85.0 && hood.getEncoderPos() < 4.0) {
             double dL = TurretSubsystem.getDistanceFromTarget() * 0.0254;
             double tR = drivetrain.getGyro().getRadians();
             double tT = Math.PI;
