@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
+import frc.robot.Constants;
 import frc.robot.Utilities.LinearInterpolationTable;
 
 public class TurretSubsystem extends SubsystemBase{
@@ -58,27 +59,6 @@ public class TurretSubsystem extends SubsystemBase{
     private NetworkTableEntry turretRotationMax;
     private boolean tvToggle;
     NetworkTableEntry targetStatus;
-
-
-    private Point2D[] limlightTable = new Point2D.Double[] {
-
-
-        new Point2D.Double(-13.00, 276),
-        new Point2D.Double(-12.64, 264),
-        new Point2D.Double(-11.37, 240),
-        new Point2D.Double(-10.17, 225),
-        new Point2D.Double(-8.99, 210),
-        new Point2D.Double(-6.55, 186),
-        new Point2D.Double(-4.77, 174),
-        new Point2D.Double(-2.27, 156),
-        new Point2D.Double(0.88, 138),
-        new Point2D.Double(4.81, 120),
-        new Point2D.Double(9.95, 102),
-        new Point2D.Double(17.03, 83),
-        new Point2D.Double(23.90, 67)
-
-    };
-    private LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
 
     public TurretSubsystem() {
 
@@ -129,7 +109,7 @@ public class TurretSubsystem extends SubsystemBase{
         }
     }
 
-    public double getTx() {
+    public static double getTx() {
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
         NetworkTableEntry tx = table.getEntry("tx");
@@ -137,7 +117,7 @@ public class TurretSubsystem extends SubsystemBase{
         return x;
     }
 
-    public boolean targetVisible() {
+    public static boolean targetVisible() {
 
         // check Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -150,7 +130,7 @@ public class TurretSubsystem extends SubsystemBase{
         return false;
     }
 
-    public double getTa() {
+    public static double getTa() {
 
         // checks the area visible of the Target (0% of image to 100% of image)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -159,7 +139,7 @@ public class TurretSubsystem extends SubsystemBase{
         return a;
     }
 
-    public double getTy() {
+    public static double getTy() {
 
         // checks Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -169,10 +149,10 @@ public class TurretSubsystem extends SubsystemBase{
     }
 
 
-    public double getDistanceFromTarget() {
+    public static double getDistanceFromTarget() {
 
         // TODO use this to get distance from target (only while target is visible)
-       return m_limlightTable.getOutput(getTy());
+       return Constants.TuningConstants.m_limlightTable.getOutput(getTy());
         //limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
        // return limeLightDistance;
     }

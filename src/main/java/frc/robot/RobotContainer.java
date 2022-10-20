@@ -27,6 +27,7 @@ import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakeCorrectionCommand;
 import frc.robot.Commands.IntakePosCommand;
 import frc.robot.Commands.SensorOutputCommand;
+import frc.robot.Commands.SwerveShotCommand;
 import frc.robot.Commands.TowerCommand;
 import frc.robot.Commands.TowerOverrideCommand;
 import frc.robot.Commands.TurretCommand;
@@ -213,7 +214,9 @@ private Command SingleRejectAutoHigh;
       //Climber arm controls
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
-    new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> climber.retract());
+    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.retract());
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new SwerveShotCommand(shooter, hoodSubsystem, m_robotDrive, m_driverController));
+
    // new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
       //Climber motor controls
     new JoystickAnalogButton(m_driverController, false).whenHeld(new ClimberButtonCommand(m_driverController, climber));//climb up
@@ -223,7 +226,7 @@ private Command SingleRejectAutoHigh;
     //Operator Controller
       //Shoot
       // TODO - we need to add shoot commands back when we have a working turret subsystem.
-   //new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
+  //  new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
     new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerOverrideCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive));//shoot high without aimbot
    // new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low

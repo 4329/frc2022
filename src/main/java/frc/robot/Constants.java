@@ -1,10 +1,12 @@
 package frc.robot;
 
+import java.awt.geom.Point2D;
+
 import frc.robot.Configrun;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-
+import frc.robot.Utilities.LinearInterpolationTable;
 /**
  * Static method containing all constant values for the robot in one location
  */
@@ -191,6 +193,8 @@ public final class Constants {
    */
   public static final class GlobalConstants {
     public static final double kVoltCompensation = 12.0; // Sets a voltage compensation value ideally 12.0V
+    public static final double kLoopTime = 20.0; 
+
   }
 
   /**
@@ -213,6 +217,7 @@ public final class Constants {
     public static final double shooterKa = 0.06;
     public static final double shooterToleranceInRPMs = 500;
 
+    public static final Translation2d goalPos = new Translation2d(8.23, 4.115);
   }
 
   /**
@@ -251,4 +256,75 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeed, kMaxAngularAccel); // Creates a trapezoidal motion for the auto rotational commands
   }
+
+  public static final class TuningConstants {
+
+    public static final Point2D[] rpmTable = new  Point2D.Double[] {
+
+      new Point2D.Double(67, 2500),
+      new Point2D.Double(83, 2600),
+      new Point2D.Double(102, 2650),
+      new Point2D.Double(120, 2800),
+      new Point2D.Double(138, 2950),
+      new Point2D.Double(156, 3100),
+      new Point2D.Double(174, 3220),
+      new Point2D.Double(186, 3225),
+      new Point2D.Double(210, 3400),
+      new Point2D.Double(225, 3600),
+      new Point2D.Double(240, 3650),
+      new Point2D.Double(264, 3900),
+      new Point2D.Double(276, 3975)
+    };
+    public static final LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
+
+
+    public static final Point2D[] hoodTable = new  Point2D.Double[] {
+
+      new Point2D.Double(67, 3),
+      new Point2D.Double(83, 5.5),
+      new Point2D.Double(102, 11),
+      new Point2D.Double(120, 18),
+      new Point2D.Double(138, 21),
+      new Point2D.Double(156, 24),
+      new Point2D.Double(174, 26),
+      new Point2D.Double(186, 28),
+      new Point2D.Double(210, 28),
+      new Point2D.Double(225, 28),
+      new Point2D.Double(240, 29),
+      new Point2D.Double(264, 30),
+      new Point2D.Double(276, 32)
+    };
+    public static final LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
+
+    public static final Point2D[] limlightTable = new Point2D.Double[] {
+
+
+      new Point2D.Double(-13.00, 276),
+      new Point2D.Double(-12.64, 264),
+      new Point2D.Double(-11.37, 240),
+      new Point2D.Double(-10.17, 225),
+      new Point2D.Double(-8.99, 210),
+      new Point2D.Double(-6.55, 186),
+      new Point2D.Double(-4.77, 174),
+      new Point2D.Double(-2.27, 156),
+      new Point2D.Double(0.88, 138),
+      new Point2D.Double(4.81, 120),
+      new Point2D.Double(9.95, 102),
+      new Point2D.Double(17.03, 83),
+      new Point2D.Double(23.90, 67)
+    };        
+    public static final LinearInterpolationTable m_limlightTable = new LinearInterpolationTable(limlightTable);
+
+    private static final Point2D[] kShotTimes = new Point2D.Double[] {
+      // (ty-angle,time)
+      new Point2D.Double(80, 0.78 + 0.05),
+      new Point2D.Double(130, 0.80 + 0.05),
+      new Point2D.Double(190, 0.81 + 0.05),
+      new Point2D.Double(240, 0.82 + 0.05),
+      new Point2D.Double(280, 0.83 + 0.05)
+    };
+
+    public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);
+  }
 }
+  

@@ -14,9 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.*;
+import frc.robot.Utilities.FieldRelativeAccel;
+import frc.robot.Utilities.FieldRelativeSpeed;
 
 /**
  * Implements a swerve Drivetrain Subsystem for the Robot
@@ -68,6 +71,14 @@ public class Drivetrain extends SubsystemBase {
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
       ahrs.getRotation2d());
 
+  private SlewRateLimiter slewX = new SlewRateLimiter(6.5);
+  private SlewRateLimiter slewY = new SlewRateLimiter(6.5);
+  private SlewRateLimiter slewRot = new SlewRateLimiter(10.0);
+
+  private FieldRelativeSpeed m_fieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeSpeed m_lastFieldRelVel = new FieldRelativeSpeed();
+  private FieldRelativeAccel m_fieldRelAccel = new FieldRelativeAccel();
+
   /**
    * Constructs a Drivetrain and resets the Gyro and Keep Angle parameters
    */
@@ -91,6 +102,9 @@ public class Drivetrain extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     rot = performKeepAngle(xSpeed, ySpeed, rot); // Calls the keep angle function to update the keep angle or rotate
                                                  // depending on driver input
+    xSpeed= slewX.calculate(xSpeed);
+    ySpeed = slewY.calculate(ySpeed);
+    rot = slewRot.calculate(rot);
 
     SmartDashboard.putNumber("xSpeed Commanded", xSpeed);
     SmartDashboard.putNumber("ySpeed Commanded", ySpeed);
@@ -113,6 +127,9 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    m_fieldRelVel = new FieldRelativeSpeed(getChassisSpeed(), getGyro());
+    m_fieldRelAccel = new FieldRelativeAccel(m_fieldRelVel, m_lastFieldRelVel, GlobalConstants.kLoopTime);
+    m_lastFieldRelVel = m_fieldRelVel;
     // Update swerve drive odometry periodically so robot pose can be tracked
     updateOdometry();
 
@@ -147,8 +164,9 @@ public class Drivetrain extends SubsystemBase {
    * once per loop to minimize error.
    */
   public void updateOdometry() {
+
     m_odometry.update(ahrs.getRotation2d(), m_frontLeft.getState(), m_frontRight.getState(), m_backLeft.getState(),
-        m_backRight.getState());
+    m_backRight.getState());
   }
 
   /**
@@ -157,7 +175,18 @@ public class Drivetrain extends SubsystemBase {
    * @return Rotation2d object containing Gyro angle
    */
   public Rotation2d getGyro() {
+
     return ahrs.getRotation2d();
+  }
+
+  public FieldRelativeSpeed getRelativeSpeed() {
+
+    return m_fieldRelVel;
+  }
+
+  public FieldRelativeAccel getRelativeAccel() {
+
+    return m_fieldRelAccel;
   }
 
   /**
@@ -179,10 +208,17 @@ public class Drivetrain extends SubsystemBase {
    * @param pose in which to set the odometry and gyro.
    */
   public void resetOdometry(Pose2d pose) {
+
     ahrs.reset();
     ahrs.setAngleAdjustment(pose.getRotation().getDegrees());
     keepAngle = getGyro().getRadians();
     m_odometry.resetPosition(pose, ahrs.getRotation2d());
+  }
+
+  public void setPose(Pose2d pose) {
+
+    m_odometry.resetPosition(pose, ahrs.getRotation2d().times(-1.0));
+    keepAngle = getGyro().getRadians();
   }
 
   /**
@@ -192,18 +228,10 @@ public class Drivetrain extends SubsystemBase {
    * @return ChassisSpeeds object containing robot X, Y, and Angular velocity
    */
   public ChassisSpeeds getChassisSpeed() {
+
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
         m_backLeft.getState(),
         m_backRight.getState());
-  }
-
-  public ChassisSpeeds getFieldRelativeSpeeds() {
-    return new ChassisSpeeds(
-        getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getCos()
-            - getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getSin(),
-        getChassisSpeed().vyMetersPerSecond * ahrs.getRotation2d().getCos()
-            + getChassisSpeed().vxMetersPerSecond * ahrs.getRotation2d().getSin(),
-        getChassisSpeed().omegaRadiansPerSecond);
   }
 
   /**

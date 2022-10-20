@@ -18,9 +18,6 @@ public class DriveByController extends CommandBase {
   private final XboxController m_controller;
   private boolean fieldOrient = true;
 
-  private SlewRateLimiter slewX = new SlewRateLimiter(2.0);
-  private SlewRateLimiter slewY = new SlewRateLimiter(2.0);
-
   private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withPosition(4, 2).getEntry();
 
   /**
@@ -46,10 +43,9 @@ public class DriveByController extends CommandBase {
   @Override
   public void execute() {
     m_robotDrive.drive(
-        slewX.calculate(
-            -inputTransform(m_controller.getLeftY()))
+            -inputTransform(m_controller.getLeftY())
             * DriveConstants.kMaxSpeedMetersPerSecond,
-        slewY.calculate(-inputTransform(m_controller.getLeftX()))
+        -inputTransform(m_controller.getLeftX())
             * DriveConstants.kMaxSpeedMetersPerSecond,
         -inputTransform(m_controller.getRightX())
             * DriveConstants.kMaxAngularSpeed,

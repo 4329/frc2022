@@ -14,12 +14,13 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configrun;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Swerve.Drivetrain;
 import frc.robot.Utilities.LinearInterpolationTable;
 
-public class Shooter {
+public class Shooter extends SubsystemBase {
 
   private PIDController shooterPID;
   SimpleMotorFeedforward simpleFeedForward;
@@ -49,47 +50,6 @@ public class Shooter {
 
   double minDistance;
   double maxDistance;
-
-  private Point2D[] rpmTable = new  Point2D.Double[] {
-
-    new Point2D.Double(67, 2500),
-    new Point2D.Double(83, 2600),
-    new Point2D.Double(102, 2650),
-    new Point2D.Double(120, 2800),
-    new Point2D.Double(138, 2950),
-    new Point2D.Double(156, 3100),
-    new Point2D.Double(174, 3220),
-    new Point2D.Double(186, 3225),
-    new Point2D.Double(210, 3400),
-    new Point2D.Double(225, 3600),
-    new Point2D.Double(240, 3650),
-    new Point2D.Double(264, 3900),
-    new Point2D.Double(276, 3975)
-  };
-  private LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
-
-  private Point2D[] hoodTable = new  Point2D.Double[] {
-
-    new Point2D.Double(67, 3),
-    new Point2D.Double(83, 5.5),
-    new Point2D.Double(102, 11),
-    new Point2D.Double(120, 18),
-    new Point2D.Double(138, 21),
-    new Point2D.Double(156, 24),
-    new Point2D.Double(174, 26),
-    new Point2D.Double(186, 28),
-    new Point2D.Double(210, 28),
-    new Point2D.Double(225, 28),
-    new Point2D.Double(240, 29),
-    new Point2D.Double(264, 30),
-    new Point2D.Double(276, 32)
-  };
-  private LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
-
-
-
-
-
 
   /**
    * Creates a shooter subsystem
@@ -230,8 +190,8 @@ public class Shooter {
    */
   public double aim(HoodSubsystem hood, TurretSubsystem turret, double targetDistance) {
 
-    double rpmTableValue = m_rpmTable.getOutput(targetDistance);
-    double hoodTableValue = m_hoodTable.getOutput(targetDistance);
+    double rpmTableValue = Constants.TuningConstants.m_rpmTable.getOutput(targetDistance);
+    double hoodTableValue = Constants.TuningConstants.m_hoodTable.getOutput(targetDistance);
 
     hood.setEncoderPosition(hoodTableValue);
 

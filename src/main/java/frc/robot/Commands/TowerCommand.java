@@ -75,11 +75,11 @@ public class TowerCommand extends CommandBase {
 
         }
         else {
-         if (turret.targetVisible()) {
+         if (TurretSubsystem.targetVisible()) {
 
             //drivetrain.lock();
             foundTarget = true;
-            targetDistance = turret.getDistanceFromTarget();
+            targetDistance = TurretSubsystem.getDistanceFromTarget();
 
          }
         }
