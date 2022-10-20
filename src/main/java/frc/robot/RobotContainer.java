@@ -26,6 +26,7 @@ import frc.robot.Commands.IntakeAutoCommand;
 import frc.robot.Commands.IntakeBackwardsCommand;
 import frc.robot.Commands.IntakeCorrectionCommand;
 import frc.robot.Commands.IntakePosCommand;
+import frc.robot.Commands.MoveFeedCommand;
 import frc.robot.Commands.SensorOutputCommand;
 import frc.robot.Commands.SwerveShotCommand;
 import frc.robot.Commands.TowerCommand;
@@ -231,12 +232,13 @@ private Command SingleRejectAutoHigh;
    // new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
-    new JoystickButton(m_operatorController, Button.kX.value).whenPressed(new IntakePosCommand(intakeSolenoid));//intake up/down
+    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new MoveFeedCommand(shooterFeed, storageIntake));//intake up/down
     new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
     new JoystickButton(m_operatorController, Button.kB.value).whenReleased(new IntakeCorrectionCommand(shooterFeed, storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject
     new JoystickButton(m_operatorController, Button.kLeftBumper.value).whenHeld(new IntakeBackwardsCommand(intakeMotor));
   }
+
 
   /**
    * Pulls autos and configures the chooser

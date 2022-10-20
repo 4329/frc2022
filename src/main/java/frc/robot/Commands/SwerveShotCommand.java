@@ -106,7 +106,8 @@ public class SwerveShotCommand extends CommandBase {
             } else {
                 hood.setPosition(HoodPosition.OPEN);
             }
-            
+
+            shooter.shoot(Constants.TuningConstants.m_rpmTable.getOutput(newDistance));
 
             double targetAngle = Math.atan2(robotToMovingGoal.getY(), robotToMovingGoal.getX()) + Math.PI;
             targetAngle = MathUtils.toUnitCircAngle(targetAngle);
