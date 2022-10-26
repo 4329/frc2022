@@ -37,20 +37,21 @@ public class HoodSubsystem extends SubsystemBase {
 
 
 
+
   public HoodSubsystem() {
     hoodNeutral = Configrun.get(0, "hoodNeutral");
-    hoodOpen = Configrun.get(3, "hoodOpen");
+    hoodOpen = Configrun.get(1, "hoodOpen");
     setpoint = hoodOpen;
     overrideSetpoint = 3;
     hoodHalf = Configrun.get(15, "hoodHalf");
     hoodClosed = Configrun.get(30, "hoodClosed");
-
+    
     hoodwheel = new CANSparkMax(Configrun.get(11, "HoodWheelID"), MotorType.kBrushless);
 
     hoodEncoder = hoodwheel.getEncoder();
     hoodEncoder.setPosition(0);
 
-    hoodPID = new PIDController(2.2, 0, 0);
+    hoodPID = new PIDController(0.07, 0, 0);
     hoodwheel.setIdleMode(IdleMode.kBrake);
     hoodPID.setTolerance(1);
 
@@ -93,8 +94,6 @@ public class HoodSubsystem extends SubsystemBase {
 
     double output = hoodPID.calculate(hoodposition, setpoint);
 
-    output = output / MAX_RANGE;
-
     if (Math.abs(hoodposition) > MAX_RANGE) {
       output = 0;
     }
@@ -135,6 +134,10 @@ public class HoodSubsystem extends SubsystemBase {
       }
   }
 
+
+  public boolean atSetpoint() {
+      return hoodPID.atSetpoint();
+  }
   /**
    * Sets the hood position with a double
    *
@@ -142,9 +145,9 @@ public class HoodSubsystem extends SubsystemBase {
    */
   public void setEncoderPosition(double position) {
 
-    if (position < 3) {
+    if (position < 1) {
 
-      setpoint = 3;
+      setpoint = 1;
     } else if (position > 33) {
 
       setpoint = 33;

@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.Shooter;
+import frc.robot.Subsystems.ShooterFeedSubsytem;
+import frc.robot.Subsystems.StorageIntake;
 import frc.robot.Subsystems.TurretSubsystem;
 import frc.robot.Subsystems.HoodSubsystem.HoodPosition;
 import frc.robot.Subsystems.Swerve.Drivetrain;
@@ -27,20 +29,25 @@ public class SwerveShotCommand extends CommandBase {
     // TurretSubsystem turret;
     Drivetrain drivetrain;
     XboxController xboxController;
+    ShooterFeedSubsytem shooterFeedSubsytem;
+    StorageIntake storageIntake;
     Timer timer = new Timer();
     PIDController swervepid = new PIDController (3.5, 0, 0.25);
     NetworkTableEntry tGEntry = Shuffleboard.getTab("RobotData").add("tG", 1).getEntry();
     NetworkTableEntry tREntry = Shuffleboard.getTab("RobotData").add("tR", 1).getEntry();
 
 
-    public SwerveShotCommand(Shooter shooter, HoodSubsystem hood, /*TurretSubsystem turret,*/ Drivetrain drivetrain, XboxController xboxController) {
+    public SwerveShotCommand(Shooter shooter, HoodSubsystem hood, /*TurretSubsystem turret,*/ Drivetrain drivetrain, XboxController xboxController, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeedSubsytem) {
 
         this.shooter = shooter;
         this.drivetrain = drivetrain;
         this.hood = hood;
         // this.turret = turret;
         this.xboxController = xboxController;
-        addRequirements(shooter, drivetrain, hood);
+        this.storageIntake = storageIntake;
+        this.shooterFeedSubsytem = shooterFeedSubsytem;
+        addRequirements(shooter, drivetrain, hood, storageIntake, shooterFeedSubsytem);
+        
 
         swervepid.enableContinuousInput(0, 2 * Math.PI);
     }
@@ -103,8 +110,20 @@ public class SwerveShotCommand extends CommandBase {
 
                 hood.setEncoderPosition(Constants.TuningConstants.m_hoodTable.getOutput(newDistance));
 
+                if(hood.atSetpoint()) {
+                    storageIntake.storageIntakeInSlow();
+                    shooterFeedSubsytem.shooterFeedFire();
+                }
+
+                else {
+                    storageIntake.storageIntakeStop();
+                    shooterFeedSubsytem.shooterFeedStop();
+                }
+
             } else {
                 hood.setPosition(HoodPosition.OPEN);
+                storageIntake.storageIntakeStop();
+                shooterFeedSubsytem.shooterFeedStop();
             }
 
             shooter.shoot(Constants.TuningConstants.m_rpmTable.getOutput(newDistance));
@@ -140,7 +159,9 @@ public class SwerveShotCommand extends CommandBase {
     public void end(boolean interrupted) {
         
         shooter.holdFire();
-        hood.setPosition(HoodPosition.OPEN);        
+        hood.setPosition(HoodPosition.OPEN);  
+        storageIntake.storageIntakeStop();
+        shooterFeedSubsytem.shooterFeedStop();      
     }
 
     private Pose2d calcPoseFromVision(double dL, double tR, double tT, double tL, Translation2d goal) {

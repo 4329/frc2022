@@ -216,7 +216,7 @@ private Command SingleRejectAutoHigh;
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.retract());
-    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new SwerveShotCommand(shooter, hoodSubsystem, m_robotDrive, m_driverController));
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new SwerveShotCommand(shooter, hoodSubsystem, m_robotDrive, m_driverController, storageIntake, shooterFeed));
 
    // new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
       //Climber motor controls

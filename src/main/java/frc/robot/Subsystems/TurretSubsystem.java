@@ -152,7 +152,8 @@ public class TurretSubsystem extends SubsystemBase{
     public static double getDistanceFromTarget() {
 
         // TODO use this to get distance from target (only while target is visible)
-       return Constants.TuningConstants.m_limlightTable.getOutput(getTy());
+        double yadjustement = (getTy()-0.006039*getTx()*getTx())/(0.000306*getTx()*getTx()+1);
+       return Constants.TuningConstants.m_limlightTable.getOutput(yadjustement);
         //limeLightDistance = (h2In - h1In) / Math.tan(Math.toRadians(a1Degree) + (Math.toRadians(getTy())));
        // return limeLightDistance;
     }
