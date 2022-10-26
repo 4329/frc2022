@@ -17,10 +17,10 @@ backLeftTurningEncoderPort = 2
 backRightTurningEncoderPort = 3
 
 # Motor Offsets in Radians
-frontLeftOffset = 5.882
-frontRightOffset = 4.58   
+frontLeftOffset = 5.892
+frontRightOffset = 4.582
 backLeftOffset = 5.245
-backRightOffset = 4.46
+backRightOffset = 4.412
 
 
 Intake_ID = 40
@@ -91,7 +91,7 @@ HoodWheelID = 11
 
 # Hood Offsets (in Encoder ticks)
 hoodNeutral = 0
-hoodOpen = 3
+hoodOpen = 7.75
 hoodHalf = 15
 hoodClosed = 30
 

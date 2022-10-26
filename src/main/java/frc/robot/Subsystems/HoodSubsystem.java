@@ -39,7 +39,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   public HoodSubsystem() {
     hoodNeutral = Configrun.get(0, "hoodNeutral");
-    hoodOpen = Configrun.get(3, "hoodOpen");
+    hoodOpen = Configrun.get(7.75, "hoodOpen");
     setpoint = hoodOpen;
     overrideSetpoint = 3;
     hoodHalf = Configrun.get(15, "hoodHalf");
