@@ -52,4 +52,26 @@ public class MathUtils {
     }
   }
 
+  /**
+   * Turns inches into meters
+   * 
+   * @param inches
+   * @return meters
+   */
+  public static double inchesToMeters(double inches) {
+
+    return inches * 0.0254;
+  }
+
+  /**
+   * Turns meters into inches
+   * 
+   * @param meters
+   * @return inches
+   */
+  public static double MetersToInches(double meters) {
+
+    return meters * 39.37;
+  }
+
 }
