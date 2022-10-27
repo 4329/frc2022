@@ -41,6 +41,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry atSetpoint;
   private NetworkTableEntry shooterRPM;
   public NetworkTableEntry manualOverride;
+  public NetworkTableEntry overrideRPM;
+  public NetworkTableEntry hoodOverride;
   private NetworkTableEntry aimedSetpoint;
   private NetworkTableEntry ks;
   private NetworkTableEntry kv;
@@ -71,8 +73,11 @@ public class Shooter extends SubsystemBase {
       ks = Shuffleboard.getTab("RobotData").add("KS", 12).getEntry();
       kv = Shuffleboard.getTab("RobotData").add("KV", 0.35).getEntry();
       update = Shuffleboard.getTab("Shooter").add("Update", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+
     }
     manualOverride = Shuffleboard.getTab("RobotData").add("Manual Override", false).withPosition(1, 3).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    overrideRPM = Shuffleboard.getTab("RobotData").add("Override Setpoint", 0).withPosition(1, 4).getEntry();
+    hoodOverride = Shuffleboard.getTab("RobotData").add("Hood Override Setpoint 4Real Totally", 3).withPosition(1, 5).getEntry();
 
     // Configures PID and feedForward
     shooterPID = new PIDController(0.000005, 0.0003, 0.000);
@@ -161,7 +166,8 @@ public class Shooter extends SubsystemBase {
 
       if (manualOverride.getBoolean(true)) {
 
-        return shooterRPM.getDouble(3500);
+        hood.setEncoderPosition(hoodOverride.getDouble(3));
+        return overrideRPM.getDouble(0);
     } else {
 
       return aim(hood, turret, targetDistance);
@@ -172,6 +178,7 @@ public class Shooter extends SubsystemBase {
    * If the override is on, it will be turned off and vice versa
    */
   public void toggleOverride() {
+
       if (manualOverride.getBoolean(true)) {
 
           manualOverride.setBoolean(false);

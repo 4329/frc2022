@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
@@ -11,6 +12,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,12 +65,15 @@ public class TurretSubsystem extends SubsystemBase{
     public TurretSubsystem() {
 
         turret = new CANSparkMax(Configrun.get(43/*29*/, "turretID"), MotorType.kBrushless);
+        turret.setSoftLimit(SoftLimitDirection.kForward, 15);
+        turret.setSoftLimit(SoftLimitDirection.kReverse, -15);
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kBrake);
         turretEncoder.setPosition(0);
+        turret.burnFlash();
         limeLightPid = new PIDController(6.5, 0, 0);
         limeLightPid.setTolerance(limeLightTolerance);
-        turretPid = new PIDController(6.5, 0, 0);
+        turretPid = new PIDController(0.075, 0, 0);
         turretPid.setTolerance(turretTolerance);
 
         checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();
@@ -202,8 +207,10 @@ public class TurretSubsystem extends SubsystemBase{
         double pwmPos = getEncoderPosition();
 
         if(pwmPos >= TURRET_MIN && pwmPos <= TURRET_MAX) {
+
             turretPower(output);
         } else {
+
             turretStop();
         }
     }
@@ -242,7 +249,7 @@ public class TurretSubsystem extends SubsystemBase{
 
             double output = turretPid.calculate(encoderReading, TURRET_ZERO);
             //converts range to % power
-            output = output / TURRET_RANGE;
+            // output = output / TURRET_RANGE;
 
             if (output < 0) {
                 output = output - zeroStaticFeedforward;
@@ -263,4 +270,20 @@ public class TurretSubsystem extends SubsystemBase{
         return limeLightPid.atSetpoint();
     }
 
+    /**
+     * Converts turret units into radians
+     * 
+     * @return radians
+     */
+    public double getTrueTurretPos() {
+
+        return (turretEncoder.getPosition() * (1.0 / 462.0)) * (2.0 * Math.PI);
+    }
+
+    public void setTurretAngle(double angle) {
+
+        angle *= 462.0 / (2.0 * Math.PI);
+        double output = turretPid.calculate(turretEncoder.getPosition(), angle);
+        turretPower(output);
+    }
 }

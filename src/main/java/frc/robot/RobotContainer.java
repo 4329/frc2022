@@ -84,14 +84,14 @@ public class RobotContainer {
   private final StorageIntake storageIntake;
   private final IntakeSensors intakeSensors;
   private final ShooterFeedSubsytem shooterFeed;
-//  private final TurretSubsystem turretSubsystem;
+ private final TurretSubsystem turretSubsystem;
   private final IntakeSolenoidSubsystem intakeSolenoid;
   private final IntakeMotor intakeMotor;
   private final Shooter shooter;
   private final Climber climber;
   private final CommandGroups commandGroups;
   private final HoodSubsystem hoodSubsystem;
-  private final TrackingTurretSubsystem trackingTurretSubsystem;
+  // private final TrackingTurretSubsystem trackingTurretSubsystem;
   // The driver's controllers
   final XboxController m_driverController;
   final XboxController m_operatorController;
@@ -151,12 +151,13 @@ private Command SingleRejectAutoHigh;
     sensorOutputCommand = new SensorOutputCommand(intakeSensors);
     intakeSensors.setDefaultCommand(sensorOutputCommand);
     hoodSubsystem = new HoodSubsystem();
-    trackingTurretSubsystem = new TrackingTurretSubsystem();
+    // trackingTurretSubsystem = new TrackingTurretSubsystem();
 
     commandGroups = new CommandGroups();
-    turretFollow = new TurretFollow(trackingTurretSubsystem, drivetrain);
+    // turretFollow = new TurretFollow(trackingTurretSubsystem, drivetrain);
 
-    trackingTurretSubsystem.setDefaultCommand(turretFollow);
+    // trackingTurretSubsystem.setDefaultCommand(turretFollow);
+    turretSubsystem = new TurretSubsystem();
 
 
     initializeCamera();
@@ -216,7 +217,7 @@ private Command SingleRejectAutoHigh;
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> climber.togglePivot());
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> climber.extend());
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.retract());
-    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new SwerveShotCommand(shooter, hoodSubsystem, m_robotDrive, m_driverController, storageIntake, shooterFeed));
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new SwerveShotCommand(shooter, hoodSubsystem, m_robotDrive, m_driverController, storageIntake, shooterFeed, turretSubsystem));
 
    // new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> climber.toggleShift());
       //Climber motor controls
@@ -229,7 +230,7 @@ private Command SingleRejectAutoHigh;
       // TODO - we need to add shoot commands back when we have a working turret subsystem.
   //  new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
     new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerOverrideCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive));//shoot high without aimbot
-   // new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
+    new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
     new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new MoveFeedCommand(shooterFeed, storageIntake));//intake up/down
@@ -334,7 +335,9 @@ private Command SingleRejectAutoHigh;
   }
 
   public void teleopPeriodic() {
+
     hoodSubsystem.hoodOverride(shooter);
+    turretSubsystem.putValuesToShuffleboard();
   }
 
   public void test() {

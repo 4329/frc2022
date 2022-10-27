@@ -31,13 +31,14 @@ public class SwerveShotCommand extends CommandBase {
     XboxController xboxController;
     ShooterFeedSubsytem shooterFeedSubsytem;
     StorageIntake storageIntake;
+    TurretSubsystem turretSubsystem;
     Timer timer = new Timer();
-    PIDController swervepid = new PIDController (3.5, 0, 0.25);
+    PIDController swervepid = new PIDController (2.0, 0, 0.1);
     NetworkTableEntry tGEntry = Shuffleboard.getTab("RobotData").add("tG", 1).getEntry();
     NetworkTableEntry tREntry = Shuffleboard.getTab("RobotData").add("tR", 1).getEntry();
 
 
-    public SwerveShotCommand(Shooter shooter, HoodSubsystem hood, /*TurretSubsystem turret,*/ Drivetrain drivetrain, XboxController xboxController, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeedSubsytem) {
+    public SwerveShotCommand(Shooter shooter, HoodSubsystem hood, /*TurretSubsystem turret,*/ Drivetrain drivetrain, XboxController xboxController, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeedSubsytem, TurretSubsystem turretSubsystem) {
 
         this.shooter = shooter;
         this.drivetrain = drivetrain;
@@ -46,7 +47,8 @@ public class SwerveShotCommand extends CommandBase {
         this.xboxController = xboxController;
         this.storageIntake = storageIntake;
         this.shooterFeedSubsytem = shooterFeedSubsytem;
-        addRequirements(shooter, drivetrain, hood, storageIntake, shooterFeedSubsytem);
+        this.turretSubsystem = turretSubsystem;
+        addRequirements(shooter, drivetrain, hood, storageIntake, shooterFeedSubsytem, turretSubsystem);
         
 
         swervepid.enableContinuousInput(0, 2 * Math.PI);
@@ -141,11 +143,15 @@ public class SwerveShotCommand extends CommandBase {
             * Constants.DriveConstants.kMaxSpeedMetersPerSecond,
         pidOutput,
         true);
+
+        double angleError = MathUtils.toUnitCircAngle(targetAngle - currentAngle);
+        double turretAngle = MathUtils.toUnitCircAngle(angleError + Math.PI) - Math.PI;
+        turretSubsystem.setTurretAngle(turretAngle);
         //TODO also make sure hood is not impeding the limlight
         if (currentTime > 0.250 && TurretSubsystem.targetVisible() && TurretSubsystem.getDistanceFromTarget() >= 85.0 && hood.getEncoderPos() < 4.0) {
             double dL = TurretSubsystem.getDistanceFromTarget() * 0.0254;
             double tR = drivetrain.getGyro().getRadians();
-            double tT = Math.PI;
+            double tT = Math.PI+turretSubsystem.getTrueTurretPos();
             double tL = -1.0 * TurretSubsystem.getTx();
 
             Pose2d pose = calcPoseFromVision(dL, tR, tT, tL, Constants.ShooterConstants.goalPos);
@@ -161,7 +167,8 @@ public class SwerveShotCommand extends CommandBase {
         shooter.holdFire();
         hood.setPosition(HoodPosition.OPEN);  
         storageIntake.storageIntakeStop();
-        shooterFeedSubsytem.shooterFeedStop();      
+        shooterFeedSubsytem.shooterFeedStop();
+        turretSubsystem.turretStop();
     }
 
     private Pose2d calcPoseFromVision(double dL, double tR, double tT, double tL, Translation2d goal) {

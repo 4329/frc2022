@@ -61,6 +61,7 @@ public class TowerCommand extends CommandBase {
         if (foundTarget) {
 
             setpoint = shooter.shooterManualOverride(hood, turret, targetDistance);
+            System.out.println("____________________________yay_________________________________" + setpoint);
             shooter.shoot(setpoint);
 
             if (shooter.getShooterError()) {
