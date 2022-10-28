@@ -65,8 +65,8 @@ public class TurretSubsystem extends SubsystemBase{
     public TurretSubsystem() {
 
         turret = new CANSparkMax(Configrun.get(43/*29*/, "turretID"), MotorType.kBrushless);
-        turret.setSoftLimit(SoftLimitDirection.kForward, 15);
-        turret.setSoftLimit(SoftLimitDirection.kReverse, -15);
+        turret.setSoftLimit(SoftLimitDirection.kForward, 35);
+        turret.setSoftLimit(SoftLimitDirection.kReverse, -35);
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kBrake);
         turretEncoder.setPosition(0);
@@ -232,7 +232,7 @@ public class TurretSubsystem extends SubsystemBase{
 
                 output = output + staticFeedforward;
             }
-            rotateTurret(-output);
+            rotateTurret(output);
         }
         else {
 
