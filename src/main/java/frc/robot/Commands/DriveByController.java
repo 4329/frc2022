@@ -4,6 +4,9 @@ import frc.robot.Constants.*;
 import frc.robot.Subsystems.Swerve.*;
 import frc.robot.Utilities.MathUtils;
 import edu.wpi.first.wpilibj.XboxController;
+
+import java.util.Map;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTableEntry;
 //import edu.wpi.first.wpilibj.GenericHID;
@@ -18,7 +21,7 @@ public class DriveByController extends CommandBase {
   private final XboxController m_controller;
   private boolean fieldOrient = true;
 
-  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withPosition(4, 2).getEntry();
+  private NetworkTableEntry fieldOrientStatus = Shuffleboard.getTab("RobotData").add("Field Orient On", true).withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000")).withPosition(4, 2).getEntry();
 
   /**
    * Contructs a DriveByController object which applys the driver inputs from the

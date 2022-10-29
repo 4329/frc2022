@@ -1,5 +1,7 @@
 package frc.robot.Subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -44,9 +46,9 @@ public class Climber {
         climberNeoMotor2.setIdleMode(IdleMode.kBrake);
 
         //isShiftedShuffleboard = Shuffleboard.getTab("ClimberData").add("Climber Winch in Gear", false).getEntry();
-        isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot", false).withPosition(0, 3).getEntry();
-        isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Extend Climber", false).withPosition(0, 2).getEntry();
-        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withPosition(1, 2).getEntry();
+        isPivotedShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Pivot", false).withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000")).withPosition(0, 3).getEntry();
+        isExtendedShuffleboard = Shuffleboard.getTab("RobotData").add("Extend Climber", false).withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000")).withPosition(0, 2).getEntry();
+        isMoterActiveShuffleboard = Shuffleboard.getTab("RobotData").add("Climber Winch", false).withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000")).withPosition(1, 2).getEntry();
     }
 
 

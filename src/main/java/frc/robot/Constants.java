@@ -313,11 +313,11 @@ public final class Constants {
 
     private static final Point2D[] kShotTimes = new Point2D.Double[] {
       // (ty-angle,time)
-      new Point2D.Double(80, 0.78 + 0.02),
-      new Point2D.Double(130, 0.80 + 0.05),
-      new Point2D.Double(190, 0.81 + 0.06),
-      new Point2D.Double(240, 0.82 + 0.08),
-      new Point2D.Double(280, 0.83 + 0.08)
+      new Point2D.Double(80, 0.78 - 0.05),
+      new Point2D.Double(130, 0.80 - 0.02),
+      new Point2D.Double(190, 0.81 - 0.01),
+      new Point2D.Double(240, 0.82 + 0.01),
+      new Point2D.Double(280, 0.83 + 0.01)
     };
 
     public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);

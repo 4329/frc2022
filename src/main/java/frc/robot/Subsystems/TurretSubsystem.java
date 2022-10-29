@@ -1,6 +1,7 @@
 package frc.robot.Subsystems;
 
 import java.awt.geom.Point2D;
+import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -65,8 +66,8 @@ public class TurretSubsystem extends SubsystemBase{
     public TurretSubsystem() {
 
         turret = new CANSparkMax(Configrun.get(43/*29*/, "turretID"), MotorType.kBrushless);
-        turret.setSoftLimit(SoftLimitDirection.kForward, 15);
-        turret.setSoftLimit(SoftLimitDirection.kReverse, -15);
+        turret.setSoftLimit(SoftLimitDirection.kForward, 35);
+        turret.setSoftLimit(SoftLimitDirection.kReverse, -35);
         turretEncoder = turret.getEncoder();
         turret.setIdleMode(IdleMode.kBrake);
         turretEncoder.setPosition(0);
@@ -76,7 +77,7 @@ public class TurretSubsystem extends SubsystemBase{
         turretPid = new PIDController(0.075, 0, 0);
         turretPid.setTolerance(turretTolerance);
 
-        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withPosition(3, 2).getEntry();
+        checkTVDisplay = Shuffleboard.getTab("RobotData").add("Target Visible", false).withWidget(BuiltInWidgets.kBooleanBox).withProperties(Map.of("Color when true", "#FFFFFF", "Color when false", "#000000")).withPosition(3, 2).getEntry();
         getDistanceFromTargetDisplay = Shuffleboard.getTab("RobotData").add("Distance", 0).withPosition(2, 2).getEntry();
 
         if (Configrun.get(false, "extraShuffleBoardToggle")) {
@@ -232,7 +233,7 @@ public class TurretSubsystem extends SubsystemBase{
 
                 output = output + staticFeedforward;
             }
-            rotateTurret(-output);
+            rotateTurret(output);
         }
         else {
 

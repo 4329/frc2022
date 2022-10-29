@@ -158,6 +158,8 @@ private Command SingleRejectAutoHigh;
 
     // trackingTurretSubsystem.setDefaultCommand(turretFollow);
     turretSubsystem = new TurretSubsystem();
+    turretToZeroCommand = new TurretToZeroCommand(turretSubsystem);
+    turretSubsystem.setDefaultCommand(turretToZeroCommand);
 
 
     initializeCamera();
@@ -228,7 +230,7 @@ private Command SingleRejectAutoHigh;
     //Operator Controller
       //Shoot
       // TODO - we need to add shoot commands back when we have a working turret subsystem.
-  //  new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
+    new JoystickButton(m_operatorController, Button.kY.value).whenHeld(commandGroups.fire(turretSubsystem, storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive, intakeSensors));//shoot high with aimbot
     new JoystickButton(m_operatorController, Button.kBack.value).whenHeld(new TowerOverrideCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, m_robotDrive));//shoot high without aimbot
     new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
@@ -248,7 +250,6 @@ private Command SingleRejectAutoHigh;
 
 
     KISSAuto = new KISSAuto(m_robotDrive);
-    /*
     //TODO pass in a turret subsystem once we have move and shoot working... 
     ComplexAuto = new ComplexAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     ComplexerAuto = new ComplexerAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
@@ -265,8 +266,6 @@ private Command SingleRejectAutoHigh;
     RejectTest = new RejectTest(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     MostComplexifiedAuto = new MostComplexifiedAuto(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
     SingleRejectAutoHigh = new SingleRejectAutoHigh(m_robotDrive, intakeMotor, storageIntake, shooterFeed, shooter, turretSubsystem, hoodSubsystem, intakeSolenoid, intakeSensors);
-    */
-
 
     // Adds autos to the chooser
     // m_chooser.setDefaultOption("MoveOneMeterAuto", moveOneMeter);

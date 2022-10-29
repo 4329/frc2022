@@ -7,8 +7,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Configrun;
 import frc.robot.Constants;
 import frc.robot.Subsystems.HoodSubsystem;
 import frc.robot.Subsystems.Shooter;
@@ -32,11 +35,11 @@ public class SwerveShotCommand extends CommandBase {
     StorageIntake storageIntake;
     TurretSubsystem turretSubsystem;
     Timer timer = new Timer();
-    PIDController swervepid = new PIDController (3.5, 0, 0.2);
+    PIDController swervepid = new PIDController (5.0, 0, 0.2);
     NetworkTableEntry tGEntry = Shuffleboard.getTab("RobotData").add("tG", 1).getEntry();
     NetworkTableEntry tREntry = Shuffleboard.getTab("RobotData").add("tR", 1).getEntry();
-
-
+    
+    NetworkTableEntry pidGraph = Shuffleboard.getTab("RobotData").add("Pid Graph", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
     public SwerveShotCommand(Shooter shooter, HoodSubsystem hood, /*TurretSubsystem turret,*/ Drivetrain drivetrain, XboxController xboxController, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeedSubsytem, TurretSubsystem turretSubsystem) {
 
         this.shooter = shooter;
@@ -62,6 +65,11 @@ public class SwerveShotCommand extends CommandBase {
 
     @Override
     public void execute() {
+
+        if (Configrun.get(false, "extraShuffleBoardToggle")) {
+
+            pidGraph.setDouble(swervepid.getPositionError());
+        }
 
         double currentTime = timer.get();
         FieldRelativeSpeed speed = drivetrain.getRelativeSpeed();
