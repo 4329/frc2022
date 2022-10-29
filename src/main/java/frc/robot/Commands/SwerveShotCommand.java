@@ -32,7 +32,7 @@ public class SwerveShotCommand extends CommandBase {
     StorageIntake storageIntake;
     TurretSubsystem turretSubsystem;
     Timer timer = new Timer();
-    PIDController swervepid = new PIDController (2.0, 0, 0.1);
+    PIDController swervepid = new PIDController (3.5, 0, 0.2);
     NetworkTableEntry tGEntry = Shuffleboard.getTab("RobotData").add("tG", 1).getEntry();
     NetworkTableEntry tREntry = Shuffleboard.getTab("RobotData").add("tR", 1).getEntry();
 
@@ -107,7 +107,7 @@ public class SwerveShotCommand extends CommandBase {
 
         if (xboxController.getLeftTriggerAxis() > 0.5) {
 
-            hood.setEncoderPosition(Constants.TuningConstants.m_hoodTable.getOutput(newDistance));
+            hood.setDesiredHoodPos(Constants.TuningConstants.m_hoodTable.getOutput(newDistance));
 
                 if(hood.atSetpoint()) {
                     storageIntake.storageIntakeInSlow();
@@ -133,23 +133,33 @@ public class SwerveShotCommand extends CommandBase {
 
         double pidOutput = swervepid.calculate(currentAngle, targetAngle);
 
+        if (pidOutput > Constants.DriveConstants.kMaxAngularSpeed){
+
+            pidOutput = Constants.DriveConstants.kMaxAngularSpeed;
+        } else if (pidOutput < - Constants.DriveConstants.kMaxAngularSpeed){
+
+            pidOutput = -Constants.DriveConstants.kMaxAngularSpeed;
+        }
+
+        double adjTranslation = ((Constants.DriveConstants.kMaxAngularSpeed - Math.abs(pidOutput)) / Constants.DriveConstants.kMaxAngularSpeed) * 0.5;
+
         drivetrain.drive(
             -inputTransform(xboxController.getLeftY())
-            * Constants.DriveConstants.kMaxSpeedMetersPerSecond,
+            * (Constants.DriveConstants.kMaxSpeedMetersPerSecond * adjTranslation),
         -inputTransform(xboxController.getLeftX())
-            * Constants.DriveConstants.kMaxSpeedMetersPerSecond,
+            * (Constants.DriveConstants.kMaxSpeedMetersPerSecond * adjTranslation),
         pidOutput,
         true);
 
         double angleError = MathUtils.toUnitCircAngle(targetAngle - currentAngle);
         double turretAngle = MathUtils.toUnitCircAngle(angleError + Math.PI) - Math.PI;
-        turretSubsystem.setTurretAngle(turretAngle);
+        turretSubsystem.setTurretAngle(/*turretAngle*/ 0);
         //TODO also make sure hood is not impeding the limlight
         if (currentTime > 0.250 && TurretSubsystem.targetVisible() && TurretSubsystem.getDistanceFromTarget() >= 85.0 && hood.getEncoderPos() < 4.0) {
             //double dL = TurretSubsystem.getDistanceFromTarget() * 0.0254;
             double dL = MathUtils.inchesToMeters(TurretSubsystem.getDistanceFromTarget());
             double tR = drivetrain.getGyro().getRadians();
-            double tT = Math.PI+turretSubsystem.getTrueTurretPos();
+            double tT = Math.PI + turretSubsystem.getTrueTurretPos();
             double tL = -1.0 * TurretSubsystem.getTx();
 
             Pose2d pose = calcPoseFromVision(dL, tR, tT, tL, Constants.ShooterConstants.goalPos);

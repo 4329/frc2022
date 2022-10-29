@@ -94,9 +94,9 @@ public class HoodSubsystem extends SubsystemBase {
 
     double output = hoodPID.calculate(hoodposition, setpoint);
 
-    if (Math.abs(hoodposition) > MAX_RANGE) {
-      output = 0;
-    }
+    // if (Math.abs(hoodposition) > MAX_RANGE) {
+    //   output = 0;
+    // }
     hoodwheel.set(output);
   }
 
@@ -143,7 +143,7 @@ public class HoodSubsystem extends SubsystemBase {
    *
    * @param position
    */
-  public void setEncoderPosition(double position) {
+  public void setDesiredHoodPos(double position) {
 
     if (position < 1) {
 
@@ -187,7 +187,7 @@ public class HoodSubsystem extends SubsystemBase {
       sparkPosition.setDouble(hoodEncoder.getPosition());
 
       if (shooter.manualOverride.getBoolean(true)) {
-        setEncoderPosition(overrideSetpointEntry.getDouble(3));
+        setDesiredHoodPos(overrideSetpointEntry.getDouble(3));
           if (hoodOverrideIdleMode.getBoolean(true)) {
 
             hoodwheel.setIdleMode(IdleMode.kBrake);

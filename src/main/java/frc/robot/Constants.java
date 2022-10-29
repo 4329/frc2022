@@ -265,15 +265,13 @@ public final class Constants {
       new Point2D.Double(83, 2400),
       new Point2D.Double(102, 2550),
       new Point2D.Double(122, 2675),
-      new Point2D.Double(138, 2725),
-      new Point2D.Double(156, 3050),
-      new Point2D.Double(175, 3150),
-      new Point2D.Double(186, 3375),
-      // new Point2D.Double(210, 3400),
-      // new Point2D.Double(225, 3600),
-      // new Point2D.Double(240, 3650),
-      // new Point2D.Double(264, 3900),
-      new Point2D.Double(276, 3975)
+      new Point2D.Double(138, 2750),
+      new Point2D.Double(156, 2900),
+      new Point2D.Double(175, 3165),
+      new Point2D.Double(186, 3385),
+      new Point2D.Double(210, 3600),
+      new Point2D.Double(225, 3950),
+      new Point2D.Double(240, 4100),
     };
     public static final LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
 
@@ -284,15 +282,13 @@ public final class Constants {
       new Point2D.Double(83, 13),
       new Point2D.Double(102, 17),
       new Point2D.Double(122, 25),
-      new Point2D.Double(138, 27),
+      new Point2D.Double(138, 26),
       new Point2D.Double(156, 30),
       new Point2D.Double(175, 30),
-      new Point2D.Double(186, 31),
-      // new Point2D.Double(210, 28),
-      // new Point2D.Double(225, 28),
-      // new Point2D.Double(240, 29),
-      // new Point2D.Double(264, 30),
-      new Point2D.Double(276, 32)
+      new Point2D.Double(186, 30.5),
+      new Point2D.Double(210, 31),
+      new Point2D.Double(225, 32.5),
+      new Point2D.Double(240, 33),
     };
     public static final LinearInterpolationTable m_hoodTable = new LinearInterpolationTable(hoodTable);
 
@@ -317,11 +313,11 @@ public final class Constants {
 
     private static final Point2D[] kShotTimes = new Point2D.Double[] {
       // (ty-angle,time)
-      new Point2D.Double(80, 0.78 - 0.04),
-      new Point2D.Double(130, 0.80 - 0.04),
-      new Point2D.Double(190, 0.81 - 0.04),
-      new Point2D.Double(240, 0.82 - 0.04),
-      new Point2D.Double(280, 0.83 - 0.04)
+      new Point2D.Double(80, 0.78 + 0.02),
+      new Point2D.Double(130, 0.80 + 0.05),
+      new Point2D.Double(190, 0.81 + 0.06),
+      new Point2D.Double(240, 0.82 + 0.08),
+      new Point2D.Double(280, 0.83 + 0.08)
     };
 
     public static final LinearInterpolationTable kTimeTable = new LinearInterpolationTable(kShotTimes);

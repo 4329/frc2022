@@ -166,7 +166,7 @@ public class Shooter extends SubsystemBase {
 
       if (manualOverride.getBoolean(true)) {
 
-        hood.setEncoderPosition(hoodOverride.getDouble(3));
+        hood.setDesiredHoodPos(hoodOverride.getDouble(3));
         return overrideRPM.getDouble(0);
     } else {
 
@@ -200,7 +200,7 @@ public class Shooter extends SubsystemBase {
     double rpmTableValue = Constants.TuningConstants.m_rpmTable.getOutput(targetDistance);
     double hoodTableValue = Constants.TuningConstants.m_hoodTable.getOutput(targetDistance);
 
-    hood.setEncoderPosition(hoodTableValue);
+    hood.setDesiredHoodPos(hoodTableValue);
 
     return rpmTableValue;
 
