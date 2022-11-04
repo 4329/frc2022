@@ -38,6 +38,7 @@ public class SwerveShotCommand extends CommandBase {
     PIDController swervepid = new PIDController (5.0, 0, 0.2);
     NetworkTableEntry tGEntry = Shuffleboard.getTab("RobotData").add("tG", 1).getEntry();
     NetworkTableEntry tREntry = Shuffleboard.getTab("RobotData").add("tR", 1).getEntry();
+    NetworkTableEntry ohnowhy = Shuffleboard.getTab("RobotData").add("ack", 1).getEntry();
     
     NetworkTableEntry pidGraph = Shuffleboard.getTab("RobotData").add("Pid Graph", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
     public SwerveShotCommand(Shooter shooter, HoodSubsystem hood, /*TurretSubsystem turret,*/ Drivetrain drivetrain, XboxController xboxController, StorageIntake storageIntake, ShooterFeedSubsytem shooterFeedSubsytem, TurretSubsystem turretSubsystem) {
@@ -112,6 +113,7 @@ public class SwerveShotCommand extends CommandBase {
         Translation2d robotToMovingGoal = movingGoal.minus(drivetrain.getPose().getTranslation());
 
         double newDistance = MathUtils.MetersToInches(robotToMovingGoal.getDistance(new Translation2d()));
+        ohnowhy.setDouble(newDistance);
 
         if (xboxController.getLeftTriggerAxis() > 0.5) {
 

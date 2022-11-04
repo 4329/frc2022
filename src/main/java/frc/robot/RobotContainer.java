@@ -235,7 +235,7 @@ private Command SingleRejectAutoHigh;
     new JoystickButton(m_operatorController, Button.kStart.value).whenHeld(new TowerCommand(storageIntake, shooterFeed, shooter, hoodSubsystem, turretSubsystem, m_robotDrive, intakeSensors));//shoot high without limlight
     new JoystickButton(m_operatorController, Button.kA.value).whenHeld(new BumperCommand(storageIntake, shooterFeed, shooter, hoodSubsystem));//shoot low
       //Manage cargo
-    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new MoveFeedCommand(shooterFeed, storageIntake));//intake up/down
+    new JoystickButton(m_operatorController, Button.kX.value).whenHeld(new IntakePosCommand(intakeSolenoid));//intake up/down
     new JoystickButton(m_operatorController, Button.kB.value).whenHeld(new IntakeAutoCommand(intakeSensors, shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//store
     new JoystickButton(m_operatorController, Button.kB.value).whenReleased(new IntakeCorrectionCommand(shooterFeed, storageIntake));
     new JoystickButton(m_operatorController, Button.kRightBumper.value).whenHeld(new AllBackwardsCommand(shooterFeed, storageIntake, intakeMotor, intakeSolenoid));//eject

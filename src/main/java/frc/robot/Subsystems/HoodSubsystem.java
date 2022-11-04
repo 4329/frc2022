@@ -40,7 +40,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   public HoodSubsystem() {
     hoodNeutral = Configrun.get(0, "hoodNeutral");
-    hoodOpen = Configrun.get(1, "hoodOpen");
+    hoodOpen = Configrun.get(2, "hoodOpen");
     setpoint = hoodOpen;
     overrideSetpoint = 3;
     hoodHalf = Configrun.get(15, "hoodHalf");
@@ -51,7 +51,7 @@ public class HoodSubsystem extends SubsystemBase {
     hoodEncoder = hoodwheel.getEncoder();
     hoodEncoder.setPosition(0);
 
-    hoodPID = new PIDController(0.07, 0, 0);
+    hoodPID = new PIDController(0.035, 0, 0);
     hoodwheel.setIdleMode(IdleMode.kBrake);
     hoodPID.setTolerance(1);
 
