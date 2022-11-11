@@ -261,17 +261,17 @@ public final class Constants {
 
     public static final Point2D[] rpmTable = new  Point2D.Double[] {
 
-      new Point2D.Double(71, 2350),
-      new Point2D.Double(83, 2400),
-      new Point2D.Double(102, 2550),
-      new Point2D.Double(122, 2675),
-      new Point2D.Double(138, 2750),
-      new Point2D.Double(156, 2900),
-      new Point2D.Double(175, 3165),
-      new Point2D.Double(186, 3385),
-      new Point2D.Double(210, 3600),
-      new Point2D.Double(225, 3950),
-      new Point2D.Double(240, 4100),
+      new Point2D.Double(71, 2350 + 50),
+      new Point2D.Double(83, 2400 + 50),
+      new Point2D.Double(102, 2550 + 50),
+      new Point2D.Double(122, 2675 + 50),
+      new Point2D.Double(138, 2750 + 50),
+      new Point2D.Double(156, 2900 + 50),
+      new Point2D.Double(175, 3165 + 50),
+      new Point2D.Double(186, 3385 + 50),
+      new Point2D.Double(210, 3600 + 50),
+      new Point2D.Double(225, 3950 + 50),
+      new Point2D.Double(240, 4100 + 50),
     };
     public static final LinearInterpolationTable m_rpmTable = new LinearInterpolationTable(rpmTable);
 
